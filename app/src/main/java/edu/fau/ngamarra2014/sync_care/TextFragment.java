@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
+//Fragment Class
 public class TextFragment extends Fragment {
 
     private static TextView textview;
