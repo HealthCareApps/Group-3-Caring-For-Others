@@ -24,6 +24,26 @@
             android:name=".HomeActivity"
             android:label="Home Page" >
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings" >
+        </activity>
+        <activity
+            android:name=".LinkedRequestsActivity"
+            android:label="Linked Requests" >
+        </activity>
+        <activity
+            android:name=".VuMarkActivity"
+            android:label="VuMark" >
+        </activity>
+        <activity
+            android:name=".AlertsActivity"
+            android:label="Alerts" >
+        </activity>
+        <activity
+            android:name=".AccountActivity"
+            android:label="Account" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
