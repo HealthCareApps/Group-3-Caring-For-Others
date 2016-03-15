@@ -2,10 +2,14 @@ package edu.fau.ngamarra2014.sync_care;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RxInfoFragment extends Fragment {
 
@@ -33,9 +37,12 @@ public class RxInfoFragment extends Fragment {
         return view;
     }
 
-    public void changeTextProperties(String text)
-    {
-        name.setText(text);
+    public void changeTextProperties(JSONObject obj) throws JSONException {
+        name.setText(obj.getString("name"));
+        dosage.setText(obj.getString("dosage"));
+        symptoms.setText(obj.getString("symptoms"));
+        doc.setText(obj.getString("doctor"));
+        instructions.setText(obj.getString("instructions"));
     }
 
 }

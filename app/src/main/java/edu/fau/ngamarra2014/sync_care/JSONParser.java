@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +19,7 @@ public class JSONParser {
 
     static InputStream is = null;
     static JSONObject jObj = null;
+    static JSONArray jArray = null;
     static String json = "";
 
     private String params = "";
@@ -82,10 +84,16 @@ public class JSONParser {
         try {
             jObj = new JSONObject(json);
         } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
+            try{
+                jArray = new JSONArray(json);
+                jObj = new JSONObject();
+                for(int i = 0; i < jArray.length(); i++){
+                    jObj.accumulate("Rx", jArray.optJSONObject(i));
+                }
+            }catch (JSONException ex){
+                Log.e("JSON Parser", "Error parsing data " + ex.toString());
+            }
         }
-
-        // return JSON String
         return jObj;
 
     }

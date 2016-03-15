@@ -14,6 +14,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -25,11 +27,13 @@ public class RxListFragment extends ListFragment implements OnItemClickListener{
     private static String rx_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/rx.php";
 
     RxListListener activityCallback;
-    String name;
     ArrayList<String> itemsList = new ArrayList<String>();
 
+    RxListFragment frag;
+    JSONArray array;
+
     public interface RxListListener {
-        public void onRxClick(String name);
+        public void onRxClick(JSONObject obj) throws JSONException;
     }
     @Override
     public void onAttach(Context context) {
@@ -55,34 +59,28 @@ public class RxListFragment extends ListFragment implements OnItemClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        // Inflate the layout for this rx_list
         View view = inflater.inflate(R.layout.rx_list, container, false);
-
         return view;
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        frag = this;
         new Prescriptions().execute();
-
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        name = (String)parent.getItemAtPosition(position);
-        buttonClicked(view);
-    }
-
-    public void buttonClicked (View view) {
-        activityCallback.onRxClick(name);
+        try {
+            JSONObject rxInfo = array.getJSONObject(position);
+            activityCallback.onRxClick(rxInfo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     class Prescriptions extends AsyncTask<String, String, String> {
 
-        /**
-         * Before starting background thread Show Progress Dialog
-         * */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -93,9 +91,6 @@ public class RxListFragment extends ListFragment implements OnItemClickListener{
             pDialog.show();
         }
 
-        /**
-         * Creating product
-         * */
         protected String doInBackground(String... args) {
 
             // Building Parameters
@@ -106,8 +101,11 @@ public class RxListFragment extends ListFragment implements OnItemClickListener{
 
             // check for success tag
             try {
-                if(!json.has("error")){
-                    itemsList.add(json.getString("name"));
+                array = json.getJSONArray("Rx");
+                if(json.length() > 0){
+                    for(int i = 0; i < array.length(); i++){
+                        itemsList.add(array.getJSONObject(i).getString("name"));
+                    }
                 } else {
                     // failed to create product
                 }
@@ -118,15 +116,11 @@ public class RxListFragment extends ListFragment implements OnItemClickListener{
             return null;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
         protected void onPostExecute(String file_url) {
 
             ArrayAdapter<String> myArray = new ArrayAdapter<String> (getActivity(), android.R.layout.simple_list_item_1, itemsList);
             setListAdapter(myArray);
-            //getListView().setOnItemClickListener(this);
-            // dismiss the dialog once done
+            getListView().setOnItemClickListener(frag);
             pDialog.dismiss();
 
         }
