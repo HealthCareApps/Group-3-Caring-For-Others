@@ -29,7 +29,6 @@ public class JSONParser {
 
     public void setParams(QueryString query){
         params = query.toString();
-        Log.d("look", "setParams: " + query);
     }
     // function get json from url
     // by making HTTP POST or GET mehtod

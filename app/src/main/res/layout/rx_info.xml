@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/nameLabel"
+        android:id="@+id/nameLabel"
+        android:layout_marginTop="83dp"
+        android:textSize="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Dosage:"
+        android:id="@+id/dosageLabel"
+        android:textSize="15dp"
+        android:layout_below="@+id/nameLabel"
+        android:layout_alignLeft="@+id/nameLabel"
+        android:layout_alignStart="@+id/nameLabel"
+        android:layout_marginTop="27dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Instructions:"
+        android:id="@+id/instructionLabel"
+        android:textSize="15dp"
+        android:layout_below="@+id/docLabel"
+        android:layout_alignLeft="@+id/docLabel"
+        android:layout_alignStart="@+id/docLabel"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Symptoms:"
+        android:id="@+id/symptomlabel"
+        android:textSize="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/dosageLabel"
+        android:layout_alignLeft="@+id/dosageLabel"
+        android:layout_alignStart="@+id/dosageLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Doctor:"
+        android:id="@+id/docLabel"
+        android:textSize="15dp"
+        android:layout_marginTop="56dp"
+        android:layout_below="@+id/symptomlabel"
+        android:layout_alignLeft="@+id/symptomlabel"
+        android:layout_alignStart="@+id/symptomlabel" />
+
+    <EditText
+        android:layout_width="550dp"
+        android:layout_height="200dp"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/instructions"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/instructionLabel"
+        android:layout_alignLeft="@+id/instructionLabel"
+        android:layout_alignStart="@+id/instructionLabel"
+        android:layout_alignRight="@+id/save"
+        android:layout_alignEnd="@+id/save" />
+
+    <EditText
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"
+        android:layout_above="@+id/dosageLabel"
+        android:layout_alignLeft="@+id/dosage"
+        android:layout_alignStart="@+id/dosage" />
+
+    <EditText
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/dosage"
+        android:layout_alignBottom="@+id/dosageLabel"
+        android:layout_toRightOf="@+id/instructionLabel"
+        android:layout_toEndOf="@+id/instructionLabel" />
+
+    <EditText
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/doc"
+        android:layout_alignBottom="@+id/docLabel"
+        android:layout_toRightOf="@+id/instructionLabel"
+        android:layout_toEndOf="@+id/instructionLabel" />
+
+    <EditText
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/symptom"
+        android:layout_above="@+id/docLabel"
+        android:layout_alignLeft="@+id/dosage"
+        android:layout_alignStart="@+id/dosage" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/save"
+        android:layout_below="@+id/instructions"
+        android:layout_alignRight="@+id/doc"
+        android:layout_alignEnd="@+id/doc"
+        android:layout_marginTop="48dp" />
+</RelativeLayout>
+
+    <!--<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/seekBar1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="17dp"
+            android:text="Button" />
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:inputType="text" >
+            <requestFocus />
+        </EditText>
+
+        <SeekBar
+            android:id="@+id/seekBar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/editText1"
+            android:layout_marginTop="14dp" />
+
+    </RelativeLayout>-->
