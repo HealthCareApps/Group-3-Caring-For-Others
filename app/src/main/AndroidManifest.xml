@@ -45,6 +45,10 @@
             android:name=".AccountActivity"
             android:label="Account" >
         </activity>
+        <activity
+            android:name=".RxActivity"
+            android:label="Rx" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

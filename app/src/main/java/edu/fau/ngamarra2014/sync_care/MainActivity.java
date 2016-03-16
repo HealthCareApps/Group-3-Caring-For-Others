@@ -90,15 +90,13 @@ public class MainActivity extends AppCompatActivity {
             jsonParser.setParams(query);
             JSONObject json = jsonParser.makeHttpRequest(login_url, "POST");
 
-            // check log cat fro response
-            Log.d("Create Response", json.toString());
-
             // check for success tag
             try {
                 if(!json.has("error")){
                     // successfully created product
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                     i.putExtra("username", username);
+                    i.putExtra("id", json.getInt("id"));
                     startActivity(i);
 
                     // closing this screen
