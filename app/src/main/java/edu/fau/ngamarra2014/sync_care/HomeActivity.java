@@ -1,19 +1,15 @@
 package edu.fau.ngamarra2014.sync_care;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-
-public class HomeActivity extends Activity{
+public class HomeActivity extends AppCompatActivity{
 
     Button settings, rx;
     String username;
@@ -26,10 +22,10 @@ public class HomeActivity extends Activity{
         settings = (Button) findViewById(R.id.settings);
         rx = (Button) findViewById(R.id.rxButton);
 
-        TextView welcome = (TextView) findViewById(R.id.welcome);
         username = getIntent().getStringExtra("username");
         userid = getIntent().getIntExtra("id",0);
-        welcome.setText("Welcome " + username);
+
+        setTitle("Welcome, " + username);
 
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,12 +40,32 @@ public class HomeActivity extends Activity{
         rx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //new Prescriptions().execute();
                 Intent i = new Intent(getApplicationContext(), RxActivity.class);
                 i.putExtra("id", userid); //Patients id for the prescriptions
                 startActivity(i);
             }
         });
 
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent set = new Intent(getApplicationContext(), SettingsActivity.class);
+                set.putExtra("settingsFor", username);
+                startActivity(set);
+                return true;
+            case R.id.logout:
+                Intent signin = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(signin);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
