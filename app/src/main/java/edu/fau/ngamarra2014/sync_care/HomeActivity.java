@@ -7,11 +7,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity{
 
-    Button settings, rx;
+    Button rx;
+    ImageButton addPatient;
     String username;
     int userid;
 
@@ -19,21 +21,21 @@ public class HomeActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_screen);
 
-        settings = (Button) findViewById(R.id.settings);
         rx = (Button) findViewById(R.id.rxButton);
+        addPatient = (ImageButton) findViewById(R.id.addPatient);
 
         username = getIntent().getStringExtra("username");
         userid = getIntent().getIntExtra("id",0);
 
         setTitle("Welcome, " + username);
 
-        settings.setOnClickListener(new View.OnClickListener() {
+        addPatient.setOnClickListener(new View.OnClickListener(){
+
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-                i.putExtra("settingsFor", username);
+                Intent i = new Intent(getApplicationContext(), AddPatient.class);
+                i.putExtra("id", userid); //Patients id for the prescriptions
                 startActivity(i);
-
             }
         });
 

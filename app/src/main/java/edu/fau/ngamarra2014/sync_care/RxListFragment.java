@@ -1,7 +1,7 @@
 package edu.fau.ngamarra2014.sync_care;
 
 import android.app.Activity;
-import android.app.ListFragment;
+import android.support.v4.app.ListFragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +35,7 @@ public class RxListFragment extends ListFragment implements OnItemClickListener{
     public interface RxListListener {
         public void onRxClick(JSONObject obj) throws JSONException;
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
