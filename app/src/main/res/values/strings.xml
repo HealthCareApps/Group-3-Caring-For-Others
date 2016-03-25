@@ -23,4 +23,8 @@
         <item>Uranus</item>
         <item>Neptune</item>
     </string-array>
+    <string name="title_activity_healthcare">Healthcare</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="string_name">Name</string>
 </resources>
