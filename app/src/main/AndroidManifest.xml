@@ -19,7 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".registerActivity"
             android:label="Registration" />
@@ -47,6 +46,15 @@
         <activity
             android:name=".AddPatient"
             android:label="Add Patient" />
+
+        <activity
+            android:name=".PatientActivity"
+            android:label="@string/title_activity_patient"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".PatientListActivity"
+            android:label="List of Patients"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

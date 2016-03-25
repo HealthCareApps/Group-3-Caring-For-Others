@@ -44,11 +44,11 @@
         android:inputType="date"
         android:ems="10"
         android:id="@+id/birthdate"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="94dp"
+        android:hint="Date of Birth"
         android:layout_below="@+id/last"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Date of Birth" />
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -56,19 +56,23 @@
         android:inputType="phone"
         android:ems="10"
         android:id="@+id/emernum"
-        android:layout_centerVertical="true"
+        android:hint="Number (Emergancy)"
+        android:numeric="integer"
+        android:layout_below="@+id/phonenum"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:hint="Number (Emergancy)"
-        android:numeric="integer" />
+        android:layout_marginTop="22dp" />
 
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="23dp"
         android:id="@+id/radioGroup"
-        android:layout_below="@+id/emernum"
-        android:layout_centerHorizontal="true">
+        android:layout_below="@+id/last"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="133dp"
+        android:layout_marginStart="133dp">
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -96,11 +100,23 @@
         android:layout_height="wrap_content"
         android:text="Add Patient"
         android:id="@+id/addPatient"
-        android:layout_below="@+id/radioGroup"
-        android:layout_toRightOf="@+id/radioGroup"
-        android:layout_toEndOf="@+id/radioGroup"
-        android:layout_marginLeft="82dp"
-        android:layout_marginStart="82dp"
-        android:layout_marginTop="80dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="34dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginBottom="123dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/diagnosis"
+        android:layout_below="@+id/emernum"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="44dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Primary diagnosis" />
 
 </RelativeLayout>

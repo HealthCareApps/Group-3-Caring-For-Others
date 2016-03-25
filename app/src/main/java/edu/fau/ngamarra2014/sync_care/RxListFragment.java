@@ -102,7 +102,7 @@ public class RxListFragment extends ListFragment implements OnItemClickListener{
 
             // check for success tag
             try {
-                array = json.getJSONArray("Rx");
+                array = json.getJSONArray("result");
                 if(json.length() > 0){
                     for(int i = 0; i < array.length(); i++){
                         itemsList.add(array.getJSONObject(i).getString("name"));

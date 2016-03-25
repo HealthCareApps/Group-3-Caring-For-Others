@@ -86,10 +86,12 @@ public class JSONParser {
         } catch (JSONException e) {
             try{
                 jArray = new JSONArray(json);
+                Log.i("JSONArray", jArray.toString());
                 jObj = new JSONObject();
                 for(int i = 0; i < jArray.length(); i++){
-                    jObj.accumulate("Rx", jArray.optJSONObject(i));
+                    jObj.accumulate("result", jArray.optJSONObject(i));
                 }
+                Log.i("JSONObject", jObj.toString());
             }catch (JSONException ex){
                 Log.e("JSON Parser", "Error parsing data " + ex.toString());
             }
