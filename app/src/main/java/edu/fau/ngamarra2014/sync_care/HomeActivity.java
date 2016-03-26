@@ -55,8 +55,6 @@ public class HomeActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 new GrabPatients().execute();
-                Intent i = new Intent(getApplicationContext(), PatientListActivity.class);
-                startActivity(i);
             }
         });
 
@@ -116,18 +114,17 @@ public class HomeActivity extends AppCompatActivity{
                     array = json.getJSONArray("result");
                 }
 
-                /*if(!json.has("error")){
+                if(!json.has("error")){
                     // successfully created product
-                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                    i.putExtra("username", username);
-                    i.putExtra("id", json.getInt("id"));
+                    Intent i = new Intent(getApplicationContext(), PatientListActivity.class);
+                    i.putExtra("patients", array.toString());
                     startActivity(i);
 
                     // closing this screen
                     finish();
                 } else {
                     // failed to create product
-                }*/
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

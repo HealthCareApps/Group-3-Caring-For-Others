@@ -9,11 +9,29 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
+
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
 
-    private String[] titles = {"Chapter One"};
-    private String[] details = {"Item one details"};
+    private ArrayList<String> titles = new ArrayList<String>();
+    private ArrayList<String> details = new ArrayList<String>();
     private int[] images = { R.drawable.profile};
+    private JSONArray patients;
+
+    public RecyclerAdapter(JSONArray p){
+        patients = p;
+        for(int i = 0; i < p.length(); i++){
+            try{
+                titles.add(p.getJSONObject(i).getString("first") + " " + p.getJSONObject(i).getString("last"));
+                details.add(p.getJSONObject(i).getString("birthdate"));
+            }catch(JSONException e){
+
+            }
+        }
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -24,13 +42,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.itemTitle.setText(titles[i]);
-        viewHolder.itemDetail.setText(details[i]);
-        viewHolder.itemImage.setImageResource(images[i]);
+        viewHolder.itemTitle.setText(titles.get(i));
+        viewHolder.itemDetail.setText(details.get(i));
+        viewHolder.itemImage.setImageResource(images[0]);
     }
     @Override
     public int getItemCount() {
-        return titles.length;
+        return titles.size();
     }
 
 
