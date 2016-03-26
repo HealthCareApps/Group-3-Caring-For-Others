@@ -3,6 +3,7 @@ package edu.fau.ngamarra2014.sync_care;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         for(int i = 0; i < p.length(); i++){
             try{
                 titles.add(p.getJSONObject(i).getString("first") + " " + p.getJSONObject(i).getString("last"));
-                details.add(p.getJSONObject(i).getString("birthdate"));
+                details.add("DOB: " + p.getJSONObject(i).getString("birthdate"));
             }catch(JSONException e){
 
             }
@@ -54,7 +55,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        public int currentItem;
         public ImageView itemImage;
         public TextView itemTitle;
         public TextView itemDetail;
@@ -75,6 +75,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     int position = getAdapterPosition();
                     Intent i = new Intent();
                     i.setClass(v.getContext(), PatientActivity.class);
+                    try{
+                        i.putExtra("patient", patients.getJSONObject(position).toString());
+                    }catch(JSONException e){
+
+                    }
                     v.getContext().startActivity(i);
                 }
             });

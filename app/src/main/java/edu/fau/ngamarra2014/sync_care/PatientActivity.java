@@ -8,7 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class PatientActivity extends AppCompatActivity {
+
+    JSONObject patientInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +22,14 @@ public class PatientActivity extends AppCompatActivity {
         setContentView(R.layout.activity_patient);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        try{
+            patientInfo = new JSONObject(getIntent().getStringExtra("patient"));
+            setTitle(patientInfo.getString("first") + " " + patientInfo.getString("last"));
+
+        }catch(JSONException e){
+
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
