@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.fau.ngamarra2014.sync_care">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,31 +13,37 @@
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".registerActivity"
-            android:label="Registration" />
+            android:label="Registration" >
+        </activity>
         <activity
             android:name=".HomeActivity"
-            android:label="Home Page" />
+            android:label="Home Page" >
+        </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="Settings" />
+            android:label="Settings" >
+        </activity>
         <activity
             android:name=".LinkedRequestsActivity"
-            android:label="Linked Requests" />
+            android:label="Linked Requests" >
+        </activity>
         <activity
             android:name=".VuMarkActivity"
-            android:label="VuMark" />
+            android:label="VuMark" >
+        </activity>
         <activity
             android:name=".AlertsActivity"
-            android:label="Alerts" />
+            android:label="Alerts" >
+        </activity>
         <activity
             android:name=".AccountActivity"
-            android:label="Account" />
+            android:label="Account" >
+        </activity>
         <activity
             android:name=".RxActivity"
             android:label="Prescriptions" />
@@ -55,6 +59,13 @@
         <activity android:name=".PatientListActivity"
             android:label="List of Patients"
             android:theme="@style/AppTheme.NoActionBar" />
+   
+        <activity
+            android:name=".Healthcare"
+            android:label="@string/title_activity_healthcare"
+            android:theme="@style/AppTheme.NoActionBar">
+            
+        </activity>
     </application>
 
 </manifest>
