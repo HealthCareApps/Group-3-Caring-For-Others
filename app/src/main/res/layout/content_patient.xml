@@ -95,7 +95,7 @@
         <ImageButton
             android:layout_width="300dp"
             android:layout_height="200dp"
-            android:id="@+id/pharmacy"
+            android:id="@+id/healthcare"
             android:src="@drawable/pharmacy_button"
             android:cropToPadding="false"
             android:scaleType="centerCrop"

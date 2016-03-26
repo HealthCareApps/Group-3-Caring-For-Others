@@ -30,7 +30,8 @@
             android:layout_height="wrap_content"
             app:tabGravity="fill"
             android:fillViewport="true"
-            app:tabMode="fixed"/>
+            app:tabMode="fixed"
+            style="@style/MyCustomTabLayout"/>
 
     </android.support.design.widget.AppBarLayout>
 
