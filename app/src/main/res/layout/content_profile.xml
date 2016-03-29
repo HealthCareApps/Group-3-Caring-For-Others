@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    android:padding="@dimen/activity_horizontal_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.letsnurture.ln_202.coordinatorlayoutpart1.ScrollingActivity"
+    tools:showIn="@layout/activity_profile">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:weightSum="1">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,7 +32,7 @@
                 android:src="@drawable/ic_name" />
 
             <EditText
-                android:id="@+id/first"
+                android:id="@+id/firstname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -38,13 +42,12 @@
                 android:background="@android:color/transparent"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#212121"
-                android:inputType="textPersonName"
-                android:hint="Joe"/>
+                android:inputType="textPersonName" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/first"
+                android:layout_below="@id/firstname"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
@@ -74,7 +77,7 @@
                 android:visibility="invisible" />
 
             <EditText
-                android:id="@+id/last"
+                android:id="@+id/lastname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -84,13 +87,12 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:background="@android:color/transparent"
                 android:textColor="#212121"
-                android:inputType="textPersonName"
-                android:hint="Doe"/>
+                android:inputType="textPersonName" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/last"
+                android:layout_below="@id/lastname"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
@@ -99,72 +101,6 @@
                 android:text="Last name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:layout_weight="0.46">
-
-            <ImageView
-                android:id="@+id/ivGender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_name"
-                android:visibility="invisible"/>
-
-            <RadioGroup
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/radioGroup"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/ivGender"
-                android:layout_toEndOf="@+id/ivGender">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="#212121"
-                    android:text="Male"
-                    android:id="@+id/male"
-                    android:checked="true"/>
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="#212121"
-                    android:text="Female"
-                    android:id="@+id/female"
-                    android:checked="false"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginStart="24dp" />
-
-            </RadioGroup>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gender"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:textColor="#727272"
-                android:id="@+id/textView3"
-                android:layout_below="@+id/ivGender"
-                android:layout_toRightOf="@+id/ivGender"
-                android:layout_toEndOf="@+id/ivGender" />
 
         </RelativeLayout>
 
@@ -187,7 +123,7 @@
                 android:src="@drawable/ic_birthday" />
 
             <EditText
-                android:id="@+id/birthdate"
+                android:id="@+id/dob"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -198,13 +134,12 @@
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:background="@android:color/transparent"
-                android:textColor="#212121"
-                android:hint="01/01/1989"/>
+                android:textColor="#212121" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/birthdate"
+                android:layout_below="@id/dob"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
@@ -247,8 +182,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:background="@android:color/transparent"
                 android:textColor="#212121"
-                android:inputType="phone"
-                android:hint="(123) 456-7890"/>
+                android:inputType="phone" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -295,8 +229,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:background="@android:color/transparent"
                 android:textColor="#212121"
-                android:inputType="phone"
-                android:hint="(123) 456-7890"/>
+                android:inputType="phone" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -341,7 +274,7 @@
                 android:layout_toRightOf="@id/ivAddress"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:hint="202 Park Street, Los Angeles"
+                android:text="202 Park Street, Los Angeles"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:background="@android:color/transparent"
                 android:textColor="#212121" />
@@ -388,7 +321,7 @@
                 android:layout_toRightOf="@id/ivCity"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:hint="221B Baker Street, England"
+                android:text="221B Baker Street, England"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:background="@android:color/transparent"
                 android:textColor="#212121" />
@@ -435,7 +368,7 @@
                 android:layout_toRightOf="@id/ivzipcode"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:hint="33461"
+                android:text="33461"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:background="@android:color/transparent"
                 android:textColor="#212121"
@@ -467,139 +400,11 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Patient"
-                android:id="@+id/addPatient"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="34dp"
-                android:layout_marginEnd="34dp"
-                android:layout_marginBottom="123dp" />
+                android:text="Save"
+                android:id="@+id/save"
+                android:visibility="invisible" />
 
         </LinearLayout>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
-<!--
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1"
-    android:visibility="visible">
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/first"
-        android:layout_marginTop="56dp"
-        android:layout_alignParentTop="true"
-        android:hint="First Name" />
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/last"
-        android:layout_below="@+id/first"
-        android:layout_marginTop="23dp"
-        android:hint="Last Name" />
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:id="@+id/phonenum"
-        android:layout_marginTop="29dp"
-        android:layout_below="@+id/birthdate"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:inputType="phone"
-        android:hint="Number (Home)"
-        android:numeric="integer" />
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/birthdate"
-        android:layout_marginTop="94dp"
-        android:hint="Date of Birth"
-        android:layout_below="@+id/last"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:ems="10"
-        android:id="@+id/emernum"
-        android:hint="Number (Emergancy)"
-        android:numeric="integer"
-        android:layout_below="@+id/phonenum"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="22dp" />
-
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:id="@+id/radioGroup"
-        android:layout_below="@+id/last"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="133dp"
-        android:layout_marginStart="133dp">
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Male"
-            android:id="@+id/male"
-            android:checked="true"
-            android:layout_gravity="left" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Female"
-            android:id="@+id/female"
-            android:layout_alignTop="@+id/radioGroup"
-            android:layout_toRightOf="@+id/radioGroup"
-            android:layout_toEndOf="@+id/radioGroup"
-            android:checked="false"
-            android:layout_gravity="left" />
-
-    </RadioGroup>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Patient"
-        android:id="@+id/addPatient"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="34dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginBottom="123dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/diagnosis"
-        android:layout_marginTop="28dp"
-        android:hint="Primary diagnosis"
-        android:layout_below="@+id/emernum"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-</RelativeLayout>-->

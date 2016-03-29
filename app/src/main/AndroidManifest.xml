@@ -63,9 +63,13 @@
         <activity
             android:name=".Healthcare"
             android:label="@string/title_activity_healthcare"
-            android:theme="@style/AppTheme.NoActionBar">
-            
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".PatientProfileActivity"
+            android:label="Profile"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

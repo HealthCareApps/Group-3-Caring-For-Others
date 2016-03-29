@@ -5,13 +5,17 @@
         <item name="actionBarSize">55dip</item>
     </style>
 
+    <!-- Hides the Action bar. Set in the Manifest -->
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+
+    <!-- Tab layout style -->
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/MyCustomTabText</item>
         <item name="tabSelectedTextColor">#1ba0e1</item>

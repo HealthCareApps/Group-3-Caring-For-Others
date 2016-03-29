@@ -1,11 +1,10 @@
 package edu.fau.ngamarra2014.sync_care;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +14,7 @@ import android.widget.RadioGroup;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AddPatient extends Activity {
+public class AddPatient extends AppCompatActivity {
 
     private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
