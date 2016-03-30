@@ -10,25 +10,26 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 public class PatientActivity extends AppCompatActivity {
 
     JSONObject patientInfo;
-    TextView diagnosis, dob;
+    TextView diagnosis, dob, name;
     ImageButton profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient);
+        setContentView(R.layout.patient_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        name = (TextView) findViewById(R.id.pname);
+
         try{
             patientInfo = new JSONObject(getIntent().getStringExtra("patient"));
-            setTitle(patientInfo.getString("first") + " " + patientInfo.getString("last"));
+            name.setText(patientInfo.getString("first") + " " + patientInfo.getString("last"));
             diagnosis = (TextView) findViewById(R.id.pdiganosis);
             dob = (TextView) findViewById(R.id.dob);
 

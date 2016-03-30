@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/leaves"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.letsnurture.ln_202.coordinatorlayoutpart1.ScrollingActivity"
-    tools:showIn="@layout/activity_healthcare">
+    tools:context="com.letsnurture.ln_202.coordinatorlayoutpart1.ScrollingActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

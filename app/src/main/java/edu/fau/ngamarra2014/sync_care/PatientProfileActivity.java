@@ -3,7 +3,6 @@ package edu.fau.ngamarra2014.sync_care;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,14 +14,14 @@ import org.json.JSONObject;
 public class PatientProfileActivity extends AppCompatActivity {
 
     JSONObject info;
-    EditText firstname, lastname, DOB, primarynum, emergancynum;
+    EditText firstname, lastname, DOB, primarynum, emergancynum, address, city, zipcode;
     ImageButton edit, back;
     Button save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.patient_profile_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -32,6 +31,9 @@ public class PatientProfileActivity extends AppCompatActivity {
         DOB = (EditText) findViewById(R.id.dob);
         primarynum = (EditText) findViewById(R.id.phonenum);
         emergancynum = (EditText) findViewById(R.id.emernum);
+        address = (EditText) findViewById(R.id.address);
+        city = (EditText) findViewById(R.id.city);
+        zipcode = (EditText) findViewById(R.id.zipcode);
         edit = (ImageButton) findViewById(R.id.editButton);
         save = (Button) findViewById(R.id.save);
         back = (ImageButton) findViewById(R.id.previousButton);
@@ -98,5 +100,14 @@ public class PatientProfileActivity extends AppCompatActivity {
         emergancynum.setFocusable(set);
         emergancynum.setFocusableInTouchMode(set);
         emergancynum.setClickable(set);
+        address.setFocusable(set);
+        address.setFocusableInTouchMode(set);
+        address.setClickable(set);
+        city.setFocusable(set);
+        city.setFocusableInTouchMode(set);
+        city.setClickable(set);
+        zipcode.setFocusable(set);
+        zipcode.setFocusableInTouchMode(set);
+        zipcode.setClickable(set);
     }
 }

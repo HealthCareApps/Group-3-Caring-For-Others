@@ -19,7 +19,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     private ArrayList<String> titles = new ArrayList<String>();
     private ArrayList<String> details = new ArrayList<String>();
-    private int[] images = { R.drawable.profile};
+    private int[] images = { R.drawable.mario_icon};
     private JSONArray patients;
 
     public RecyclerAdapter(JSONArray p){

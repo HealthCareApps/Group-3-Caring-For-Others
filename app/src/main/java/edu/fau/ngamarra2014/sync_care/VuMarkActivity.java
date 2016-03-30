@@ -7,6 +7,6 @@ public class VuMarkActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.vumark);
+        setContentView(R.layout.z_vumark);
     }
 }

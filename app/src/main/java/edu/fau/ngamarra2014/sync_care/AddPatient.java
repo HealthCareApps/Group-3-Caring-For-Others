@@ -33,7 +33,7 @@ public class AddPatient extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_patient);
+        setContentView(R.layout.patient_add_activity);
 
         id = getIntent().getIntExtra("id",0);
 

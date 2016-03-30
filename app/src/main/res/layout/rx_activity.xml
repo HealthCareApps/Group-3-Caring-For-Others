@@ -18,7 +18,7 @@
         android:layout_height="fill_parent"
         android:name="edu.fau.ngamarra2014.sync_care.RxInfoFragment"
         android:id="@+id/info"
-        tools:layout="@layout/rx_info"
+        tools:layout="@layout/rx_content"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/list"
         android:layout_marginBottom="63dp"

@@ -23,10 +23,10 @@
         android:hint="Username"
         android:textColor="#FFFFFF"
         android:gravity="center|center_horizontal"
+        android:textColorHint="#FFFFFF"
         android:layout_above="@+id/password"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="26dp"
-        android:textColorHint="#FFFFFF" />
+        android:layout_marginBottom="27dp" />
 
     <EditText
         android:layout_width="300dp"
@@ -37,10 +37,10 @@
         android:hint="Password"
         android:textColor="#FFFFFF"
         android:gravity="center|center_horizontal"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/username"
-        android:layout_alignStart="@+id/username"
-        android:textColorHint="#FFFFFF" />
+        android:textColorHint="#FFFFFF"
+        android:layout_marginBottom="41dp"
+        android:layout_above="@+id/login"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="200dp"
@@ -48,9 +48,9 @@
         android:text="LOG IN"
         android:id="@+id/login"
         android:gravity="center|center_horizontal"
+        android:layout_marginBottom="43dp"
         android:layout_above="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="33dp" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -60,10 +60,10 @@
         android:id="@+id/textView"
         android:textColor="#FFFFFF"
         android:gravity="center|center_horizontal"
+        android:layout_marginBottom="328dp"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/login"
-        android:layout_alignStart="@+id/login"
-        android:layout_marginBottom="247dp" />
+        android:layout_alignStart="@+id/login" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -77,5 +77,20 @@
         android:layout_alignTop="@+id/textView"
         android:layout_toRightOf="@+id/textView"
         android:layout_toEndOf="@+id/textView" />
+
+    <TextView
+        android:layout_width="450dp"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Sync-Care! The worlds first platform that enables synchronization of patients medical information with family, doctors, and caretakers."
+        android:id="@+id/textView2"
+        android:layout_marginTop="34dp"
+        android:textColor="#ffffff"
+        android:textSize="25dp"
+        android:layout_below="@+id/signup"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="58dp"
+        android:layout_marginEnd="58dp"
+        android:gravity="center" />
 
 </RelativeLayout>

@@ -32,7 +32,7 @@ public class registerActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
+        setContentView(R.layout.register_activity);
 
         inputFirst = (EditText) findViewById(R.id.firstname);
         inputLast = (EditText) findViewById(R.id.lastname);

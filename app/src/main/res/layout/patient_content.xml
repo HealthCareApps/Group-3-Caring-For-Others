@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="edu.fau.ngamarra2014.sync_care.PatientActivity"
-    tools:showIn="@layout/activity_patient"
+    tools:showIn="@layout/patient_activity"
     android:background="#ffffff">
 
     <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,9 +22,19 @@
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="600dp"
-            android:layout_height="100dp"
+            android:layout_height="64dp"
             android:orientation="vertical"
             android:layout_columnSpan="2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Date of Birth: "
+                android:id="@+id/dob"
+                android:paddingTop="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -33,18 +43,7 @@
                 android:text="Primary Diagnosis"
                 android:id="@+id/pdiganosis"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="27dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Date of Birth: "
-                android:id="@+id/dob"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp" />
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
 
@@ -58,7 +57,6 @@
             android:padding="5dp"
             android:background="#ffffff"
             android:clickable="true"
-            android:layout_marginTop="62dp"
             android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true"
             android:layout_gravity="right" />
@@ -66,14 +64,13 @@
         <ImageButton
             android:layout_width="300dp"
             android:layout_height="200dp"
-            android:id="@+id/doc"
-            android:src="@drawable/doctor_button"
+            android:id="@+id/healthcare"
+            android:src="@drawable/healthcare_button"
             android:cropToPadding="false"
             android:scaleType="centerCrop"
             android:padding="5dp"
             android:background="#ffffff"
             android:clickable="true"
-            android:layout_marginTop="62dp"
             android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true" />
 
@@ -87,24 +84,9 @@
             android:padding="5dp"
             android:background="#ffffff"
             android:clickable="true"
-            android:layout_marginTop="62dp"
             android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true"
             android:layout_gravity="right" />
-
-        <ImageButton
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:id="@+id/healthcare"
-            android:src="@drawable/pharmacy_button"
-            android:cropToPadding="false"
-            android:scaleType="centerCrop"
-            android:padding="5dp"
-            android:background="#ffffff"
-            android:clickable="true"
-            android:layout_marginTop="62dp"
-            android:layout_below="@+id/imageView"
-            android:layout_centerHorizontal="true" />
 
         <ImageButton
             android:layout_width="300dp"
@@ -116,7 +98,6 @@
             android:padding="5dp"
             android:background="#ffffff"
             android:clickable="true"
-            android:layout_marginTop="62dp"
             android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true" />
 
@@ -130,7 +111,6 @@
             android:padding="5dp"
             android:background="#ffffff"
             android:clickable="true"
-            android:layout_marginTop="62dp"
             android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true" />
 

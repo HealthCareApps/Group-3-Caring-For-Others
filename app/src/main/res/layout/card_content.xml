@@ -10,6 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="edu.fau.ngamarra2014.carddemo.CardDemoActivity"
-    tools:showIn="@layout/activity_card">
+    tools:showIn="@layout/card_activity">
 
 </RelativeLayout>

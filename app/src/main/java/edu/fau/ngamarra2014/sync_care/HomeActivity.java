@@ -1,10 +1,11 @@
 package edu.fau.ngamarra2014.sync_care;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +15,7 @@ import android.widget.ImageButton;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class HomeActivity extends AppCompatActivity{
+public class HomeActivity extends NavigationActivity{
 
     Button rx;
     ImageButton addPatient, patients;
@@ -28,7 +29,11 @@ public class HomeActivity extends AppCompatActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_screen);
+        //setContentView(R.layout.home_activity);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.home_activity, null, false);
+        drawer.addView(contentView, 0);
 
         rx = (Button) findViewById(R.id.rxButton);
         addPatient = (ImageButton) findViewById(R.id.addPatient);
@@ -36,8 +41,6 @@ public class HomeActivity extends AppCompatActivity{
 
         username = getIntent().getStringExtra("username");
         userid = getIntent().getIntExtra("id", 0);
-
-        setTitle("Welcome, " + username);
 
         addPatient.setOnClickListener(new View.OnClickListener() {
 

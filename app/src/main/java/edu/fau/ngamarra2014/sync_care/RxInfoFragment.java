@@ -2,7 +2,6 @@ package edu.fau.ngamarra2014.sync_care;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ public class RxInfoFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.rx_info,
+        View view = inflater.inflate(R.layout.rx_content,
                 container, false);
 
         name = (EditText) view.findViewById(R.id.name);

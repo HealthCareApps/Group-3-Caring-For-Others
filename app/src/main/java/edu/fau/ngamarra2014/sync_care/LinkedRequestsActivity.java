@@ -7,6 +7,6 @@ import android.os.Bundle;
 public class LinkedRequestsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.linked_requests);
+        setContentView(R.layout.z_linked_requests);
     }
 }
