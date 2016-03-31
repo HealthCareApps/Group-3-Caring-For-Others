@@ -42,9 +42,6 @@
             android:name=".AccountActivity"
             android:label="Account"/>
         <activity
-            android:name=".RxActivity"
-            android:label="Prescriptions" />
-        <activity
             android:name=".AddPatient"
             android:label="Add Patient" />
         <activity
@@ -58,6 +55,10 @@
         <activity
             android:name=".Healthcare"
             android:label="@string/title_activity_healthcare"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RxListActivity"
+            android:label="Prescriptions"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PatientProfileActivity"

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,14 +20,10 @@ public class AddPatient extends AppCompatActivity {
     private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
 
-    EditText first;
-    EditText last;
-    EditText dateofbirth;
-    EditText number;
-    EditText emergancy;
+    EditText first, last, dateofbirth, number, emergancy;
     RadioGroup radio;
     Button add;
-    int id;
+    String userid;
 
     private static String add_patient_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addPatient.php";
 
@@ -35,7 +32,7 @@ public class AddPatient extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.patient_add_activity);
 
-        id = getIntent().getIntExtra("id",0);
+        userid = getIntent().getStringExtra("id");
 
         first = (EditText) findViewById(R.id.first);
         last = (EditText) findViewById(R.id.last);
@@ -57,12 +54,7 @@ public class AddPatient extends AppCompatActivity {
 
     class CreatePatient extends AsyncTask<String, String, String> {
 
-        String fname;
-        String lname;
-        String birth;
-        String phoneNumber;
-        String emergancyNumber;
-        String gender;
+        String fname, lname, birth, phoneNumber, emergancyNumber, gender;
         RadioButton rd = (RadioButton) findViewById(radio.getCheckedRadioButtonId());
 
         /**
@@ -74,7 +66,8 @@ public class AddPatient extends AppCompatActivity {
             pDialog = new ProgressDialog(AddPatient.this);
             pDialog.setMessage("Adding Patient...");
             pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
+            pDialog.setCancelable(false);
+            pDialog.setCanceledOnTouchOutside(false);
             pDialog.show();
 
             fname = first.getText().toString();
@@ -86,13 +79,10 @@ public class AddPatient extends AppCompatActivity {
             gender = rd.getText().toString();
         }
 
-        /**
-         * Creating product
-         * */
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("caretaker", Integer.toString(id));
+            QueryString query = new QueryString("caretaker", userid);
             query.add("first", fname);
             query.add("last", lname);
             query.add("birth", birth);
@@ -100,22 +90,17 @@ public class AddPatient extends AppCompatActivity {
             query.add("emergancy", emergancyNumber);
             query.add("gender", gender);
 
-            // getting JSON Object
-            // Note that create product url accepts POST method
             jsonParser.setParams(query);
-            JSONObject json = jsonParser.makeHttpRequest(add_patient_url,
+            JSONArray json = jsonParser.makeHttpRequest(add_patient_url,
                     "POST");
 
             // check for success tag
             try {
-                int success = json.getInt("success");
+                int success = json.getInt(0);
 
                 if (success == 1) {
-                    // successfully created product
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                     startActivity(i);
-
-                    // closing this screen
                     finish();
                 } else {
                     // failed to create product
@@ -127,9 +112,6 @@ public class AddPatient extends AppCompatActivity {
             return null;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog once done
             pDialog.dismiss();

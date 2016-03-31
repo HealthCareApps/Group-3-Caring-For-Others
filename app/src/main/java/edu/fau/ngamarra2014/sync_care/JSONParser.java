@@ -18,7 +18,6 @@ import android.util.Log;
 public class JSONParser {
 
     static InputStream is = null;
-    static JSONObject jObj = null;
     static JSONArray jArray = null;
     static String json = "";
 
@@ -34,7 +33,7 @@ public class JSONParser {
     }
     // function get json from url
     // by making HTTP POST or GET mehtod
-    public JSONObject makeHttpRequest(String url, String method) {
+    public JSONArray makeHttpRequest(String url, String method) {
         // Making HTTP request
         try {
 
@@ -82,21 +81,13 @@ public class JSONParser {
 
         // try parse the string to a JSON object
         try {
-            jObj = new JSONObject(json);
+            jArray = new JSONArray(json);
+            Log.i("JSONArray", jArray.toString());
+
         } catch (JSONException e) {
-            try{
-                jArray = new JSONArray(json);
-                Log.i("JSONArray", jArray.toString());
-                jObj = new JSONObject();
-                for(int i = 0; i < jArray.length(); i++){
-                    jObj.accumulate("result", jArray.optJSONObject(i));
-                }
-                Log.i("JSONObject", jObj.toString());
-            }catch (JSONException ex){
-                Log.e("JSON Parser", "Error parsing data " + ex.toString());
-            }
+            Log.i("Error", "makeHttpRequest: ");
         }
-        return jObj;
+        return jArray;
 
     }
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,7 +70,8 @@ public class registerActivity extends Activity {
             pDialog = new ProgressDialog(registerActivity.this);
             pDialog.setMessage("Creating Product..");
             pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
+            pDialog.setCancelable(false);
+            pDialog.setCanceledOnTouchOutside(false);
             pDialog.show();
 
             first = inputFirst.getText().toString();
@@ -94,15 +96,14 @@ public class registerActivity extends Activity {
             // getting JSON Object
             // Note that create product url accepts POST method
             jsonParser.setParams(query);
-            JSONObject json = jsonParser.makeHttpRequest(register_caretaker_url,
-                    "POST");
+            JSONArray json = jsonParser.makeHttpRequest(register_caretaker_url, "POST");
 
             // check log cat fro response
             Log.d("Create Response", json.toString());
 
             // check for success tag
             try {
-                int success = json.getInt("success");
+                int success = json.getInt(0);
 
                 if (success == 1) {
                     // successfully created product

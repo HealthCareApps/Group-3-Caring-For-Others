@@ -13,15 +13,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class HomeActivity extends NavigationActivity{
 
-    Button rx;
     ImageButton addPatient, patients;
-    String username;
-    int userid;
-    JSONArray array;
+    String username, userid;
+    JSONObject info;
 
     private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
@@ -29,25 +28,29 @@ public class HomeActivity extends NavigationActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.home_activity);
+
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.home_activity, null, false);
         drawer.addView(contentView, 0);
 
-        rx = (Button) findViewById(R.id.rxButton);
         addPatient = (ImageButton) findViewById(R.id.addPatient);
         patients = (ImageButton) findViewById(R.id.patients);
 
-        username = getIntent().getStringExtra("username");
-        userid = getIntent().getIntExtra("id", 0);
+        try {
+            info = new JSONObject(getIntent().getStringExtra("info"));
+            username = info.getString("username");
+            userid = info.getString("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         addPatient.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), AddPatient.class);
-                i.putExtra("id", userid); //Patients id for the prescriptions
+                i.putExtra("id", userid);
                 startActivity(i);
             }
         });
@@ -58,37 +61,6 @@ public class HomeActivity extends NavigationActivity{
                 new GrabPatients().execute();
             }
         });
-
-        rx.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), RxActivity.class);
-                i.putExtra("id", userid); //Patients id for the prescriptions
-                startActivity(i);
-            }
-        });
-
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent set = new Intent(getApplicationContext(), SettingsActivity.class);
-                set.putExtra("settingsFor", username);
-                startActivity(set);
-                return true;
-            case R.id.logout:
-                Intent signin = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(signin);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     class GrabPatients extends AsyncTask<String, String, String> {
@@ -99,29 +71,25 @@ public class HomeActivity extends NavigationActivity{
             pDialog = new ProgressDialog(HomeActivity.this);
             pDialog.setMessage("Getting Patients...");
             pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
+            pDialog.setCancelable(false);
+            pDialog.setCanceledOnTouchOutside(false);
             pDialog.show();
         }
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("id", Integer.toString(userid));
+            QueryString query = new QueryString("id", userid);
 
             jsonParser.setParams(query);
-            JSONObject json = jsonParser.makeHttpRequest(grab_patient_url, "GET");
+            JSONArray json = jsonParser.makeHttpRequest(grab_patient_url, "GET");
 
             try {
-                if(json.has("result")){
-                    array = json.getJSONArray("result");
-                }
-
-                if(!json.has("error")){
-                    // successfully created product
+                if(json.length() > 0){
                     Intent i = new Intent(getApplicationContext(), PatientListActivity.class);
-                    i.putExtra("patients", array.toString());
+                    i.putExtra("patients", json.toString());
                     startActivity(i);
                 } else {
-                    // failed to create product
+                    // failed
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -130,11 +98,7 @@ public class HomeActivity extends NavigationActivity{
             return null;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
         protected void onPostExecute(String file_url) {
-            // dismiss the dialog once done
             pDialog.dismiss();
         }
 

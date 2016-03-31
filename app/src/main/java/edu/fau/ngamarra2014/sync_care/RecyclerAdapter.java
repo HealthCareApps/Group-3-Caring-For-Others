@@ -1,9 +1,7 @@
 package edu.fau.ngamarra2014.sync_care;
 
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +24,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         patients = p;
         for(int i = 0; i < p.length(); i++){
             try{
-                titles.add(p.getJSONObject(i).getString("first") + " " + p.getJSONObject(i).getString("last"));
+                titles.add(p.getJSONObject(i).getString("name"));
                 details.add("DOB: " + p.getJSONObject(i).getString("birthdate"));
             }catch(JSONException e){
 
@@ -37,7 +35,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.card_layout, viewGroup, false);
+                .inflate(R.layout.card_patient_layout, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -62,11 +60,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
             itemImage =
-                    (ImageView)itemView.findViewById(R.id.item_image);
+                    (ImageView) itemView.findViewById(R.id.item_image);
             itemTitle =
-                    (TextView)itemView.findViewById(R.id.item_title);
+                    (TextView) itemView.findViewById(R.id.item_title);
             itemDetail =
-                    (TextView)itemView.findViewById(R.id.item_detail);
+                    (TextView) itemView.findViewById(R.id.item_detail);
 
             itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -75,16 +73,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     int position = getAdapterPosition();
                     Intent i = new Intent();
                     i.setClass(v.getContext(), PatientActivity.class);
-                    try{
+                    try {
                         i.putExtra("patient", patients.getJSONObject(position).toString());
-                    }catch(JSONException e){
-
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                     v.getContext().startActivity(i);
                 }
             });
+        }
     }
-}
 
 }
 

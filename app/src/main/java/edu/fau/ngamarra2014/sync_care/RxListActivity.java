@@ -1,6 +1,8 @@
 package edu.fau.ngamarra2014.sync_care;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,15 +11,13 @@ import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
-/**
- * Created by Nick on 3/25/2016.
- */
-public class PatientListActivity extends NavigationActivity {
+public class RxListActivity extends NavigationActivity{
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
-    JSONArray patients;
+    JSONArray prescriptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +29,8 @@ public class PatientListActivity extends NavigationActivity {
         drawer.addView(contentView, 0);
 
         try {
-            patients = new JSONArray(getIntent().getStringExtra("patients"));
-        }catch(JSONException e){
+            prescriptions = new JSONArray(getIntent().getStringExtra("rx"));
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -38,7 +38,7 @@ public class PatientListActivity extends NavigationActivity {
                 (RecyclerView) findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerAdapter(patients);
+        adapter = new RxRecyclerAdapter(prescriptions);
         recyclerView.setAdapter(adapter);
 
     }

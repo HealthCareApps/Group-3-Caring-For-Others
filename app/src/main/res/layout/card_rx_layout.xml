@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/rx_card_view"
+    android:layout_margin="5dp"
+    card_view:cardBackgroundColor="#f2f0f0"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="3dp"
+    card_view:contentPadding="4dp" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp" >
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/item_image"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_name"
+            android:layout_toRightOf="@+id/item_image"
+            android:layout_alignParentTop="true"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/doctor"
+            android:text="Doctor: "
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/item_image"
+            android:layout_below="@+id/item_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_doctor"
+            android:layout_toRightOf="@+id/doctor"
+            android:layout_below="@+id/item_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dosage"
+            android:text="Dosage: "
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/item_image"
+            android:layout_below="@+id/item_doctor"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_dosage"
+            android:layout_toRightOf="@+id/dosage"
+            android:layout_below="@+id/item_doctor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/instructions"
+            android:text="Instructions: "
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/item_image"
+            android:layout_below="@+id/item_dosage" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_instructions"
+            android:layout_toRightOf="@+id/instructions"
+            android:layout_below="@+id/item_dosage" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/symptoms"
+            android:text="Symptoms: "
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/item_image"
+            android:layout_below="@+id/item_instructions" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_symptoms"
+            android:layout_toRightOf="@+id/symptoms"
+            android:layout_below="@+id/item_instructions" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

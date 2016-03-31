@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
@@ -70,7 +72,8 @@ public class LoginActivity extends AppCompatActivity {
             pDialog = new ProgressDialog(LoginActivity.this);
             pDialog.setMessage("Logging in..");
             pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
+            pDialog.setCancelable(false);
+            pDialog.setCanceledOnTouchOutside(false);
             pDialog.show();
 
             username = inputUsername.getText().toString();
@@ -89,21 +92,20 @@ public class LoginActivity extends AppCompatActivity {
             // getting JSON Object
             // Note that create product url accepts POST method
             jsonParser.setParams(query);
-            JSONObject json = jsonParser.makeHttpRequest(login_url, "POST");
+            JSONArray json = jsonParser.makeHttpRequest(login_url, "POST");
 
             // check for success tag
             try {
-                if(!json.has("error")){
+                if(!json.getString(0).equals("Invalid")){
                     // successfully created product
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                    i.putExtra("username", username);
-                    i.putExtra("id", json.getInt("id"));
+                    i.putExtra("info", json.getJSONObject(0).toString());
                     startActivity(i);
 
                     // closing this screen
                     finish();
                 } else {
-                    // failed to create product
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
