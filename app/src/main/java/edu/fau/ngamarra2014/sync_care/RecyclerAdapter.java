@@ -15,17 +15,18 @@ import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
 
+    Globals globals = Globals.getInstance();
+
     private ArrayList<String> titles = new ArrayList<String>();
     private ArrayList<String> details = new ArrayList<String>();
     private int[] images = { R.drawable.mario_icon};
-    private JSONArray patients;
 
-    public RecyclerAdapter(JSONArray p){
-        patients = p;
-        for(int i = 0; i < p.length(); i++){
+    public RecyclerAdapter(){
+
+        for(int i = 0; i < globals.getPatients().length(); i++){
             try{
-                titles.add(p.getJSONObject(i).getString("name"));
-                details.add("DOB: " + p.getJSONObject(i).getString("birthdate"));
+                titles.add(globals.getPatients().getJSONObject(i).getString("name"));
+                details.add("DOB: " + globals.getPatients().getJSONObject(i).getString("birthdate"));
             }catch(JSONException e){
 
             }
@@ -73,8 +74,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     int position = getAdapterPosition();
                     Intent i = new Intent();
                     i.setClass(v.getContext(), PatientActivity.class);
+
                     try {
-                        i.putExtra("patient", patients.getJSONObject(position).toString());
+                        globals.setCurrentPatient(globals.getPatients().getJSONObject(position));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

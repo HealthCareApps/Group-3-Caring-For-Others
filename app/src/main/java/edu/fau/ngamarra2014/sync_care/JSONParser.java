@@ -82,8 +82,6 @@ public class JSONParser {
         // try parse the string to a JSON object
         try {
             jArray = new JSONArray(json);
-            Log.i("JSONArray", jArray.toString());
-
         } catch (JSONException e) {
             Log.i("Error", "makeHttpRequest: ");
         }

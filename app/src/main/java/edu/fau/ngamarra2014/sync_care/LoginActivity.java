@@ -1,6 +1,5 @@
 package edu.fau.ngamarra2014.sync_care;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -17,11 +16,7 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private ProgressDialog pDialog;
-
-    JSONParser jsonParser = new JSONParser();
-
-    private static String login_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/login.php";
+    Globals globals = Globals.getInstance();
 
     EditText inputUsername;
     EditText inputPassword;
@@ -60,12 +55,13 @@ public class LoginActivity extends AppCompatActivity {
 
     class Signin extends AsyncTask<String, String, String> {
 
+        private ProgressDialog pDialog;
+        JSONParser jsonParser = new JSONParser();
+        private String login_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/login.php";
+
         String username;
         String password;
 
-        /**
-         * Before starting background thread Show Progress Dialog
-         * */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -80,29 +76,22 @@ public class LoginActivity extends AppCompatActivity {
             password = inputPassword.getText().toString();
         }
 
-        /**
-         * Creating product
-         * */
         protected String doInBackground(String... args) {
 
             // Building Parameters
             QueryString query = new QueryString("username", username);
             query.add("password", password);
 
-            // getting JSON Object
-            // Note that create product url accepts POST method
             jsonParser.setParams(query);
             JSONArray json = jsonParser.makeHttpRequest(login_url, "POST");
 
-            // check for success tag
             try {
                 if(!json.getString(0).equals("Invalid")){
-                    // successfully created product
+
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                    i.putExtra("info", json.getJSONObject(0).toString());
+                    globals.setUser(json.getJSONObject(0));
                     startActivity(i);
 
-                    // closing this screen
                     finish();
                 } else {
 
@@ -114,9 +103,6 @@ public class LoginActivity extends AppCompatActivity {
             return null;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog once done
             pDialog.dismiss();

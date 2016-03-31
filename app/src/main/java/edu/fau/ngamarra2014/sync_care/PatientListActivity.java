@@ -10,14 +10,10 @@ import android.view.View;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-/**
- * Created by Nick on 3/25/2016.
- */
 public class PatientListActivity extends NavigationActivity {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
-    JSONArray patients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,17 +24,11 @@ public class PatientListActivity extends NavigationActivity {
         View contentView = inflater.inflate(R.layout.card_activity, null, false);
         drawer.addView(contentView, 0);
 
-        try {
-            patients = new JSONArray(getIntent().getStringExtra("patients"));
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
-
         recyclerView =
                 (RecyclerView) findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerAdapter(patients);
+        adapter = new RecyclerAdapter();
         recyclerView.setAdapter(adapter);
 
     }

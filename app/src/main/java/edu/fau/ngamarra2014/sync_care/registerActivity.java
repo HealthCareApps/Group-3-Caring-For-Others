@@ -20,16 +20,13 @@ import org.json.JSONObject;
  */
 public class registerActivity extends Activity {
 
-    private ProgressDialog pDialog;
-    JSONParser jsonParser = new JSONParser();
+    Globals globals = Globals.getInstance();
 
     EditText inputFirst;
     EditText inputLast;
     EditText inputEmail;
     EditText inputUsername;
     EditText inputPassword;
-
-    private static String register_caretaker_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/register.php";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,15 +52,13 @@ public class registerActivity extends Activity {
 
     class CreateNewUser extends AsyncTask<String, String, String> {
 
-        String first;
-        String last;
-        String email;
-        String username;
-        String password;
+        JSONObject user = new JSONObject();
+        private ProgressDialog pDialog;
+        JSONParser jsonParser = new JSONParser();
+        private String register_caretaker_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/register.php";
 
-        /**
-         * Before starting background thread Show Progress Dialog
-         * */
+        String first, last, email, username, password;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -81,9 +76,6 @@ public class registerActivity extends Activity {
             password = inputPassword.getText().toString();
         }
 
-        /**
-         * Creating product
-         * */
         protected String doInBackground(String... args) {
 
             // Building Parameters
@@ -93,28 +85,25 @@ public class registerActivity extends Activity {
             query.add("username", username);
             query.add("password", password);
 
-            // getting JSON Object
-            // Note that create product url accepts POST method
             jsonParser.setParams(query);
             JSONArray json = jsonParser.makeHttpRequest(register_caretaker_url, "POST");
 
-            // check log cat fro response
-            Log.d("Create Response", json.toString());
-
-            // check for success tag
             try {
                 int success = json.getInt(0);
 
                 if (success == 1) {
-                    // successfully created product
+                    user.put("first", first);
+                    user.put("last", last);
+                    user.put("email", email);
+                    user.put("username", username);
+                    globals.setUser(user);
+
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                    i.putExtra("username", username);
                     startActivity(i);
 
-                    // closing this screen
                     finish();
                 } else {
-                    // failed to create product
+                    // failed
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -123,9 +112,6 @@ public class registerActivity extends Activity {
             return null;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
         protected void onPostExecute(String file_url) {
             // dismiss the dialog once done
             pDialog.dismiss();

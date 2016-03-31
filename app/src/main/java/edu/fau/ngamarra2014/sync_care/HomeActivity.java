@@ -15,13 +15,10 @@ import org.json.JSONObject;
 
 public class HomeActivity extends NavigationActivity{
 
-    ImageButton addPatient, patients;
-    String username, userid;
-    JSONObject info;
+    Globals globals = Globals.getInstance();
 
-    private ProgressDialog pDialog;
-    JSONParser jsonParser = new JSONParser();
-    private static String grab_patient_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/getPatients.php";
+    ImageButton addPatient, patients;
+    String userid;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +32,7 @@ public class HomeActivity extends NavigationActivity{
         patients = (ImageButton) findViewById(R.id.patients);
 
         try {
-            info = new JSONObject(getIntent().getStringExtra("info"));
-            username = info.getString("username");
-            userid = info.getString("id");
+            userid = globals.getuser().getString("id");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -47,7 +42,6 @@ public class HomeActivity extends NavigationActivity{
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), AddPatient.class);
-                i.putExtra("id", userid);
                 startActivity(i);
             }
         });
@@ -61,6 +55,10 @@ public class HomeActivity extends NavigationActivity{
     }
 
     class GrabPatients extends AsyncTask<String, String, String> {
+
+        private ProgressDialog pDialog;
+        JSONParser jsonParser = new JSONParser();
+        private String grab_patient_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/getPatients.php";
 
         @Override
         protected void onPreExecute() {
@@ -83,7 +81,7 @@ public class HomeActivity extends NavigationActivity{
             try {
                 if(json.length() > 0){
                     Intent i = new Intent(getApplicationContext(), PatientListActivity.class);
-                    i.putExtra("patients", json.toString());
+                    globals.setPatients(json);
                     startActivity(i);
                 } else {
                     // failed

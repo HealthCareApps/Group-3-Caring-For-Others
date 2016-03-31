@@ -13,7 +13,8 @@ import org.json.JSONObject;
 
 public class PatientProfileActivity extends AppCompatActivity {
 
-    JSONObject info;
+    Globals globals = Globals.getInstance();
+
     EditText firstname, lastname, DOB, primarynum, emergancynum, address, city, zipcode;
     ImageButton edit, back;
     Button save;
@@ -41,12 +42,11 @@ public class PatientProfileActivity extends AppCompatActivity {
         toggleTextFields(false);
 
         try{
-            info = new JSONObject(getIntent().getStringExtra("patient"));
-            firstname.setText(info.getString("first"));
-            lastname.setText(info.getString("last"));
-            DOB.setText(info.getString("birthdate"));
-            primarynum.setText(info.getString("phone"));
-            emergancynum.setText(info.getString("emergency"));
+            firstname.setText(globals.getCurrentPatient().getString("first"));
+            lastname.setText(globals.getCurrentPatient().getString("last"));
+            DOB.setText(globals.getCurrentPatient().getString("birthdate"));
+            primarynum.setText(globals.getCurrentPatient().getString("phone"));
+            emergancynum.setText(globals.getCurrentPatient().getString("emergency"));
         }catch (JSONException e){
 
         }
@@ -70,11 +70,11 @@ public class PatientProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try{
-                    info.put("first", firstname.getText().toString());
-                    info.put("last", lastname.getText().toString());
-                    info.put("birthdate", DOB.getText().toString());
-                    info.put("phone", primarynum.getText().toString());
-                    info.put("emergency", emergancynum.getText().toString());
+                    globals.getCurrentPatient().put("first", firstname.getText().toString());
+                    globals.getCurrentPatient().put("last", lastname.getText().toString());
+                    globals.getCurrentPatient().put("birthdate", DOB.getText().toString());
+                    globals.getCurrentPatient().put("phone", primarynum.getText().toString());
+                    globals.getCurrentPatient().put("emergency", emergancynum.getText().toString());
 
                     save.setVisibility(View.INVISIBLE);
                 }catch (JSONException e){

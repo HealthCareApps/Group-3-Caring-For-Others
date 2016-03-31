@@ -17,28 +17,29 @@ import org.json.JSONObject;
 
 public class AddPatient extends AppCompatActivity {
 
-    private ProgressDialog pDialog;
-    JSONParser jsonParser = new JSONParser();
+    Globals globals = Globals.getInstance();
 
-    EditText first, last, dateofbirth, number, emergancy;
+    EditText first, last, dateofbirth, number, emergency;
     RadioGroup radio;
     Button add;
     String userid;
-
-    private static String add_patient_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addPatient.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.patient_add_activity);
 
-        userid = getIntent().getStringExtra("id");
+        try {
+            userid = globals.getuser().getString("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         first = (EditText) findViewById(R.id.first);
         last = (EditText) findViewById(R.id.last);
         dateofbirth = (EditText) findViewById(R.id.birthdate);
         number = (EditText) findViewById(R.id.phonenum);
-        emergancy = (EditText) findViewById(R.id.emernum);
+        emergency = (EditText) findViewById(R.id.emernum);
         radio = (RadioGroup) findViewById(R.id.radioGroup);
 
         add = (Button) findViewById(R.id.addPatient);
@@ -54,12 +55,13 @@ public class AddPatient extends AppCompatActivity {
 
     class CreatePatient extends AsyncTask<String, String, String> {
 
-        String fname, lname, birth, phoneNumber, emergancyNumber, gender;
+        private ProgressDialog pDialog;
+        JSONParser jsonParser = new JSONParser();
+        private String add_patient_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addPatient.php";
+
+        String fname, lname, birth, phoneNumber, emergencyNumber, gender;
         RadioButton rd = (RadioButton) findViewById(radio.getCheckedRadioButtonId());
 
-        /**
-         * Before starting background thread Show Progress Dialog
-         * */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -74,7 +76,7 @@ public class AddPatient extends AppCompatActivity {
             lname = last.getText().toString();
             birth = dateofbirth.getText().toString();
             phoneNumber = number.getText().toString();
-            emergancyNumber = emergancy.getText().toString();
+            emergencyNumber = emergency.getText().toString();
 
             gender = rd.getText().toString();
         }
@@ -87,7 +89,7 @@ public class AddPatient extends AppCompatActivity {
             query.add("last", lname);
             query.add("birth", birth);
             query.add("phone", phoneNumber);
-            query.add("emergancy", emergancyNumber);
+            query.add("emergancy", emergencyNumber);
             query.add("gender", gender);
 
             jsonParser.setParams(query);
@@ -99,11 +101,11 @@ public class AddPatient extends AppCompatActivity {
                 int success = json.getInt(0);
 
                 if (success == 1) {
-                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                    Intent i = new Intent(getApplicationContext(), PatientListActivity.class);
                     startActivity(i);
                     finish();
                 } else {
-                    // failed to create product
+                    // failed
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -113,7 +115,6 @@ public class AddPatient extends AppCompatActivity {
         }
 
         protected void onPostExecute(String file_url) {
-            // dismiss the dialog once done
             pDialog.dismiss();
         }
 

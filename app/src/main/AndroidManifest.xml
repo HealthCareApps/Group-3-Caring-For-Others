@@ -69,6 +69,11 @@
             android:label="@string/title_activity_navigation"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".RxEditActivity"
+            android:label="Edit"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

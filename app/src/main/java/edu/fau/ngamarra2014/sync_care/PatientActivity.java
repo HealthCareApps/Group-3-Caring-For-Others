@@ -17,8 +17,8 @@ import org.json.JSONObject;
 
 public class PatientActivity extends AppCompatActivity {
 
-    JSONObject patientInfo;
-    JSONArray prescriptions;
+    Globals globals = Globals.getInstance();
+
     TextView diagnosis, dob, name;
     ImageButton profile, healthcare, meds;
     String patientid;
@@ -38,11 +38,10 @@ public class PatientActivity extends AppCompatActivity {
         dob = (TextView) findViewById(R.id.dob);
 
         try{
-            patientInfo = new JSONObject(getIntent().getStringExtra("patient"));
-            patientid = patientInfo.getString("id");
-            name.setText(patientInfo.getString("name"));
-            diagnosis.setText("Primary Diagnosis: " + patientInfo.getString("primary_diagnosis"));
-            dob.setText("Date of Birth: " + patientInfo.getString("birthdate"));
+            patientid = globals.getCurrentPatient().getString("id");
+            name.setText(globals.getCurrentPatient().getString("name"));
+            diagnosis.setText("Primary Diagnosis: " + globals.getCurrentPatient().getString("primary_diagnosis"));
+            dob.setText("Date of Birth: " + globals.getCurrentPatient().getString("birthdate"));
 
         }catch(JSONException e){
             e.printStackTrace();
@@ -64,7 +63,7 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                     Intent i = new Intent(getApplicationContext(), RxListActivity.class);
-                    i.putExtra("rx", prescriptions.toString());
+                    //i.putExtra("rx", prescriptions.toString());
                     startActivity(i);
             }
         });
@@ -73,7 +72,6 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), PatientProfileActivity.class);
-                i.putExtra("patient", patientInfo.toString());
                 startActivity(i);
             }
         });
@@ -103,7 +101,7 @@ public class PatientActivity extends AppCompatActivity {
             JSONArray json = jsonParser.makeHttpRequest(patient_info_url, "GET");
 
             try {
-                prescriptions = new JSONArray(json.getJSONObject(0).getString("Prescriptions"));
+                globals.setPatientPrescriptions(new JSONArray(json.getJSONObject(0).getString("Prescriptions")));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
