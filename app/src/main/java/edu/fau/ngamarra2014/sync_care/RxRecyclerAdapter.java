@@ -1,7 +1,8 @@
 package edu.fau.ngamarra2014.sync_care;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,12 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.ViewHolder>{
@@ -29,6 +27,9 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
     private ArrayList<String> symptoms = new ArrayList<String>();
     private int[] images = { R.drawable.rx_bottle_icon};
     RxListActivity RX;
+
+    private String id;
+    private int position;
 
     public RxRecyclerAdapter(RxListActivity rx){
 
@@ -82,6 +83,8 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
 
         public ViewHolder(View itemView) {
             super(itemView);
+
+
             itemImage =
                     (ImageView) itemView.findViewById(R.id.item_image);
             itemName =
@@ -102,10 +105,11 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    position = getAdapterPosition();
                     Intent i = new Intent();
                     i.setClass(v.getContext(), RxEditActivity.class);
                     try {
-                        globals.setCurrentPrescription(globals.getPatientPrescriptions().getJSONObject(getAdapterPosition()));
+                        globals.setCurrentPrescription(globals.getPatientPrescriptions().getJSONObject(position));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -115,10 +119,51 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    globals.getPatientPrescriptions().remove(getAdapterPosition());
-                    RX.onFinishCallback();
+                    position = getAdapterPosition();
+                    try {
+                        id = globals.getPatientPrescriptions().getJSONObject(position).getString("id");
+                        new DeleteRx().execute();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
     }
+    class DeleteRx extends AsyncTask<String, String, String> {
+
+        private ProgressDialog pDialog;
+        JSONParser jsonParser = new JSONParser();
+        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deletePrescription.php";
+
+        protected String doInBackground(String... args) {
+
+            // Building Parameters
+            QueryString query = new QueryString("id", id);
+
+            jsonParser.setParams(query);
+            JSONArray json = jsonParser.makeHttpRequest(delete_url, "POST");
+
+            try {
+                int success = json.getInt(0);
+
+                if (success == 1) {
+                    globals.getPatientPrescriptions().remove(position);
+                    RX.onFinishCallback();
+                } else {
+                    // failed
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(String file_url) {
+
+        }
+
+    }
+
 }
