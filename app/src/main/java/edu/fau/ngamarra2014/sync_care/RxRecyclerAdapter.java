@@ -106,7 +106,6 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
                     i.setClass(v.getContext(), RxEditActivity.class);
                     try {
                         globals.setCurrentPrescription(globals.getPatientPrescriptions().getJSONObject(getAdapterPosition()));
-                        //i.putExtra("rx", globals.getPatientPrescriptions().getJSONObject(getAdapterPosition()).toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -118,7 +117,6 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
                 public void onClick(View v) {
                     globals.getPatientPrescriptions().remove(getAdapterPosition());
                     RX.onFinishCallback();
-                    Log.i("Debug", "onClick: " + v.getContext().getClass());
                 }
             });
         }
