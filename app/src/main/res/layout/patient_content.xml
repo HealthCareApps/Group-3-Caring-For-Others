@@ -64,8 +64,8 @@
         <ImageButton
             android:layout_width="300dp"
             android:layout_height="200dp"
-            android:id="@+id/healthcare"
-            android:src="@drawable/healthcare_button"
+            android:id="@+id/doctor"
+            android:src="@drawable/doctor_button"
             android:cropToPadding="false"
             android:scaleType="centerCrop"
             android:padding="5dp"
@@ -106,6 +106,32 @@
             android:layout_height="200dp"
             android:id="@+id/profile"
             android:src="@drawable/profile_button"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"
+            android:padding="5dp"
+            android:background="#ffffff"
+            android:clickable="true"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:id="@+id/insurance"
+            android:src="@drawable/insurance_icon"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"
+            android:padding="5dp"
+            android:background="#ffffff"
+            android:clickable="true"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:id="@+id/pharmacy"
+            android:src="@drawable/pharmacy_button"
             android:cropToPadding="false"
             android:scaleType="centerCrop"
             android:padding="5dp"
