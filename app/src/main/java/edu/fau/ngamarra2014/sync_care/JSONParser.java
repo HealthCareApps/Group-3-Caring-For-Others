@@ -39,7 +39,6 @@ public class JSONParser {
 
             // check for request method
             if(method == "POST"){
-//                // request method is POST
                 byte[] postData = params.getBytes( StandardCharsets.UTF_8 );
                 HttpURLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
                 urlConnection.setDoOutput(true);
@@ -52,7 +51,6 @@ public class JSONParser {
                 urlConnection.disconnect();
 
             }else if(method == "GET"){
-                // request method is GET
                 HttpURLConnection urlConnection = (HttpURLConnection) new URL(url + "?" + params).openConnection();
                 is = urlConnection.getInputStream();
                 urlConnection.disconnect();
@@ -79,11 +77,10 @@ public class JSONParser {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
 
-        // try parse the string to a JSON object
         try {
             jArray = new JSONArray(json);
         } catch (JSONException e) {
-            Log.i("Error", "makeHttpRequest: ");
+            Log.i("Error", e.toString());
         }
         return jArray;
 

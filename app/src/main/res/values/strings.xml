@@ -1,22 +1,6 @@
 <resources>
     <string name="app_name">Sync-Care</string>
-    <string name="username">Email address</string>
-    <string name="password">Password</string>
-    <string name="login">LOG IN</string>
-    <string name="signup">Sign up now</string>
-    <string name="firstname">John</string>
-    <string name="lastname">Doe</string>
-    <string name="regemail">JohnDoe@example.com</string>
-    <string name="regusername">Enter Username</string>
-    <string name="regpass">Enter Password</string>
-    <string name="register">Register</string>
-    <string name="nameLabel">Name:</string>
-    <string name="title_activity_patient">PatientActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_healthcare">Healthcare</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="string_name">Name</string>
-    <string name="title_activity_navigation">NavigationActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

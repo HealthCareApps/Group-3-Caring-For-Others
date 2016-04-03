@@ -1,6 +1,9 @@
 package edu.fau.ngamarra2014.sync_care;
 
+import android.util.Log;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Globals {
@@ -17,25 +20,22 @@ public class Globals {
     private Globals(){}
 
     //Logged user information
-    public void setUser(JSONObject o){
+    public void setUser(JSONObject o) throws JSONException {
         this.user = o;
+        this.user.put("name", this.user.getString("first") + " " + this.user.getString("last"));
     }
     public JSONObject getuser(){
         return this.user;
     }
 
     //Patients
-    public void setPatients(JSONArray a){
-        this.patients = a;
+    public void setPatients(JSONArray a){ this.patients = a;}
+    public JSONArray getPatients(){ return this.patients;
     }
-    public JSONArray getPatients(){
-        return this.patients;
-    }
+    public void addPatient(JSONObject patient) throws JSONException { this.patients.put(this.patients.length(), patient);}
 
     //Current patient being viewed
-    public void setCurrentPatient(JSONObject o){
-        this.currentPatient = o;
-    }
+    public void setCurrentPatient(JSONObject o){ this.currentPatient = o; }
     public JSONObject getCurrentPatient(){
         return this.currentPatient;
     }

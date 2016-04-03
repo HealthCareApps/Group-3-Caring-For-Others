@@ -25,6 +25,7 @@
         <activity
             android:name=".HomeActivity"
             android:label="Home Page"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".SettingsActivity"
@@ -46,15 +47,15 @@
             android:label="Add Patient" />
         <activity
             android:name=".PatientActivity"
-            android:label="@string/title_activity_patient"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PatientListActivity"
             android:label="List of Patients"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Healthcare"
-            android:label="@string/title_activity_healthcare"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".RxListActivity"
@@ -66,7 +67,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".NavigationActivity"
-            android:label="@string/title_activity_navigation"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity

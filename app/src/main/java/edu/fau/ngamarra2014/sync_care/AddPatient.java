@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -19,9 +21,10 @@ public class AddPatient extends AppCompatActivity {
 
     Globals globals = Globals.getInstance();
 
-    EditText first, last, dateofbirth, number, emergency;
+    EditText first, last, dateofbirth, number, emergency, dia;
     RadioGroup radio;
     Button add;
+    static int valid = 0;
     String userid;
 
     @Override
@@ -40,6 +43,7 @@ public class AddPatient extends AppCompatActivity {
         dateofbirth = (EditText) findViewById(R.id.birthdate);
         number = (EditText) findViewById(R.id.phonenum);
         emergency = (EditText) findViewById(R.id.emernum);
+        dia = (EditText) findViewById(R.id.diagnosis);
         radio = (RadioGroup) findViewById(R.id.radioGroup);
 
         add = (Button) findViewById(R.id.addPatient);
@@ -47,10 +51,35 @@ public class AddPatient extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CreatePatient().execute();
+                valid = 0;
+                FormValidation((ViewGroup) findViewById(R.id.addPatientContent));
+                if(valid == 0){
+                    new CreatePatient().execute();
+                }
             }
         });
 
+    }
+
+    private void FormValidation(ViewGroup group)
+    {
+        for (int i = 0, count = group.getChildCount(); i < count; ++i) {
+            View view = group.getChildAt(i);
+            if (view instanceof EditText) {
+                if(view.getId() == first.getId() || view.getId() == last.getId()
+                        || view.getId() == dateofbirth.getId()
+                        || view.getId() == dia.getId()){
+
+                    if (((EditText)view).getText().toString().length() == 0){
+                        ((EditText) view).setError("Required!");
+                        valid++;
+                    }
+                }
+
+            }
+            if(view instanceof ViewGroup && (((ViewGroup)view).getChildCount() > 0))
+                FormValidation((ViewGroup)view);
+        }
     }
 
     class CreatePatient extends AsyncTask<String, String, String> {
@@ -59,8 +88,9 @@ public class AddPatient extends AppCompatActivity {
         JSONParser jsonParser = new JSONParser();
         private String add_patient_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addPatient.php";
 
-        String fname, lname, birth, phoneNumber, emergencyNumber, gender;
+        String fname, lname, birth, phoneNumber, emergencyNumber, gender, diagnosis;
         RadioButton rd = (RadioButton) findViewById(radio.getCheckedRadioButtonId());
+        JSONObject patient = new JSONObject();
 
         @Override
         protected void onPreExecute() {
@@ -77,7 +107,7 @@ public class AddPatient extends AppCompatActivity {
             birth = dateofbirth.getText().toString();
             phoneNumber = number.getText().toString();
             emergencyNumber = emergency.getText().toString();
-
+            diagnosis = dia.getText().toString();
             gender = rd.getText().toString();
         }
 
@@ -89,18 +119,26 @@ public class AddPatient extends AppCompatActivity {
             query.add("last", lname);
             query.add("birth", birth);
             query.add("phone", phoneNumber);
-            query.add("emergancy", emergencyNumber);
+            query.add("emergency", emergencyNumber);
             query.add("gender", gender);
+            query.add("diagnosis", diagnosis);
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(add_patient_url,
-                    "POST");
+            JSONArray json = jsonParser.makeHttpRequest(add_patient_url, "POST");
 
-            // check for success tag
             try {
                 int success = json.getInt(0);
 
                 if (success == 1) {
+                    patient.put("first", fname);
+                    patient.put("last", lname);
+                    patient.put("birthdate", birth);
+                    patient.put("phone", phoneNumber);
+                    patient.put("emergency", emergencyNumber);
+                    patient.put("gender", gender);
+                    patient.put("primary_diagnosis", diagnosis);
+                    patient.put("name", fname + " " + lname);
+                    globals.addPatient(patient);
                     Intent i = new Intent(getApplicationContext(), PatientListActivity.class);
                     startActivity(i);
                     finish();

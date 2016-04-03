@@ -3,6 +3,7 @@ package edu.fau.ngamarra2014.sync_care;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,24 +32,22 @@ public class LoginActivity extends AppCompatActivity {
 
         findViewById(R.id.background).getBackground().setAlpha(222);
 
-
+        //Text Fields
         inputUsername = (EditText) findViewById(R.id.username);
         inputPassword = (EditText) findViewById(R.id.password);
 
+        //Buttons
         create = (TextView) findViewById(R.id.signup);
         signin = (Button) findViewById(R.id.login);
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), registerActivity.class));
-            }
+            public void onClick(View v) { startActivity(new Intent(getApplicationContext(), registerActivity.class));}
         });
-
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Signin().execute();
+                new Signin(v).execute();
             }
         });
 
@@ -59,8 +59,13 @@ public class LoginActivity extends AppCompatActivity {
         JSONParser jsonParser = new JSONParser();
         private String login_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/login.php";
 
+        private View view;
         String username;
         String password;
+
+        public Signin(View v){
+            this.view = v;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -72,13 +77,14 @@ public class LoginActivity extends AppCompatActivity {
             pDialog.setCanceledOnTouchOutside(false);
             pDialog.show();
 
+            //Getting user credentials
             username = inputUsername.getText().toString();
             password = inputPassword.getText().toString();
         }
 
         protected String doInBackground(String... args) {
 
-            // Building Parameters
+            // Building Parameters for php
             QueryString query = new QueryString("username", username);
             query.add("password", password);
 
@@ -86,27 +92,25 @@ public class LoginActivity extends AppCompatActivity {
             JSONArray json = jsonParser.makeHttpRequest(login_url, "POST");
 
             try {
+                //Login successful
                 if(!json.getString(0).equals("Invalid")){
-
-                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                    //Sets the users information to globals class
                     globals.setUser(json.getJSONObject(0));
+                    //Send user to Home Page
+                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                     startActivity(i);
-
-                    finish();
+                    finish(); //Finish the Login activity so it is removed from the stack
                 } else {
-
+                    //Wrong credentials
+                    Snackbar.make(view, "Invalid credentials", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 
-        protected void onPostExecute(String file_url) {
-            // dismiss the dialog once done
-            pDialog.dismiss();
-        }
-
+        protected void onPostExecute(String file_url) { pDialog.dismiss();}
     }
 }

@@ -54,25 +54,21 @@ public class PatientActivity extends AppCompatActivity {
         healthcare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), Healthcare.class);
-                startActivity(i);
+                startActivity(new Intent(getApplicationContext(), Healthcare.class));
             }
         });
 
         meds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent i = new Intent(getApplicationContext(), RxListActivity.class);
-                    //i.putExtra("rx", prescriptions.toString());
-                    startActivity(i);
+                    startActivity(new Intent(getApplicationContext(), RxListActivity.class));
             }
         });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), PatientProfileActivity.class);
-                startActivity(i);
+                startActivity(new Intent(getApplicationContext(), PatientProfileActivity.class));
             }
         });
     }

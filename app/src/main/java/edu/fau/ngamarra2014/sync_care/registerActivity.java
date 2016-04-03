@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -14,10 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-/**
- * Created by Nick on 3/3/2016.
- */
 public class registerActivity extends Activity {
 
     Globals globals = Globals.getInstance();
@@ -43,12 +40,27 @@ public class registerActivity extends Activity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (FormValidation((ViewGroup) findViewById(R.id.registration))){
                     new CreateNewUser().execute();
+                }
             }
         });
 
     }
 
+    private boolean FormValidation(ViewGroup group)
+    {
+        for (int i = 0, count = group.getChildCount(); i < count; ++i) {
+            View view = group.getChildAt(i);
+            if (view instanceof EditText) {
+                if (((EditText)view).getText().toString().length() == 0){
+                    ((EditText) view).setError(((EditText) view).getHint() + " is required!");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     class CreateNewUser extends AsyncTask<String, String, String> {
 
@@ -58,16 +70,12 @@ public class registerActivity extends Activity {
         private String register_caretaker_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/register.php";
 
         String first, last, email, username, password;
+        int success;
+        private JSONArray json;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(registerActivity.this);
-            pDialog.setMessage("Creating Product..");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.setCanceledOnTouchOutside(false);
-            pDialog.show();
 
             first = inputFirst.getText().toString();
             last = inputLast.getText().toString();
@@ -86,25 +94,11 @@ public class registerActivity extends Activity {
             query.add("password", password);
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(register_caretaker_url, "POST");
+            json = jsonParser.makeHttpRequest(register_caretaker_url, "POST");
 
             try {
-                int success = json.getInt(0);
+                success = json.getInt(0);
 
-                if (success == 1) {
-                    user.put("first", first);
-                    user.put("last", last);
-                    user.put("email", email);
-                    user.put("username", username);
-                    globals.setUser(user);
-
-                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                    startActivity(i);
-
-                    finish();
-                } else {
-                    // failed
-                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -113,8 +107,26 @@ public class registerActivity extends Activity {
         }
 
         protected void onPostExecute(String file_url) {
-            // dismiss the dialog once done
-            pDialog.dismiss();
+            try {
+                if (success == 1) {
+                    user.put("id", json.getString(1));
+                    user.put("first", first);
+                    user.put("last", last);
+                    user.put("email", email);
+                    user.put("username", username);
+                    globals.setUser(user);
+
+                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                    startActivity(i);
+                    finish();
+                }else if(success == 0){
+                    inputUsername.setError("Username already exists");
+                }else if(success == 2){
+                    Log.i("Database error", "Database failed!");
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
         }
 
     }

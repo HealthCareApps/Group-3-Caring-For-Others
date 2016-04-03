@@ -8,12 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
+public class PatientRecyclerAdapter extends RecyclerView.Adapter<PatientRecyclerAdapter.ViewHolder>{
 
     Globals globals = Globals.getInstance();
 
@@ -21,14 +20,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private ArrayList<String> details = new ArrayList<String>();
     private int[] images = { R.drawable.mario_icon};
 
-    public RecyclerAdapter(){
+    public PatientRecyclerAdapter(){
 
         for(int i = 0; i < globals.getPatients().length(); i++){
             try{
                 titles.add(globals.getPatients().getJSONObject(i).getString("name"));
                 details.add("DOB: " + globals.getPatients().getJSONObject(i).getString("birthdate"));
             }catch(JSONException e){
-
+                e.printStackTrace();
             }
         }
     }
@@ -50,7 +49,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public int getItemCount() {
         return titles.size();
     }
-
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -85,6 +83,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             });
         }
     }
-
 }
 

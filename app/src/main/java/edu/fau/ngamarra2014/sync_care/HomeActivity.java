@@ -16,8 +16,6 @@ import org.json.JSONObject;
 public class HomeActivity extends NavigationActivity{
 
     Globals globals = Globals.getInstance();
-
-    ImageButton addPatient, patients;
     String userid;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,30 +26,13 @@ public class HomeActivity extends NavigationActivity{
         View contentView = inflater.inflate(R.layout.home_activity, null, false);
         drawer.addView(contentView, 0);
 
-        addPatient = (ImageButton) findViewById(R.id.addPatient);
-        patients = (ImageButton) findViewById(R.id.patients);
-
         try {
             userid = globals.getuser().getString("id");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        addPatient.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), AddPatient.class);
-                startActivity(i);
-            }
-        });
-
-        patients.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new GrabPatients().execute();
-            }
-        });
+        new GrabPatients().execute();
     }
 
     class GrabPatients extends AsyncTask<String, String, String> {
@@ -80,11 +61,11 @@ public class HomeActivity extends NavigationActivity{
 
             try {
                 if(json.length() > 0){
-                    Intent i = new Intent(getApplicationContext(), PatientListActivity.class);
+                    //Set the patients for user
                     globals.setPatients(json);
-                    startActivity(i);
                 } else {
-                    // failed
+                    //If user has no patients initialize empty array
+                    globals.setPatients(new JSONArray());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
