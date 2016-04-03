@@ -74,6 +74,21 @@
             android:label="Edit"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".DoctorListActivity"
+            android:label="Doctor"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".PharmacyListActivity"
+            android:label="Pharmacy"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".InsuranceListActivity"
+            android:label="Insurance"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

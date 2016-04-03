@@ -20,7 +20,7 @@ public class PatientActivity extends AppCompatActivity {
     Globals globals = Globals.getInstance();
 
     TextView diagnosis, dob, name;
-    ImageButton profile, healthcare, meds;
+    ImageButton profile, doctor, meds, insurance, pharmacy;
     String patientid;
 
     @Override
@@ -47,11 +47,13 @@ public class PatientActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        healthcare = (ImageButton) findViewById(R.id.healthcare);
+        doctor = (ImageButton) findViewById(R.id.doctor);
         meds = (ImageButton) findViewById(R.id.meds);
         profile = (ImageButton) findViewById(R.id.profile);
+        insurance = (ImageButton) findViewById(R.id.insurance);
+        pharmacy = (ImageButton) findViewById(R.id.pharmacy);
 
-        healthcare.setOnClickListener(new View.OnClickListener() {
+        doctor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Healthcare.class));
@@ -69,6 +71,22 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), PatientProfileActivity.class));
+            }
+        });
+
+        insurance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), InsuranceListActivity.class);
+                startActivity(i);
+            }
+        });
+
+        pharmacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), PharmacyListActivity.class);
+                startActivity(i);
             }
         });
     }
