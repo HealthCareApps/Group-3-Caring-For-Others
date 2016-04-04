@@ -134,12 +134,13 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deletePrescription.php";
+        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deleteDoc.php";
 
         protected String doInBackground(String... args) {
 
             // Building Parameters
             QueryString query = new QueryString("id", id);
+            query.add("database", "Prescriptions");
 
             jsonParser.setParams(query);
             JSONArray json = jsonParser.makeHttpRequest(delete_url, "POST");

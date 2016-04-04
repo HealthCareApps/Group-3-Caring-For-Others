@@ -40,17 +40,17 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
 
         Ins = ins;
 
-        for(int i = 0; i < globals.getPatientPrescriptions().length(); i++){
-            /*try{
-                provider.add(globals.getPatientPrescriptions().getJSONObject(i).getString("provider"));
-                memberid.add(globals.getPatientPrescriptions().getJSONObject(i).getString("mid"));
-                groupnumber.add(globals.getPatientPrescriptions().getJSONObject(i).getString("groupnum"));
-                rxbin.add(globals.getPatientPrescriptions().getJSONObject(i).getString("rxbin"));
-                rxpcn.add(globals.getPatientPrescriptions().getJSONObject(i).getString("rxpcn"));
-                rxgrp.add(globals.getPatientPrescriptions().getJSONObject(i).getString("rxgrp"));
+        for(int i = 0; i < globals.getPatientInsurances().length(); i++){
+            try{
+                provider.add(globals.getPatientInsurances().getJSONObject(i).getString("provider"));
+                memberid.add(globals.getPatientInsurances().getJSONObject(i).getString("mid"));
+                groupnumber.add(globals.getPatientInsurances().getJSONObject(i).getString("groupnum"));
+                rxbin.add(globals.getPatientInsurances().getJSONObject(i).getString("rxbin"));
+                rxpcn.add(globals.getPatientInsurances().getJSONObject(i).getString("rxpcn"));
+                rxgrp.add(globals.getPatientInsurances().getJSONObject(i).getString("rxgrp"));
             }catch(JSONException e){
 
-            }*/
+            }
         }
     }
 
@@ -120,7 +120,7 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
                     Intent i = new Intent();
                     //i.setClass(v.getContext(), RxEditActivity.class);
                     try {
-                        globals.setCurrentPrescription(globals.getPatientPrescriptions().getJSONObject(position));
+                        globals.setCurrentInsurance(globals.getPatientInsurances().getJSONObject(position));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -132,7 +132,7 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
                 public void onClick(View v) {
                     position = getAdapterPosition();
                     try {
-                        id = globals.getPatientPrescriptions().getJSONObject(position).getString("id");
+                        id = globals.getPatientInsurances().getJSONObject(position).getString("id");
                         new DeleteIns().execute();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -145,12 +145,13 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deletePrescription.php";
+        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deleteDoc.php";
 
         protected String doInBackground(String... args) {
 
             // Building Parameters
             QueryString query = new QueryString("id", id);
+            query.add("database", "Insurances");
 
             jsonParser.setParams(query);
             JSONArray json = jsonParser.makeHttpRequest(delete_url, "POST");
@@ -159,7 +160,7 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
                 int success = json.getInt(0);
 
                 if (success == 1) {
-                    globals.getPatientPrescriptions().remove(position);
+                    globals.getPatientInsurances().remove(position);
                     Ins.onFinishCallback();
                 } else {
                     // failed

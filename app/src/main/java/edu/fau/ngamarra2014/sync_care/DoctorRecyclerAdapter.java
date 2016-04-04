@@ -44,20 +44,20 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
 
         Doc = doc;
 
-        for(int i = 0; i < globals.getPatientPrescriptions().length(); i++){
-            /*try{
-                name.add(globals.getPatientPrescriptions().getJSONObject(i).getString("name"));
-                type.add(globals.getPatientPrescriptions().getJSONObject(i).getString("type"));
-                phone.add(globals.getPatientPrescriptions().getJSONObject(i).getString("phone"));
-                email.add(globals.getPatientPrescriptions().getJSONObject(i).getString("email"));
-                address.add(globals.getPatientPrescriptions().getJSONObject(i).getString("address"));
-                city.add(globals.getPatientPrescriptions().getJSONObject(i).getString("city"));
-                state.add(globals.getPatientPrescriptions().getJSONObject(i).getString("state"));
-                zip.add(globals.getPatientPrescriptions().getJSONObject(i).getString("zip"));
-                fax.add(globals.getPatientPrescriptions().getJSONObject(i).getString("fax"));
+        for(int i = 0; i < globals.getPatientDoctors().length(); i++){
+            try{
+                name.add(globals.getPatientDoctors().getJSONObject(i).getString("name"));
+                type.add(globals.getPatientDoctors().getJSONObject(i).getString("type"));
+                phone.add(globals.getPatientDoctors().getJSONObject(i).getString("phone"));
+                email.add(globals.getPatientDoctors().getJSONObject(i).getString("email"));
+                address.add(globals.getPatientDoctors().getJSONObject(i).getString("address"));
+                city.add(globals.getPatientDoctors().getJSONObject(i).getString("city"));
+                state.add(globals.getPatientDoctors().getJSONObject(i).getString("state"));
+                zip.add(globals.getPatientDoctors().getJSONObject(i).getString("zip"));
+                fax.add(globals.getPatientDoctors().getJSONObject(i).getString("fax"));
             }catch(JSONException e){
 
-            }*/
+            }
         }
     }
 
@@ -139,7 +139,7 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
                     Intent i = new Intent();
                     //i.setClass(v.getContext(), RxEditActivity.class);
                     try {
-                        globals.setCurrentPrescription(globals.getPatientPrescriptions().getJSONObject(position));
+                        globals.setCurrentDoctor(globals.getPatientDoctors().getJSONObject(position));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -151,7 +151,7 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
                 public void onClick(View v) {
                     position = getAdapterPosition();
                     try {
-                        id = globals.getPatientPrescriptions().getJSONObject(position).getString("id");
+                        id = globals.getPatientDoctors().getJSONObject(position).getString("id");
                         new DeleteDoc().execute();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -164,12 +164,13 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deletePrescription.php";
+        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deleteDoc.php";
 
         protected String doInBackground(String... args) {
 
             // Building Parameters
             QueryString query = new QueryString("id", id);
+            query.add("database", "Doctors");
 
             jsonParser.setParams(query);
             JSONArray json = jsonParser.makeHttpRequest(delete_url, "POST");
@@ -178,7 +179,7 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
                 int success = json.getInt(0);
 
                 if (success == 1) {
-                    globals.getPatientPrescriptions().remove(position);
+                    globals.getPatientDoctors().remove(position);
                     Doc.onFinishCallback();
                 } else {
                     // failed

@@ -12,8 +12,8 @@ public class Globals {
 
     // Global variable
     private JSONObject user; //Person logged in
-    private JSONArray patients, prescriptions;
-    private JSONObject currentPatient, currentPrescription;
+    private JSONArray patients, prescriptions, doctors, insurances, pharmacies;
+    private JSONObject currentPatient, currentPrescription, currentDoctor, currentInsurance, currentPharmacy;
 
 
     // Restrict the constructor from being instantiated
@@ -55,6 +55,37 @@ public class Globals {
     public JSONObject getCurrentPrescription(){
         return this.currentPrescription;
     }
+
+    //List of patient doctors
+    public void setPatientDoctors(JSONArray a){ this.doctors = a; }
+    public JSONArray getPatientDoctors(){
+        return this.doctors;
+    }
+
+    public void setCurrentDoctor(JSONObject o) { this.currentDoctor = o; }
+    public JSONObject getCurrentDoctor() { return this.currentDoctor; }
+
+    //List of patient insurances
+    public void setPatientInsurances(JSONArray a){
+        this.insurances = a;
+    }
+    public JSONArray getPatientInsurances(){
+        return this.insurances;
+    }
+
+    public void setCurrentInsurance(JSONObject o) { this.currentInsurance = o; }
+    public JSONObject getCurrentInsurance() { return this.currentInsurance; }
+
+    //List of patient pharmacies
+    public void setPatientPharmacies(JSONArray a){
+        this.pharmacies = a;
+    }
+    public JSONArray getPatientPharmacies(){
+        return this.pharmacies;
+    }
+
+    public void setCurrentPharmacy(JSONObject o) { this.currentPharmacy = o; }
+    public JSONObject getCurrentPharmacy() { return this.currentPharmacy; }
 
     public static synchronized Globals getInstance(){
         if(instance==null){

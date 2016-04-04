@@ -66,6 +66,7 @@ public class JSONParser {
         try {
             int ch;
             StringBuffer sb = new StringBuffer();
+
             while ((ch = is.read()) != -1) {
                 sb.append((char) ch);
             }

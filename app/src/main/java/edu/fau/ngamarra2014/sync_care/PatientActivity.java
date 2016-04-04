@@ -56,7 +56,7 @@ public class PatientActivity extends AppCompatActivity {
         doctor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Healthcare.class));
+                startActivity(new Intent(getApplicationContext(), DoctorListActivity.class));
             }
         });
 
@@ -77,16 +77,14 @@ public class PatientActivity extends AppCompatActivity {
         insurance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), InsuranceListActivity.class);
-                startActivity(i);
+                startActivity(new Intent(getApplicationContext(), InsuranceListActivity.class));
             }
         });
 
         pharmacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), PharmacyListActivity.class);
-                startActivity(i);
+                startActivity(new Intent(getApplicationContext(), PharmacyListActivity.class));
             }
         });
     }
@@ -94,7 +92,10 @@ public class PatientActivity extends AppCompatActivity {
     class GrabPatientsInfo extends AsyncTask<String, String, String> {
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String patient_info_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/patientInfo.php";
+        private String prescriptions_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/patientPrescriptions.php";
+        private String doctors_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/patientDoctors.php";
+        private String insurances_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/patientInsurances.php";
+        private String pharmacies_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/patientPharmacies.php";
 
         @Override
         protected void onPreExecute() {
@@ -112,13 +113,14 @@ public class PatientActivity extends AppCompatActivity {
             QueryString query = new QueryString("id", patientid);
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(patient_info_url, "GET");
-
-            try {
-                globals.setPatientPrescriptions(new JSONArray(json.getJSONObject(0).getString("Prescriptions")));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            JSONArray json = jsonParser.makeHttpRequest(prescriptions_url, "GET");
+            globals.setPatientPrescriptions(json);
+            json = jsonParser.makeHttpRequest(doctors_url, "GET");
+            globals.setPatientDoctors(json);
+            json = jsonParser.makeHttpRequest(insurances_url, "GET");
+            globals.setPatientInsurances(json);
+            json = jsonParser.makeHttpRequest(pharmacies_url, "GET");
+            globals.setPatientPharmacies(json);
 
             return null;
         }

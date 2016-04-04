@@ -40,17 +40,17 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
 
         Phar = phar;
 
-        for(int i = 0; i < globals.getPatientPrescriptions().length(); i++){
-            /*try{
-                *//*name.add(globals.getPatientPrescriptions().getJSONObject(i).getString("name"));
-                phone.add(globals.getPatientPrescriptions().getJSONObject(i).getString("phone"));
-                address.add(globals.getPatientPrescriptions().getJSONObject(i).getString("address"));
-                city.add(globals.getPatientPrescriptions().getJSONObject(i).getString("city"));
-                state.add(globals.getPatientPrescriptions().getJSONObject(i).getString("state"));
-                zip.add(globals.getPatientPrescriptions().getJSONObject(i).getString("zip"));*//*
+        for(int i = 0; i < globals.getPatientPharmacies().length(); i++){
+            try{
+                name.add(globals.getPatientPharmacies().getJSONObject(i).getString("name"));
+                phone.add(globals.getPatientPharmacies().getJSONObject(i).getString("phone"));
+                address.add(globals.getPatientPharmacies().getJSONObject(i).getString("address"));
+                city.add(globals.getPatientPharmacies().getJSONObject(i).getString("city"));
+                state.add(globals.getPatientPharmacies().getJSONObject(i).getString("state"));
+                zip.add(globals.getPatientPharmacies().getJSONObject(i).getString("zip"));
             }catch(JSONException e){
 
-            }*/
+            }
         }
     }
 
@@ -120,7 +120,7 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
                     Intent i = new Intent();
                     //i.setClass(v.getContext(), RxEditActivity.class);
                     try {
-                        globals.setCurrentPrescription(globals.getPatientPrescriptions().getJSONObject(position));
+                        globals.setCurrentPharmacy(globals.getPatientPharmacies().getJSONObject(position));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -132,7 +132,7 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
                 public void onClick(View v) {
                     position = getAdapterPosition();
                     try {
-                        id = globals.getPatientPrescriptions().getJSONObject(position).getString("id");
+                        id = globals.getPatientPharmacies().getJSONObject(position).getString("id");
                         new DeletePhar().execute();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -145,12 +145,13 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deletePrescription.php";
+        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deleteDoc.php";
 
         protected String doInBackground(String... args) {
 
             // Building Parameters
             QueryString query = new QueryString("id", id);
+            query.add("database", "Pharmacies");
 
             jsonParser.setParams(query);
             JSONArray json = jsonParser.makeHttpRequest(delete_url, "POST");
@@ -159,7 +160,7 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
                 int success = json.getInt(0);
 
                 if (success == 1) {
-                    globals.getPatientPrescriptions().remove(position);
+                    globals.getPatientPharmacies().remove(position);
                     Phar.onFinishCallback();
                 } else {
                     // failed
