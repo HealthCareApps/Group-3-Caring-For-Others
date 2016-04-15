@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="task_list" type="layout">@layout/task_list_twopane</item>
+</resources>
