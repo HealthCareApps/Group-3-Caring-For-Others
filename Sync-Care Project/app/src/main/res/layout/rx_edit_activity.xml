@@ -21,27 +21,29 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ivname"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="8dp"
-                android:text="Drug name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
-
             <EditText
                 android:id="@+id/rx_name"
-                android:layout_below="@+id/ivname"
-                android:layout_width="wrap_content"
+                android:hint="Prescription Name"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:background="@android:color/transparent"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
+                android:textColor="#212121"
+                android:inputType="textCapSentences" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rx_name"
+                android:id="@+id/ivname"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="8dp"
+                android:text="Name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272" />
 
         </RelativeLayout>
 
@@ -52,9 +54,22 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
+            <EditText
+                android:id="@+id/rx_doctor"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Doctor's Name"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:background="@android:color/transparent"
+                android:textColor="#212121"
+                android:inputType="textCapSentences" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/rx_doctor"
                 android:id="@+id/ivdoctor"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -63,17 +78,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272" />
 
-            <EditText
-                android:id="@+id/rx_doctor"
-                android:layout_below="@+id/ivdoctor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:background="@android:color/transparent"
-                android:textColor="#212121"/>
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -83,22 +87,11 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ivdosage"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="8dp"
-                android:text="Dosage"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
-
             <EditText
                 android:id="@+id/rx_dosage"
-                android:layout_below="@+id/ivdosage"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:hint="Dosage Amount"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:ellipsize="end"
@@ -107,6 +100,18 @@
                 android:background="@android:color/transparent"
                 android:textColor="#212121" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rx_dosage"
+                android:id="@+id/ivdosage"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="8dp"
+                android:text="Dosage"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -116,9 +121,25 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
+            <EditText
+                android:id="@+id/rx_instructions"
+                android:hint="Instructions"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:background="@android:color/transparent"
+                android:textColor="#212121"
+                android:inputType="textMultiLine"
+                android:lines="6"
+                android:gravity="top" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/rx_instructions"
                 android:id="@+id/ivinstructions"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -127,20 +148,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272" />
 
-            <EditText
-                android:id="@+id/rx_instructions"
-                android:layout_below="@+id/ivinstructions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:ellipsize="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:background="@android:color/transparent"
-                android:textColor="#212121"
-                android:inputType="textMultiLine"
-                android:lines="6" />
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -150,21 +157,10 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ivsymptoms"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="8dp"
-                android:text="Symptoms"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
-
             <EditText
                 android:id="@+id/rx_symptoms"
-                android:layout_below="@+id/ivsymptoms"
-                android:layout_width="wrap_content"
+                android:hint="Side effects"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -173,7 +169,20 @@
                 android:background="@android:color/transparent"
                 android:textColor="#212121"
                 android:inputType="textMultiLine"
-                android:lines="6" />
+                android:lines="6"
+                android:gravity="top" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rx_symptoms"
+                android:id="@+id/ivsymptoms"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="8dp"
+                android:text="Symptoms"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272" />
 
         </RelativeLayout>
 
@@ -189,7 +198,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Save"
-                android:id="@+id/save"/>
+                android:id="@+id/save"
+                android:visibility="invisible" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:id="@+id/add"
+                android:visibility="invisible" />
 
         </LinearLayout>
     </LinearLayout>

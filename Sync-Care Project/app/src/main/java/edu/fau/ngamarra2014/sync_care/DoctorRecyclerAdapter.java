@@ -16,12 +16,14 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-/**
- * Created by nangi_000 on 4/3/2016.
- */
+import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
+import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
+import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+
 public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAdapter.ViewHolder> {
 
-    Globals globals = Globals.getInstance();
+    User user = User.getInstance();
 
     private ArrayList<String> name = new ArrayList<String>();
     private ArrayList<String> type = new ArrayList<String>();
@@ -33,31 +35,25 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
     private ArrayList<String> zip = new ArrayList<String>();
     private ArrayList<String> fax = new ArrayList<String>();
 
-
     private int[] images = { R.drawable.doctor_icon};
     DoctorListActivity Doc;
 
-    private String id;
-    private int position;
+    private int id;
 
     public DoctorRecyclerAdapter(DoctorListActivity doc){
 
         Doc = doc;
 
-        for(int i = 0; i < globals.getPatientDoctors().length(); i++){
-            try{
-                name.add(globals.getPatientDoctors().getJSONObject(i).getString("name"));
-                type.add(globals.getPatientDoctors().getJSONObject(i).getString("type"));
-                phone.add(globals.getPatientDoctors().getJSONObject(i).getString("phone"));
-                email.add(globals.getPatientDoctors().getJSONObject(i).getString("email"));
-                address.add(globals.getPatientDoctors().getJSONObject(i).getString("address"));
-                city.add(globals.getPatientDoctors().getJSONObject(i).getString("city"));
-                state.add(globals.getPatientDoctors().getJSONObject(i).getString("state"));
-                zip.add(globals.getPatientDoctors().getJSONObject(i).getString("zip"));
-                fax.add(globals.getPatientDoctors().getJSONObject(i).getString("fax"));
-            }catch(JSONException e){
-
-            }
+        for(int i = 0; i < user.patient.getNumberOfDoctors(); i++){
+            name.add(user.patient.getDoctor(i).getName());
+            type.add(user.patient.getDoctor(i).getType());
+            phone.add(user.patient.getDoctor(i).getContactInfo()[0]);
+            email.add(user.patient.getDoctor(i).getContactInfo()[2]);
+            address.add(user.patient.getDoctor(i).getAddress()[0]);
+            city.add(user.patient.getDoctor(i).getAddress()[1]);
+            state.add(user.patient.getDoctor(i).getAddress()[2]);
+            zip.add(user.patient.getDoctor(i).getAddress()[3]);
+            fax.add(user.patient.getDoctor(i).getContactInfo()[1]);
         }
     }
 
@@ -135,41 +131,33 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    position = getAdapterPosition();
-                    Intent i = new Intent();
-                    //i.setClass(v.getContext(), RxEditActivity.class);
-                    try {
-                        globals.setCurrentDoctor(globals.getPatientDoctors().getJSONObject(position));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    v.getContext().startActivity(i);
+                    user.patient.setCurrentDoctor(getAdapterPosition());
+                    v.getContext().startActivity(new Intent(v.getContext(), DoctorEditActivity.class));
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    position = getAdapterPosition();
-                    try {
-                        id = globals.getPatientDoctors().getJSONObject(position).getString("id");
-                        new DeleteDoc().execute();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    id = user.patient.getDoctor(getAdapterPosition()).getID();
+                    new DeleteDoc(getAdapterPosition()).execute();
                 }
             });
         }
     }
     class DeleteDoc extends AsyncTask<String, String, String> {
 
-        private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
         private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deleteDoc.php";
+        DBHandler dbHandler = new DBHandler(Doc, null, null, 2);
+        int index;
 
+        public DeleteDoc(int index){
+            this.index = index;
+        }
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("id", id);
+            QueryString query = new QueryString("id", Integer.toString(id));
             query.add("database", "Doctors");
 
             jsonParser.setParams(query);
@@ -179,10 +167,9 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
                 int success = json.getInt(0);
 
                 if (success == 1) {
-                    globals.getPatientDoctors().remove(position);
+                    dbHandler.deleteDoc("doctors", id);
+                    user.patient.removeDoctor(index);
                     Doc.onFinishCallback();
-                } else {
-                    // failed
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -2,66 +2,66 @@ package edu.fau.ngamarra2014.sync_care;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import edu.fau.ngamarra2014.sync_care.Data.Pharmacy;
+import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
+import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
+import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+
 public class PharmacyEditActivity extends Activity {
 
-    Globals globals = Globals.getInstance();
+    User user = User.getInstance();
+    DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    private String url;
 
-    EditText name, phone, email, address, city, state, zip;
-    String id;
-    Button save;
+    EditText name, phone, address, city, state, zip;
+    int id = 0;
+    Button save, add;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rx_edit_activity);
+        setContentView(R.layout.pharmacy_edit_activity);
 
         name = (EditText) findViewById(R.id.epharmacy);
         phone = (EditText) findViewById(R.id.epharphone);
-        email = (EditText) findViewById(R.id.epharemail);
         address = (EditText) findViewById(R.id.epharaddress);
         city = (EditText) findViewById(R.id.epharcity);
         state = (EditText) findViewById(R.id.epharstate);
         zip = (EditText) findViewById(R.id.epharzip);
         save = (Button) findViewById(R.id.save);
+        add = (Button) findViewById(R.id.add);
 
-        try {
-            id = globals.getCurrentPharmacy().getString("id");
-            name.setText(globals.getCurrentPharmacy().getString("name"));
-            phone.setText(globals.getCurrentPharmacy().getString("phone"));
-            email.setText(globals.getCurrentPharmacy().getString("email"));
-            address.setText(globals.getCurrentPharmacy().getString("address"));
-            city.setText(globals.getCurrentPharmacy().getString("city"));
-            state.setText(globals.getCurrentPharmacy().getString("state"));
-            zip.setText(globals.getCurrentPharmacy().getString("zip"));
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        if(user.patient.pharmacy != null) {
+            id = user.patient.pharmacy.getID();
+            name.setText(user.patient.pharmacy.getName());
+            phone.setText(user.patient.pharmacy.getPhone());
+            address.setText(user.patient.pharmacy.getAddress()[0]);
+            city.setText(user.patient.pharmacy.getAddress()[1]);
+            state.setText(user.patient.pharmacy.getAddress()[2]);
+            zip.setText(user.patient.pharmacy.getAddress()[3]);
+            save.setVisibility(View.VISIBLE);
+        }else add.setVisibility(View.VISIBLE);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    globals.getCurrentPharmacy().put("name", name.getText().toString());
-                    globals.getCurrentPharmacy().put("phone", phone.getText().toString());
-                    globals.getCurrentPharmacy().put("email", email.getText().toString());
-                    globals.getCurrentPharmacy().put("address", address.getText().toString());
-                    globals.getCurrentPharmacy().put("city", city.getText().toString());
-                    globals.getCurrentPharmacy().put("state", state.getText().toString());
-                    globals.getCurrentPharmacy().put("zip", zip.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updateDoc.php";
+                new UpdatePhar().execute();
+            }
+        });
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addDoc.php";
                 new UpdatePhar().execute();
             }
         });
@@ -69,11 +69,9 @@ public class PharmacyEditActivity extends Activity {
 
     class UpdatePhar extends AsyncTask<String, String, String> {
 
-        private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String update_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updatePrescription.php";
 
-        String pharName, pharPhone, pharEmail, pharAddress, pharCity, pharState, pharZip, pharFax;
+        String pharName, pharPhone, pharAddress, pharCity, pharState, pharZip;
 
         @Override
         protected void onPreExecute() {
@@ -81,7 +79,6 @@ public class PharmacyEditActivity extends Activity {
 
             pharName = name.getText().toString();
             pharPhone = phone.getText().toString();
-            pharEmail = email.getText().toString();
             pharAddress = address.getText().toString();
             pharCity = city.getText().toString();
             pharState = state.getText().toString();
@@ -92,10 +89,11 @@ public class PharmacyEditActivity extends Activity {
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("id", id);
+            QueryString query = new QueryString("database", "Pharmacies");
+            query.add("Patient", Integer.toString(user.patient.getID()));
+            if(id != 0) query.add("id", Integer.toString(id));
             query.add("name", pharName);
             query.add("phone", pharPhone);
-            query.add("email", pharEmail);
             query.add("address", pharAddress);
             query.add("city", pharCity);
             query.add("state", pharState);
@@ -103,15 +101,27 @@ public class PharmacyEditActivity extends Activity {
 
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(update_url, "POST");
+            JSONArray json = jsonParser.makeHttpRequest(url, "POST");
 
             try {
                 int success = json.getInt(0);
 
                 if (success == 1) {
+                    Pharmacy pharmacy = new Pharmacy();
+                    pharmacy.setID(json.getInt(1));
+                    pharmacy.setName(pharName);
+                    pharmacy.setPhone(pharPhone);
+                    pharmacy.setAddress(pharAddress, pharCity, pharState, pharZip);
+                    pharmacy.setPatient(user.patient.getID());
+
+                    if(json.getString(2).equals("Update")){
+                        user.patient.pharmacy.update(pharmacy);
+                        dbHandler.updatePharmacy(pharmacy);
+                    }else{
+                        user.patient.addPharmacy(pharmacy);
+                        dbHandler.addPharmacy(pharmacy);
+                    }
                     finish();
-                } else {
-                    // failed
                 }
             } catch (Exception e) {
                 e.printStackTrace();

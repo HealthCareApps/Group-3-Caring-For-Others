@@ -14,8 +14,6 @@ public class PatientListActivity extends NavigationActivity {
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
 
-    Globals globals = Globals.getInstance();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +34,7 @@ public class PatientListActivity extends NavigationActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), AddPatient.class);
-                startActivity(i);
+                startActivity(new Intent(getApplicationContext(), AddPatient.class));
                 finish();
             }
         });

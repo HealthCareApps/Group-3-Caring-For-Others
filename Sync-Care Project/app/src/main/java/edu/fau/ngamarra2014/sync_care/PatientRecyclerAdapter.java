@@ -12,9 +12,11 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import edu.fau.ngamarra2014.sync_care.Data.User;
+
 public class PatientRecyclerAdapter extends RecyclerView.Adapter<PatientRecyclerAdapter.ViewHolder>{
 
-    Globals globals = Globals.getInstance();
+    User user = User.getInstance();
 
     private ArrayList<String> titles = new ArrayList<String>();
     private ArrayList<String> details = new ArrayList<String>();
@@ -22,13 +24,9 @@ public class PatientRecyclerAdapter extends RecyclerView.Adapter<PatientRecycler
 
     public PatientRecyclerAdapter(){
 
-        for(int i = 0; i < globals.getPatients().length(); i++){
-            try{
-                titles.add(globals.getPatients().getJSONObject(i).getString("name"));
-                details.add("DOB: " + globals.getPatients().getJSONObject(i).getString("birthdate"));
-            }catch(JSONException e){
-                e.printStackTrace();
-            }
+        for(int i = 0; i < user.getNumberOfPatients(); i++){
+            titles.add(user.getPatient(i).getName());
+            details.add("DOB: " + user.getPatient(i).getDOB());
         }
     }
 
@@ -69,16 +67,8 @@ public class PatientRecyclerAdapter extends RecyclerView.Adapter<PatientRecycler
 
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    Intent i = new Intent();
-                    i.setClass(v.getContext(), PatientActivity.class);
-
-                    try {
-                        globals.setCurrentPatient(globals.getPatients().getJSONObject(position));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    v.getContext().startActivity(i);
+                    user.setCurrentPatient(getAdapterPosition());
+                    v.getContext().startActivity(new Intent(v.getContext(), PatientActivity.class));
                 }
             });
         }

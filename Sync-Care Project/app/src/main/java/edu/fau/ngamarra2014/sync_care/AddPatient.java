@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,26 +16,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.fau.ngamarra2014.sync_care.Data.Patient;
+import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
+import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
+import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+
 public class AddPatient extends AppCompatActivity {
 
-    Globals globals = Globals.getInstance();
+    User user = User.getInstance();
+    DBHandler dbHandler = new DBHandler(this, null, null, 2);
 
     EditText first, last, dateofbirth, number, emergency, dia;
     RadioGroup radio;
     Button add;
     static int valid = 0;
-    String userid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.patient_add_activity);
-
-        try {
-            userid = globals.getuser().getString("id");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         first = (EditText) findViewById(R.id.first);
         last = (EditText) findViewById(R.id.last);
@@ -61,14 +60,12 @@ public class AddPatient extends AppCompatActivity {
 
     }
 
-    private void FormValidation(ViewGroup group)
-    {
+    private void FormValidation(ViewGroup group) {
         for (int i = 0, count = group.getChildCount(); i < count; ++i) {
             View view = group.getChildAt(i);
             if (view instanceof EditText) {
                 if(view.getId() == first.getId() || view.getId() == last.getId()
-                        || view.getId() == dateofbirth.getId()
-                        || view.getId() == dia.getId()){
+                        || view.getId() == dateofbirth.getId()){
 
                     if (((EditText)view).getText().toString().length() == 0){
                         ((EditText) view).setError("Required!");
@@ -90,7 +87,6 @@ public class AddPatient extends AppCompatActivity {
 
         String fname, lname, birth, phoneNumber, emergencyNumber, gender, diagnosis;
         RadioButton rd = (RadioButton) findViewById(radio.getCheckedRadioButtonId());
-        JSONObject patient = new JSONObject();
 
         @Override
         protected void onPreExecute() {
@@ -114,7 +110,7 @@ public class AddPatient extends AppCompatActivity {
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("caretaker", userid);
+            QueryString query = new QueryString("caretaker", Integer.toString(user.getID()));
             query.add("first", fname);
             query.add("last", lname);
             query.add("birth", birth);
@@ -130,20 +126,15 @@ public class AddPatient extends AppCompatActivity {
                 int success = json.getInt(0);
 
                 if (success == 1) {
-                    patient.put("first", fname);
-                    patient.put("last", lname);
-                    patient.put("birthdate", birth);
-                    patient.put("phone", phoneNumber);
-                    patient.put("emergency", emergencyNumber);
-                    patient.put("gender", gender);
-                    patient.put("primary_diagnosis", diagnosis);
-                    patient.put("name", fname + " " + lname);
-                    globals.addPatient(patient);
-                    Intent i = new Intent(getApplicationContext(), PatientListActivity.class);
-                    startActivity(i);
+                    Patient patient = new Patient(json.getInt(1), fname, lname, gender, birth, user.getID());
+                    patient.setPrimaryPhoneNumber(phoneNumber);
+                    patient.setEmergencyPhoneNumber(emergencyNumber);
+                    patient.setDiagnosis(diagnosis);
+                    user.addPatient(patient);
+                    dbHandler.addPatient(patient);
+
+                    startActivity(new Intent(getApplicationContext(), PatientListActivity.class));
                     finish();
-                } else {
-                    // failed
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

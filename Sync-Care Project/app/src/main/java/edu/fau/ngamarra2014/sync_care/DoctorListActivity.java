@@ -1,6 +1,7 @@
 package edu.fau.ngamarra2014.sync_care;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,14 +10,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
-/**
- * Created by nangi_000 on 4/3/2016.
- */
+import edu.fau.ngamarra2014.sync_care.Data.User;
+
 public class DoctorListActivity extends NavigationActivity {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
+
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,8 @@ public class DoctorListActivity extends NavigationActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(getApplicationContext(), DoctorEditActivity.class));
+                finish();
             }
         });
 
@@ -51,6 +53,7 @@ public class DoctorListActivity extends NavigationActivity {
     }
     protected void onRestart(){
         super.onRestart();
+        user.patient.doctor = null;
         finish();
         startActivity(getIntent());
     }

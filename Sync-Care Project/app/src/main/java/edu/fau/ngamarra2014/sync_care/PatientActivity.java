@@ -6,22 +6,26 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import edu.fau.ngamarra2014.sync_care.Data.Patient;
+import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
+import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
+import edu.fau.ngamarra2014.sync_care.Database.QueryString;
 
 public class PatientActivity extends AppCompatActivity {
 
-    Globals globals = Globals.getInstance();
+    User user = User.getInstance();
 
     TextView diagnosis, dob, name;
     ImageButton profile, doctor, meds, insurance, pharmacy;
-    String patientid;
+    int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,21 +35,15 @@ public class PatientActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        new GrabPatientsInfo().execute();
+        //new GrabPatientsInfo().execute();
 
         name = (TextView) findViewById(R.id.pname);
         diagnosis = (TextView) findViewById(R.id.pdiganosis);
         dob = (TextView) findViewById(R.id.dob);
 
-        try{
-            patientid = globals.getCurrentPatient().getString("id");
-            name.setText(globals.getCurrentPatient().getString("name"));
-            diagnosis.setText("Primary Diagnosis: " + globals.getCurrentPatient().getString("primary_diagnosis"));
-            dob.setText("Date of Birth: " + globals.getCurrentPatient().getString("birthdate"));
-
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
+        name.setText(user.patient.getName());
+        diagnosis.setText("Primary Diagnosis: " + user.patient.getDiagnosis());
+        dob.setText("Date of Birth: " + user.patient.getDOB());
 
         doctor = (ImageButton) findViewById(R.id.doctor);
         meds = (ImageButton) findViewById(R.id.meds);
@@ -63,7 +61,7 @@ public class PatientActivity extends AppCompatActivity {
         meds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), RxListActivity.class));
+                startActivity(new Intent(getApplicationContext(), RxListActivity.class));
             }
         });
 
@@ -89,13 +87,14 @@ public class PatientActivity extends AppCompatActivity {
         });
     }
 
-    class GrabPatientsInfo extends AsyncTask<String, String, String> {
+    /*class GrabPatientsInfo extends AsyncTask<String, String, String> {
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
         private String prescriptions_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/patientPrescriptions.php";
         private String doctors_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/patientDoctors.php";
         private String insurances_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/patientInsurances.php";
         private String pharmacies_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/patientPharmacies.php";
+        private String info = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/patientInfo.php";
 
         @Override
         protected void onPreExecute() {
@@ -111,8 +110,10 @@ public class PatientActivity extends AppCompatActivity {
 
             // Building Parameters
             QueryString query = new QueryString("id", patientid);
-
             jsonParser.setParams(query);
+
+            JSONArray arr = jsonParser.makeHttpRequest(info, "GET");
+
             JSONArray json = jsonParser.makeHttpRequest(prescriptions_url, "GET");
             globals.setPatientPrescriptions(json);
             json = jsonParser.makeHttpRequest(doctors_url, "GET");
@@ -129,5 +130,5 @@ public class PatientActivity extends AppCompatActivity {
             pDialog.dismiss();
         }
 
-    }
+    }*/
 }

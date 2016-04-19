@@ -5,18 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
+import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
+import edu.fau.ngamarra2014.sync_care.Database.QueryString;
 
 public class HomeActivity extends NavigationActivity{
 
-    Globals globals = Globals.getInstance();
-    String userid;
+    User user = User.getInstance();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,17 +28,15 @@ public class HomeActivity extends NavigationActivity{
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.home_activity, null, false);
         drawer.addView(contentView, 0);
-
-        try {
-            userid = globals.getuser().getString("id");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        new GrabPatients().execute();
+        //Log.i("Doctors", " " + user.getPatient(0).getNumberOfDoctors());
+        //new GrabPatients().execute();
+    }
+    protected void onRestart(){
+        super.onRestart();
+        //Log.i("Doctors", " " + user.getPatient(0).getNumberOfDoctors());
     }
 
-    class GrabPatients extends AsyncTask<String, String, String> {
+    /*class GrabPatients extends AsyncTask<String, String, String> {
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
@@ -78,5 +79,5 @@ public class HomeActivity extends NavigationActivity{
             pDialog.dismiss();
         }
 
-    }
+    }*/
 }

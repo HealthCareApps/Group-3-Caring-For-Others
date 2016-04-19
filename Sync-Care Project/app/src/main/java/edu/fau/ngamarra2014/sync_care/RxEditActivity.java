@@ -2,24 +2,31 @@ package edu.fau.ngamarra2014.sync_care;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONException;
+
+import edu.fau.ngamarra2014.sync_care.Data.Prescription;
+import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
+import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
+import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+import edu.fau.ngamarra2014.sync_care.OldCode.Globals;
 
 public class RxEditActivity extends Activity {
 
     Globals globals = Globals.getInstance();
+    User user = User.getInstance();
+    DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    private String url;
 
     EditText name, doctor, dosage, instructions, symptoms;
-    String id;
-    Button save;
+    int id = 0;
+    Button save, add;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,31 +38,30 @@ public class RxEditActivity extends Activity {
         instructions = (EditText) findViewById(R.id.rx_instructions);
         symptoms = (EditText) findViewById(R.id.rx_symptoms);
         save = (Button) findViewById(R.id.save);
+        add = (Button) findViewById(R.id.add);
 
-        try {
-            id = globals.getCurrentPrescription().getString("id");
-            name.setText(globals.getCurrentPrescription().getString("name"));
-            doctor.setText(globals.getCurrentPrescription().getString("doctor"));
-            dosage.setText(globals.getCurrentPrescription().getString("dosage"));
-            instructions.setText(globals.getCurrentPrescription().getString("instructions"));
-            symptoms.setText(globals.getCurrentPrescription().getString("symptoms"));
+        if(user.patient.prescription != null) {
+            id = user.patient.prescription.getID();
+            name.setText(user.patient.prescription.getName());
+            doctor.setText(user.patient.prescription.getDoctorName());
+            dosage.setText(user.patient.prescription.getDosage());
+            instructions.setText(user.patient.prescription.getInstructions());
+            symptoms.setText(user.patient.prescription.getSymptoms());
+            save.setVisibility(View.VISIBLE);
+        }else add.setVisibility(View.VISIBLE);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    globals.getCurrentPrescription().put("name", name.getText().toString());
-                    globals.getCurrentPrescription().put("doctor", doctor.getText().toString());
-                    globals.getCurrentPrescription().put("dosage", dosage.getText().toString());
-                    globals.getCurrentPrescription().put("instructions", instructions.getText().toString());
-                    globals.getCurrentPrescription().put("symptoms", symptoms.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updateDoc.php";
+                new UpdateRx().execute();
+            }
+        });
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addDoc.php";
                 new UpdateRx().execute();
             }
         });
@@ -65,7 +71,6 @@ public class RxEditActivity extends Activity {
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String update_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updatePrescription.php";
 
         String rxName, rxDoc, rxDosage, rxInstructions, rxSymptoms;
 
@@ -84,7 +89,9 @@ public class RxEditActivity extends Activity {
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("id", id);
+            QueryString query = new QueryString("database", "Prescriptions");
+            query.add("Patient", Integer.toString(user.patient.getID()));
+            if(id != 0) query.add("id", Integer.toString(id));
             query.add("name", rxName);
             query.add("doc", rxDoc);
             query.add("dosage", rxDosage);
@@ -92,15 +99,30 @@ public class RxEditActivity extends Activity {
             query.add("symptoms", rxSymptoms);
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(update_url, "POST");
+            JSONArray json = jsonParser.makeHttpRequest(url, "POST");
 
             try {
                 int success = json.getInt(0);
 
                 if (success == 1) {
+                    Prescription rx = new Prescription();
+                    rx.setID(json.getInt(1));
+                    rx.setName(rxName);
+                    rx.setDoctorName(rxDoc);
+                    rx.setDosage(rxDosage);
+                    rx.setInstructions(rxInstructions);
+                    rx.setSymptoms(rxSymptoms);
+                    rx.setPatient(user.patient.getID());
+
+                    if(json.getString(2).equals("Update")){
+                        user.patient.prescription.update(rx);
+                        dbHandler.updatePrescription(rx);
+                    }else{
+                        user.patient.addPrescription(rx);
+                        dbHandler.addPrescription(rx);
+                    }
+
                     finish();
-                } else {
-                    // failed
                 }
             } catch (Exception e) {
                 e.printStackTrace();

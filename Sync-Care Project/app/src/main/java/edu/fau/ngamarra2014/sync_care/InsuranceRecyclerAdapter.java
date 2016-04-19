@@ -16,12 +16,14 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-/**
- * Created by nangi_000 on 4/3/2016.
- */
+import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
+import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
+import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+
 public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecyclerAdapter.ViewHolder> {
 
-    Globals globals = Globals.getInstance();
+    User user = User.getInstance();
 
     private ArrayList<String> provider = new ArrayList<String>();
     private ArrayList<String> memberid = new ArrayList<String>();
@@ -33,24 +35,19 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
     private int[] images = {R.drawable.insurance_icon};
     InsuranceListActivity Ins;
 
-    private String id;
-    private int position;
+    private int id;
 
     public InsuranceRecyclerAdapter(InsuranceListActivity ins){
 
         Ins = ins;
 
-        for(int i = 0; i < globals.getPatientInsurances().length(); i++){
-            try{
-                provider.add(globals.getPatientInsurances().getJSONObject(i).getString("provider"));
-                memberid.add(globals.getPatientInsurances().getJSONObject(i).getString("mid"));
-                groupnumber.add(globals.getPatientInsurances().getJSONObject(i).getString("groupnum"));
-                rxbin.add(globals.getPatientInsurances().getJSONObject(i).getString("rxbin"));
-                rxpcn.add(globals.getPatientInsurances().getJSONObject(i).getString("rxpcn"));
-                rxgrp.add(globals.getPatientInsurances().getJSONObject(i).getString("rxgrp"));
-            }catch(JSONException e){
-
-            }
+        for(int i = 0; i < user.patient.getNumberOfInsurances(); i++){
+            provider.add(user.patient.getInsurance(i).getProvider());
+            memberid.add(user.patient.getInsurance(i).getMID());
+            groupnumber.add(user.patient.getInsurance(i).getGroupNumber());
+            rxbin.add(user.patient.getInsurance(i).getRxBin());
+            rxpcn.add(user.patient.getInsurance(i).getRxPcn());
+            rxgrp.add(user.patient.getInsurance(i).getRxGroup());
         }
     }
 
@@ -116,41 +113,33 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    position = getAdapterPosition();
-                    Intent i = new Intent();
-                    //i.setClass(v.getContext(), RxEditActivity.class);
-                    try {
-                        globals.setCurrentInsurance(globals.getPatientInsurances().getJSONObject(position));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    v.getContext().startActivity(i);
+                    user.patient.setCurrentInsurance(getAdapterPosition());
+                    v.getContext().startActivity(new Intent(v.getContext(), InsuranceEditActivity.class));
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    position = getAdapterPosition();
-                    try {
-                        id = globals.getPatientInsurances().getJSONObject(position).getString("id");
-                        new DeleteIns().execute();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    id = user.patient.getInsurance(getAdapterPosition()).getID();
+                    new DeleteIns(getAdapterPosition()).execute();
                 }
             });
         }
     }
     class DeleteIns extends AsyncTask<String, String, String> {
 
-        private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
         private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deleteDoc.php";
+        DBHandler dbHandler = new DBHandler(Ins, null, null, 2);
+        int index;
 
+        public DeleteIns(int index){
+            this.index = index;
+        }
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("id", id);
+            QueryString query = new QueryString("id", Integer.toString(id));
             query.add("database", "Insurances");
 
             jsonParser.setParams(query);
@@ -160,10 +149,9 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
                 int success = json.getInt(0);
 
                 if (success == 1) {
-                    globals.getPatientInsurances().remove(position);
+                    dbHandler.deleteDoc("insurances", id);
+                    user.patient.removeInsurance(index);
                     Ins.onFinishCallback();
-                } else {
-                    // failed
                 }
             } catch (Exception e) {
                 e.printStackTrace();

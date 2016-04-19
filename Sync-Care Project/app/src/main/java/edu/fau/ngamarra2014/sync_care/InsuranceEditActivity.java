@@ -2,28 +2,35 @@ package edu.fau.ngamarra2014.sync_care;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import edu.fau.ngamarra2014.sync_care.Data.Insurance;
+import edu.fau.ngamarra2014.sync_care.Data.Prescription;
+import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
+import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
+import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+
 public class InsuranceEditActivity extends Activity {
 
-    Globals globals = Globals.getInstance();
+    User user = User.getInstance();
+    DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    private String url;
 
     EditText provider, mid, groupnum, rxbin, rxpcn, rxgrp;
-    String id;
-    Button save;
+    int id = 0;
+    Button save, add;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rx_edit_activity);
+        setContentView(R.layout.insurance_edit_activity);
 
         provider = (EditText) findViewById(R.id.eprovider);
         mid = (EditText) findViewById(R.id.emid);
@@ -32,34 +39,30 @@ public class InsuranceEditActivity extends Activity {
         rxpcn = (EditText) findViewById(R.id.erxpcn);
         rxgrp = (EditText) findViewById(R.id.erxgrp);
         save = (Button) findViewById(R.id.save);
+        add = (Button) findViewById(R.id.add);
 
-        try {
-            id = globals.getCurrentInsurance().getString("id");
-            provider.setText(globals.getCurrentInsurance().getString("provider"));
-            mid.setText(globals.getCurrentInsurance().getString("mid"));
-            groupnum.setText(globals.getCurrentInsurance().getString("groupnum"));
-            rxbin.setText(globals.getCurrentInsurance().getString("rxbin"));
-            rxpcn.setText(globals.getCurrentInsurance().getString("rxpcn"));
-            rxgrp.setText(globals.getCurrentInsurance().getString("rxgrp"));
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        if(user.patient.insurance != null){
+            id = user.patient.insurance.getID();
+            provider.setText(user.patient.insurance.getProvider());
+            mid.setText(user.patient.insurance.getMID());
+            groupnum.setText(user.patient.insurance.getGroupNumber());
+            rxbin.setText(user.patient.insurance.getRxBin());
+            rxpcn.setText(user.patient.insurance.getRxPcn());
+            rxgrp.setText(user.patient.insurance.getRxGroup());
+            save.setVisibility(View.VISIBLE);
+        }else add.setVisibility(View.VISIBLE);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    globals.getCurrentInsurance().put("provider", provider.getText().toString());
-                    globals.getCurrentInsurance().put("mid", mid.getText().toString());
-                    globals.getCurrentInsurance().put("groupnum", groupnum.getText().toString());
-                    globals.getCurrentInsurance().put("rxbin", rxbin.getText().toString());
-                    globals.getCurrentInsurance().put("rxpcn", rxpcn.getText().toString());
-                    globals.getCurrentInsurance().put("rxgrp", rxgrp.getText().toString());
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updateDoc.php";
+                new UpdateIns().execute();
+            }
+        });
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addDoc.php";
                 new UpdateIns().execute();
             }
         });
@@ -69,7 +72,6 @@ public class InsuranceEditActivity extends Activity {
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String update_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updatePrescription.php";
 
         String insProvider, insMID, insGroupnum, insRxBin, insRxPCN, insRxGrp;
 
@@ -89,7 +91,9 @@ public class InsuranceEditActivity extends Activity {
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("id", id);
+            QueryString query = new QueryString("database", "Insurances");
+            query.add("Patient", Integer.toString(user.patient.getID()));
+            if(id != 0) query.add("id", Integer.toString(id));
             query.add("provider", insProvider);
             query.add("mid", insMID);
             query.add("groupnum", insGroupnum);
@@ -98,15 +102,30 @@ public class InsuranceEditActivity extends Activity {
             query.add("rxgrp", insRxGrp);
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(update_url, "POST");
+            JSONArray json = jsonParser.makeHttpRequest(url, "POST");
 
             try {
                 int success = json.getInt(0);
 
                 if (success == 1) {
+                    Insurance insurance = new Insurance();
+                    insurance.setID(json.getInt(1));
+                    insurance.setProvider(insProvider);
+                    insurance.setMID(insMID);
+                    insurance.setGroupNumber(insGroupnum);
+                    insurance.setRxBin(insRxBin);
+                    insurance.setRxPcn(insRxPCN);
+                    insurance.setRxGroup(insRxGrp);
+                    insurance.setPatient(user.patient.getID());
+                    if(json.getString(2).equals("Update")){
+                        user.patient.insurance.update(insurance);
+                        dbHandler.updateInsurance(insurance);
+                    }else{
+                        user.patient.addInsurance(insurance);
+                        dbHandler.addInsurance(insurance);
+                    }
+
                     finish();
-                } else {
-                    // failed
                 }
             } catch (Exception e) {
                 e.printStackTrace();

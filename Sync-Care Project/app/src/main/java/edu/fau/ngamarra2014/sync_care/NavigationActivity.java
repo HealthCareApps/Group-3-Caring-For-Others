@@ -15,10 +15,13 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import edu.fau.ngamarra2014.sync_care.Data.User;
+
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    Globals globals = Globals.getInstance();
+    //Globals globals = Globals.getInstance();
+    User user = User.getInstance();
     DrawerLayout drawer;
     TextView title;
 
@@ -41,11 +44,12 @@ public class NavigationActivity extends AppCompatActivity
         View headerLayout = navigationView.getHeaderView(0);
 
         title = (TextView) headerLayout.findViewById(R.id.username);
-        try {
+        title.setText(user.getName());
+       /* try {
             title.setText(globals.getuser().getString("name"));
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override
@@ -68,6 +72,8 @@ public class NavigationActivity extends AppCompatActivity
             Intent i = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_account) {
+            Intent i = new Intent(getApplicationContext(), DeletePatientActivity.class);
+            startActivity(i);
 
         } else if (id == R.id.nav_patients) {
             Intent i = new Intent(getApplicationContext(), PatientListActivity.class);

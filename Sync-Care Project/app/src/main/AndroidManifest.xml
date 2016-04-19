@@ -3,8 +3,6 @@
     package="edu.fau.ngamarra2014.sync_care">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -13,16 +11,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
+            android:name=".Authentication.LoginActivity"
             android:noHistory="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".registerActivity"
+            android:name=".Authentication.Registration"
             android:label="Registration"/>
         <activity
             android:name=".HomeActivity"
@@ -30,20 +28,17 @@
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Unused.SettingsActivity"
             android:label="Settings"/>
         <activity
-            android:name=".LinkedRequestsActivity"
+            android:name=".Unused.LinkedRequestsActivity"
             android:label="Linked Requests"/>
         <activity
-            android:name=".VuMarkActivity"
+            android:name=".Unused.VuMarkActivity"
             android:label="VuMark"/>
         <activity
-            android:name=".AlertsActivity"
+            android:name=".Unused.AlertsActivity"
             android:label="Alerts"/>
-        <activity
-            android:name=".AccountActivity"
-            android:label="Account"/>
         <activity
             android:name=".AddPatient"
             android:label="Add Patient" />
@@ -57,15 +52,10 @@
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Healthcare"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".RxListActivity"
-            android:label="Prescriptions"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PatientProfileActivity"
-            android:label="Profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".NavigationActivity"
@@ -73,24 +63,36 @@
         </activity>
         <activity
             android:name=".RxEditActivity"
-            android:label="Edit"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".DoctorListActivity"
-            android:label="Doctor"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".PharmacyListActivity"
-            android:label="Pharmacy"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".InsuranceListActivity"
-            android:label="Insurance"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".DoctorEditActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".PharmacyEditActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".InsuranceEditActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".DeletePatientActivity"
+            android:label="@string/title_activity_delete_patient"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

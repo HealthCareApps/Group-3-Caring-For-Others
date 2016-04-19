@@ -2,28 +2,35 @@ package edu.fau.ngamarra2014.sync_care;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import edu.fau.ngamarra2014.sync_care.Data.Doctor;
+import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
+import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
+import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+
 public class DoctorEditActivity extends Activity {
 
-    Globals globals = Globals.getInstance();
+    User user = User.getInstance();
+    DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    private String url;
 
     EditText name, type, phone, email, address, city, state, zip, fax;
-    String id;
-    Button save;
+    int id = 0;
+    Button save, add;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rx_edit_activity);
+        setContentView(R.layout.doctor_edit_activity);
 
         name = (EditText) findViewById(R.id.ename);
         type = (EditText) findViewById(R.id.etype);
@@ -35,39 +42,33 @@ public class DoctorEditActivity extends Activity {
         zip = (EditText) findViewById(R.id.ezip);
         fax = (EditText) findViewById(R.id.efax);
         save = (Button) findViewById(R.id.save);
+        add = (Button) findViewById(R.id.add);
 
-        try {
-            id = globals.getCurrentDoctor().getString("id");
-            name.setText(globals.getCurrentDoctor().getString("name"));
-            type.setText(globals.getCurrentDoctor().getString("type"));
-            phone.setText(globals.getCurrentDoctor().getString("phone"));
-            email.setText(globals.getCurrentDoctor().getString("email"));
-            address.setText(globals.getCurrentDoctor().getString("address"));
-            city.setText(globals.getCurrentDoctor().getString("city"));
-            state.setText(globals.getCurrentDoctor().getString("state"));
-            zip.setText(globals.getCurrentDoctor().getString("zip"));
-            fax.setText(globals.getCurrentDoctor().getString("fax"));
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        if(user.patient.doctor != null) {
+            save.setVisibility(View.VISIBLE);
+            id = user.patient.doctor.getID();
+            name.setText(user.patient.doctor.getName());
+            type.setText(user.patient.doctor.getType());
+            phone.setText(user.patient.doctor.getContactInfo()[0]);
+            email.setText(user.patient.doctor.getContactInfo()[2]);
+            address.setText(user.patient.doctor.getAddress()[0]);
+            city.setText(user.patient.doctor.getAddress()[1]);
+            state.setText(user.patient.doctor.getAddress()[2]);
+            zip.setText(user.patient.doctor.getAddress()[3]);
+            fax.setText(user.patient.doctor.getContactInfo()[1]);
+        }else add.setVisibility(View.VISIBLE);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    globals.getCurrentDoctor().put("name", name.getText().toString());
-                    globals.getCurrentDoctor().put("type", type.getText().toString());
-                    globals.getCurrentDoctor().put("phone", phone.getText().toString());
-                    globals.getCurrentDoctor().put("email", email.getText().toString());
-                    globals.getCurrentDoctor().put("address", address.getText().toString());
-                    globals.getCurrentDoctor().put("city", city.getText().toString());
-                    globals.getCurrentDoctor().put("state", state.getText().toString());
-                    globals.getCurrentDoctor().put("zip", zip.getText().toString());
-                    globals.getCurrentDoctor().put("fax", fax.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updateDoc.php";
+                new UpdateDoc().execute();
+            }
+        });
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addDoc.php";
                 new UpdateDoc().execute();
             }
         });
@@ -75,9 +76,7 @@ public class DoctorEditActivity extends Activity {
 
     class UpdateDoc extends AsyncTask<String, String, String> {
 
-        private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String update_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updatePrescription.php";
 
         String docName, docType, docPhone, docEmail, docAddress, docCity, docState, docZip, docFax;
 
@@ -100,7 +99,8 @@ public class DoctorEditActivity extends Activity {
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("id", id);
+            QueryString query = new QueryString("database", "Doctors");
+            query.add("Patient", Integer.toString(user.patient.getID()));
             query.add("name", docName);
             query.add("type", docType);
             query.add("phone", docPhone);
@@ -110,18 +110,31 @@ public class DoctorEditActivity extends Activity {
             query.add("state", docState);
             query.add("zip", docZip);
             query.add("fax", docFax);
-
+            if(id != 0) query.add("id", Integer.toString(id));
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(update_url, "POST");
+            JSONArray json = jsonParser.makeHttpRequest(url, "POST");
 
             try {
                 int success = json.getInt(0);
 
                 if (success == 1) {
+                    Doctor doc = new Doctor();
+                    doc.setID(json.getInt(1));
+                    doc.setName(docName);
+                    doc.setContactInfo(docPhone, docFax, docEmail);
+                    doc.setAddress(docAddress, docCity, docState, docZip);
+                    doc.setType(docType);
+                    doc.setPatient(user.patient.getID());
+                    if(json.getString(2).equals("Update")){
+                        user.patient.doctor.update(doc);
+                        dbHandler.updateDoctor(doc);
+                    }else{
+                        user.patient.addDoctor(doc);
+                        dbHandler.addDoctor(doc);
+                    }
+
                     finish();
-                } else {
-                    // failed
                 }
             } catch (Exception e) {
                 e.printStackTrace();

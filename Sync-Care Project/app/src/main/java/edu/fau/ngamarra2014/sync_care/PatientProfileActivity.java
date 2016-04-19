@@ -9,7 +9,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import edu.fau.ngamarra2014.sync_care.OldCode.Globals;
 
 public class PatientProfileActivity extends AppCompatActivity {
 

@@ -21,9 +21,22 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
+            <EditText
+                android:id="@+id/eprovider"
+                android:hint="Provider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:background="@android:color/transparent"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#212121"
+                android:inputType="textCapCharacters" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/eprovider"
                 android:id="@+id/provider"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -32,17 +45,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272" />
 
-            <EditText
-                android:id="@+id/eprovider"
-                android:layout_below="@+id/provider"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:background="@android:color/transparent"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -52,9 +54,22 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
+            <EditText
+                android:id="@+id/emid"
+                android:hint="ID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:background="@android:color/transparent"
+                android:textColor="#212121"
+                android:inputType="number" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/emid"
                 android:id="@+id/id"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -63,17 +78,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272" />
 
-            <EditText
-                android:id="@+id/emid"
-                android:layout_below="@+id/id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:background="@android:color/transparent"
-                android:textColor="#212121"/>
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -83,9 +87,23 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
+            <EditText
+                android:id="@+id/egroupnum"
+                android:hint="Group number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:background="@android:color/transparent"
+                android:textColor="#212121"
+                android:inputType="number" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/egroupnum"
                 android:id="@+id/groupnum"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -94,19 +112,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272" />
 
-            <EditText
-                android:id="@+id/egroupnum"
-                android:layout_below="@+id/groupnum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:background="@android:color/transparent"
-                android:textColor="#212121" />
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -116,9 +121,23 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
+            <EditText
+                android:id="@+id/erxbin"
+                android:hint="Bin number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:background="@android:color/transparent"
+                android:textColor="#212121"
+                android:inputType="number" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/erxbin"
                 android:id="@+id/rxbin"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -127,20 +146,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272" />
 
-            <EditText
-                android:id="@+id/erxbin"
-                android:layout_below="@+id/rxbin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:ellipsize="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:background="@android:color/transparent"
-                android:textColor="#212121"
-                android:inputType="textMultiLine"
-                android:lines="1" />
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -150,9 +155,23 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
+            <EditText
+                android:id="@+id/erxpcn"
+                android:hint="PCN number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:background="@android:color/transparent"
+                android:textColor="#212121"
+                android:inputType="number" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/erxpcn"
                 android:id="@+id/rxpcn"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -161,20 +180,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#727272" />
 
-            <EditText
-                android:id="@+id/erxpcn"
-                android:layout_below="@+id/rxpcn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:ellipsize="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:background="@android:color/transparent"
-                android:textColor="#212121"
-                android:inputType="textMultiLine"
-                android:lines="1" />
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -184,20 +189,9 @@
             android:clickable="true"
             android:padding="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/rxgrp"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="8dp"
-                android:text="RxGrp: "
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
-
             <EditText
                 android:id="@+id/erxgrp"
-                android:layout_below="@+id/rxgrp"
+                android:hint="Group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -206,8 +200,19 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:background="@android:color/transparent"
                 android:textColor="#212121"
-                android:inputType="textMultiLine"
-                android:maxLines="1" />
+                android:inputType="textCapCharacters" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/erxgrp"
+                android:id="@+id/rxgrp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="8dp"
+                android:text="RxGrp: "
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#727272" />
 
         </RelativeLayout>
 
@@ -224,7 +229,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Save"
-                android:id="@+id/save"/>
+                android:id="@+id/save"
+                android:visibility="invisible" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:id="@+id/add"
+                android:visibility="invisible" />
 
         </LinearLayout>
     </LinearLayout>

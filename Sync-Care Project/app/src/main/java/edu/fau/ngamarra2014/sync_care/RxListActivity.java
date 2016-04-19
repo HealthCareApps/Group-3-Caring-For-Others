@@ -1,6 +1,7 @@
 package edu.fau.ngamarra2014.sync_care;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -35,8 +36,8 @@ public class RxListActivity extends NavigationActivity{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(getApplicationContext(), RxEditActivity.class));
+                finish();
             }
         });
 
@@ -48,6 +49,7 @@ public class RxListActivity extends NavigationActivity{
     }
     protected void onRestart(){
         super.onRestart();
+        user.patient.prescription = null;
         finish();
         startActivity(getIntent());
     }

@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:id="@+id/background"
-    tools:context=".LoginActivity"
+    tools:context=".Authentication.LoginActivity"
     android:clickable="true">
 
 
@@ -24,9 +24,12 @@
         android:textColor="#FFFFFF"
         android:gravity="center|center_horizontal"
         android:textColorHint="#FFFFFF"
+        android:layout_marginBottom="23dp"
         android:layout_above="@+id/password"
+        android:layout_alignLeft="@+id/password"
+        android:layout_alignStart="@+id/password"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="27dp" />
+        android:layout_alignParentStart="false" />
 
     <EditText
         android:layout_width="300dp"
@@ -38,9 +41,9 @@
         android:textColor="#FFFFFF"
         android:gravity="center|center_horizontal"
         android:textColorHint="#FFFFFF"
-        android:layout_marginBottom="41dp"
         android:layout_above="@+id/login"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="33dp" />
 
     <Button
         android:layout_width="200dp"
@@ -83,14 +86,11 @@
         android:layout_height="wrap_content"
         android:text="Welcome to Sync-Care! The worlds first platform that enables synchronization of patients medical information with family, doctors, and caretakers."
         android:id="@+id/textView2"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="74dp"
         android:textColor="#ffffff"
         android:textSize="25dp"
+        android:gravity="center"
         android:layout_below="@+id/signup"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="58dp"
-        android:layout_marginEnd="58dp"
-        android:gravity="center" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

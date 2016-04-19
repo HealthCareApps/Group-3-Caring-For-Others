@@ -1,6 +1,5 @@
 package edu.fau.ngamarra2014.sync_care;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
@@ -12,16 +11,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 
-/**
- * Created by nangi_000 on 4/3/2016.
- */
+import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
+import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
+import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+import edu.fau.ngamarra2014.sync_care.OldCode.Globals;
+
 public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecyclerAdapter.ViewHolder> {
 
     Globals globals = Globals.getInstance();
+    User user = User.getInstance();
 
     private ArrayList<String> name = new ArrayList<String>();
     private ArrayList<String> phone = new ArrayList<String>();
@@ -33,24 +35,19 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
     private int[] images = { R.drawable.pharmacy_icon};
     PharmacyListActivity Phar;
 
-    private String id;
-    private int position;
+    private int id;
 
     public PharmacyRecyclerAdapter(PharmacyListActivity phar){
 
         Phar = phar;
 
-        for(int i = 0; i < globals.getPatientPharmacies().length(); i++){
-            try{
-                name.add(globals.getPatientPharmacies().getJSONObject(i).getString("name"));
-                phone.add(globals.getPatientPharmacies().getJSONObject(i).getString("phone"));
-                address.add(globals.getPatientPharmacies().getJSONObject(i).getString("address"));
-                city.add(globals.getPatientPharmacies().getJSONObject(i).getString("city"));
-                state.add(globals.getPatientPharmacies().getJSONObject(i).getString("state"));
-                zip.add(globals.getPatientPharmacies().getJSONObject(i).getString("zip"));
-            }catch(JSONException e){
-
-            }
+        for(int i = 0; i < user.patient.getNumberOfPharmacies(); i++){
+            name.add(user.patient.getPharmacy(i).getName());
+            phone.add(user.patient.getPharmacy(i).getPhone());
+            address.add(user.patient.getPharmacy(i).getAddress()[0]);
+            city.add(user.patient.getPharmacy(i).getAddress()[1]);
+            state.add(user.patient.getPharmacy(i).getAddress()[2]);
+            zip.add(user.patient.getPharmacy(i).getAddress()[3]);
         }
     }
 
@@ -116,41 +113,33 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    position = getAdapterPosition();
-                    Intent i = new Intent();
-                    //i.setClass(v.getContext(), RxEditActivity.class);
-                    try {
-                        globals.setCurrentPharmacy(globals.getPatientPharmacies().getJSONObject(position));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    v.getContext().startActivity(i);
+                    user.patient.setCurrentPharmacy(getAdapterPosition());
+                    v.getContext().startActivity(new Intent(v.getContext(), PharmacyEditActivity.class));
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    position = getAdapterPosition();
-                    try {
-                        id = globals.getPatientPharmacies().getJSONObject(position).getString("id");
-                        new DeletePhar().execute();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    id = user.patient.getPharmacy(getAdapterPosition()).getID();
+                    new DeletePhar(getAdapterPosition()).execute();
                 }
             });
         }
     }
     class DeletePhar extends AsyncTask<String, String, String> {
 
-        private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
         private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deleteDoc.php";
+        DBHandler dbHandler = new DBHandler(Phar, null, null, 2);
+        int index;
 
+        public DeletePhar(int index){
+            this.index = index;
+        }
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("id", id);
+            QueryString query = new QueryString("id", Integer.toString(id));
             query.add("database", "Pharmacies");
 
             jsonParser.setParams(query);
@@ -160,7 +149,8 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
                 int success = json.getInt(0);
 
                 if (success == 1) {
-                    globals.getPatientPharmacies().remove(position);
+                    dbHandler.deleteDoc("pharmacies", id);
+                    user.patient.removePharmacy(index);
                     Phar.onFinishCallback();
                 } else {
                     // failed
