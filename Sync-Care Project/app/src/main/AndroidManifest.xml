@@ -31,7 +31,7 @@
             android:name=".Unused.SettingsActivity"
             android:label="Settings"/>
         <activity
-            android:name=".Unused.LinkedRequestsActivity"
+            android:name=".LinkedRequestsActivity"
             android:label="Linked Requests"/>
         <activity
             android:name=".Unused.VuMarkActivity"
@@ -39,6 +39,15 @@
         <activity
             android:name=".Unused.AlertsActivity"
             android:label="Alerts"/>
+        <activity
+        android:name=".DeleteMedicalActivity"
+        android:label="Delete Medical" />
+        <activity
+            android:name=".DeletePatientActivity"
+            android:label="Delete Patient" />
+        <activity
+            android:name=".ManageProfileActivity"
+            android:label="Manage Profile" />
         <activity
             android:name=".AddPatient"
             android:label="Add Patient" />
@@ -90,7 +99,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".DeletePatientActivity"
+            android:name=".AccountActivity"
             android:label="@string/title_activity_delete_patient"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
