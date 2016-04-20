@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.fau.ngamarra2014.sync_care.Data.Pharmacy;
 import edu.fau.ngamarra2014.sync_care.Data.User;
@@ -54,14 +55,14 @@ public class PharmacyEditActivity extends Activity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updateDoc.php";
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/updateDoc.php";
                 new UpdatePhar().execute();
             }
         });
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addDoc.php";
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/addDoc.php";
                 new UpdatePhar().execute();
             }
         });
@@ -101,20 +102,18 @@ public class PharmacyEditActivity extends Activity {
 
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(url, "POST");
+            JSONObject response = jsonParser.makeHttpRequest(url, "POST");
 
             try {
-                int success = json.getInt(0);
-
-                if (success == 1) {
+               if (response.has("Successful")) {
                     Pharmacy pharmacy = new Pharmacy();
-                    pharmacy.setID(json.getInt(1));
+                    pharmacy.setID(response.getInt("id"));
                     pharmacy.setName(pharName);
                     pharmacy.setPhone(pharPhone);
                     pharmacy.setAddress(pharAddress, pharCity, pharState, pharZip);
                     pharmacy.setPatient(user.patient.getID());
 
-                    if(json.getString(2).equals("Update")){
+                    if(response.getString("Successful").equals("Updated")){
                         user.patient.pharmacy.update(pharmacy);
                         dbHandler.updatePharmacy(pharmacy);
                     }else{
@@ -129,10 +128,5 @@ public class PharmacyEditActivity extends Activity {
 
             return null;
         }
-
-        protected void onPostExecute(String file_url) {
-
-        }
-
     }
 }

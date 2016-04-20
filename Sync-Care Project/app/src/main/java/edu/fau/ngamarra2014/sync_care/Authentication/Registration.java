@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
@@ -21,8 +22,6 @@ import edu.fau.ngamarra2014.sync_care.Database.QueryString;
 import edu.fau.ngamarra2014.sync_care.R;
 
 public class Registration extends Activity {
-
-    //Globals globals = Globals.getInstance();
     User user = User.getInstance();
     DBHandler dbHandler = new DBHandler(this, null, null, 2);
 
@@ -77,26 +76,10 @@ public class Registration extends Activity {
 
     class CreateNewUser extends AsyncTask<String, String, String> {
 
-        //JSONObject user = new JSONObject();
-        //private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String register_caretaker_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/register.php";
+        private String register_caretaker_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/register.php";
 
-        //String first, last, email, username, password;
-        int success;
-        String id;
-        private JSONArray json;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-           /* first = inputFirst.getText().toString();
-            last = inputLast.getText().toString();
-            email = inputEmail.getText().toString();
-            username = inputUsername.getText().toString();
-            password = inputPassword.getText().toString();*/
-        }
+        private JSONObject response;
 
         protected String doInBackground(String... args) {
 
@@ -108,34 +91,20 @@ public class Registration extends Activity {
             query.add("password", user.getPassword());
 
             jsonParser.setParams(query);
-            json = jsonParser.makeHttpRequest(register_caretaker_url, "POST");
+            response = jsonParser.makeHttpRequest(register_caretaker_url, "POST");
 
-            try {
-                success = json.getInt(0);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             return null;
         }
 
         protected void onPostExecute(String file_url) {
             try {
-                if (success == 1) {
-                    user.setID(json.getInt(1));
-                    /*user.put("id", json.getString(1));
-                    user.put("first", first);
-                    user.put("last", last);
-                    user.put("email", email);
-                    user.put("username", username);
-                    globals.setUser(user);*/
+                if (response.has("Successful")) {
+                    user.setID(response.getInt("id"));
                     dbHandler.addUser(user);
-                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                    startActivity(i);
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     finish();
-                }else if(success == 0){
+                }else if(response.has("Error")){
                     inputUsername.setError("Username already exists");
-                }else if(success == 2){
-                    Log.i("Database error", "Database failed!");
                 }
             }catch (JSONException e){
                 e.printStackTrace();

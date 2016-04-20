@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import edu.fau.ngamarra2014.sync_care.Data.Prescription;
@@ -124,7 +126,7 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deleteDoc.php";
+        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/deleteDoc.php";
         DBHandler dbHandler = new DBHandler(RX, null, null, 2);
         int index;
 
@@ -138,12 +140,10 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
             query.add("database", "Prescriptions");
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(delete_url, "POST");
+            JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
 
             try {
-                int success = json.getInt(0);
-
-                if (success == 1) {
+                if (response.has("Successful")) {
                     dbHandler.deleteDoc("prescriptions", id);
                     user.patient.removePrescription(index);
                     RX.onFinishCallback();
@@ -154,11 +154,5 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
 
             return null;
         }
-
-        protected void onPostExecute(String file_url) {
-
-        }
-
     }
-
 }

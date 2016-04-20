@@ -13,13 +13,14 @@ import java.nio.charset.StandardCharsets;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 
 public class JSONParser {
 
     static InputStream is = null;
-    static JSONArray jArray = null;
+    static JSONObject response = null;
     static String json = "";
 
     private String params = "";
@@ -34,7 +35,7 @@ public class JSONParser {
     }
     // function get json from url
     // by making HTTP POST or GET mehtod
-    public JSONArray makeHttpRequest(String url, String method) {
+    public JSONObject makeHttpRequest(String url, String method) {
         // Making HTTP request
         try {
 
@@ -86,11 +87,11 @@ public class JSONParser {
         }
 
         try {
-            jArray = new JSONArray(json);
+            response = new JSONObject(json);
         } catch (JSONException e) {
             Log.i("Error", e.toString());
         }
-        return jArray;
+        return response;
 
     }
 }

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import edu.fau.ngamarra2014.sync_care.Data.Prescription;
 import edu.fau.ngamarra2014.sync_care.Data.User;
@@ -54,14 +55,14 @@ public class RxEditActivity extends Activity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updateDoc.php";
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/updateDoc.php";
                 new UpdateRx().execute();
             }
         });
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addDoc.php";
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/addDoc.php";
                 new UpdateRx().execute();
             }
         });
@@ -69,7 +70,6 @@ public class RxEditActivity extends Activity {
 
     class UpdateRx extends AsyncTask<String, String, String> {
 
-        private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
 
         String rxName, rxDoc, rxDosage, rxInstructions, rxSymptoms;
@@ -99,14 +99,12 @@ public class RxEditActivity extends Activity {
             query.add("symptoms", rxSymptoms);
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(url, "POST");
+            JSONObject response = jsonParser.makeHttpRequest(url, "POST");
 
             try {
-                int success = json.getInt(0);
-
-                if (success == 1) {
+                if (response.has("Successful")) {
                     Prescription rx = new Prescription();
-                    rx.setID(json.getInt(1));
+                    rx.setID(response.getInt("id"));
                     rx.setName(rxName);
                     rx.setDoctorName(rxDoc);
                     rx.setDosage(rxDosage);
@@ -114,7 +112,7 @@ public class RxEditActivity extends Activity {
                     rx.setSymptoms(rxSymptoms);
                     rx.setPatient(user.patient.getID());
 
-                    if(json.getString(2).equals("Update")){
+                    if(response.getString("Successful").equals("Updated")){
                         user.patient.prescription.update(rx);
                         dbHandler.updatePrescription(rx);
                     }else{
@@ -130,10 +128,5 @@ public class RxEditActivity extends Activity {
 
             return null;
         }
-
-        protected void onPostExecute(String file_url) {
-
-        }
-
     }
 }
