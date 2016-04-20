@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -129,7 +130,7 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
     class DeleteIns extends AsyncTask<String, String, String> {
 
         JSONParser jsonParser = new JSONParser();
-        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deleteDoc.php";
+        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/deleteDoc.php";
         DBHandler dbHandler = new DBHandler(Ins, null, null, 2);
         int index;
 
@@ -143,12 +144,10 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
             query.add("database", "Insurances");
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(delete_url, "POST");
+            JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
 
             try {
-                int success = json.getInt(0);
-
-                if (success == 1) {
+                if (response.has("Successful")) {
                     dbHandler.deleteDoc("insurances", id);
                     user.patient.removeInsurance(index);
                     Ins.onFinishCallback();
@@ -159,13 +158,6 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
 
             return null;
         }
-
-        protected void onPostExecute(String file_url) {
-
-        }
-
     }
-
-
 }
 

@@ -83,7 +83,7 @@ public class AddPatient extends AppCompatActivity {
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
-        private String add_patient_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addPatient.php";
+        private String add_patient_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/addDoc.php";
 
         String fname, lname, birth, phoneNumber, emergencyNumber, gender, diagnosis;
         RadioButton rd = (RadioButton) findViewById(radio.getCheckedRadioButtonId());
@@ -110,7 +110,8 @@ public class AddPatient extends AppCompatActivity {
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("caretaker", Integer.toString(user.getID()));
+            QueryString query = new QueryString("database", "patients");
+            query.add("caretaker", Integer.toString(user.getID()));
             query.add("first", fname);
             query.add("last", lname);
             query.add("birth", birth);
@@ -120,13 +121,11 @@ public class AddPatient extends AppCompatActivity {
             query.add("diagnosis", diagnosis);
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(add_patient_url, "POST");
+            JSONObject response = jsonParser.makeHttpRequest(add_patient_url, "POST");
 
             try {
-                int success = json.getInt(0);
-
-                if (success == 1) {
-                    Patient patient = new Patient(json.getInt(1), fname, lname, gender, birth, user.getID());
+                if (response.has("Successful")) {
+                    Patient patient = new Patient(response.getInt("id"), fname, lname, gender, birth, user.getID());
                     patient.setPrimaryPhoneNumber(phoneNumber);
                     patient.setEmergencyPhoneNumber(emergencyNumber);
                     patient.setDiagnosis(diagnosis);

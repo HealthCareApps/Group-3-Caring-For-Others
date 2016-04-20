@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -129,7 +130,7 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
     class DeletePhar extends AsyncTask<String, String, String> {
 
         JSONParser jsonParser = new JSONParser();
-        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/deleteDoc.php";
+        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/deleteDoc.php";
         DBHandler dbHandler = new DBHandler(Phar, null, null, 2);
         int index;
 
@@ -143,17 +144,13 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
             query.add("database", "Pharmacies");
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(delete_url, "POST");
+            JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
 
             try {
-                int success = json.getInt(0);
-
-                if (success == 1) {
+                if (response.has("Successful")) {
                     dbHandler.deleteDoc("pharmacies", id);
                     user.patient.removePharmacy(index);
                     Phar.onFinishCallback();
-                } else {
-                    // failed
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -161,12 +158,5 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
 
             return null;
         }
-
-        protected void onPostExecute(String file_url) {
-
-        }
-
     }
-
-
 }

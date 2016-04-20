@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.fau.ngamarra2014.sync_care.Data.Doctor;
 import edu.fau.ngamarra2014.sync_care.Data.User;
@@ -61,14 +62,14 @@ public class DoctorEditActivity extends Activity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updateDoc.php";
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/updateDoc.php";
                 new UpdateDoc().execute();
             }
         });
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addDoc.php";
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/addDoc.php";
                 new UpdateDoc().execute();
             }
         });
@@ -113,20 +114,18 @@ public class DoctorEditActivity extends Activity {
             if(id != 0) query.add("id", Integer.toString(id));
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(url, "POST");
+            JSONObject response = jsonParser.makeHttpRequest(url, "POST");
 
             try {
-                int success = json.getInt(0);
-
-                if (success == 1) {
+               if (response.has("Successful")) {
                     Doctor doc = new Doctor();
-                    doc.setID(json.getInt(1));
+                    doc.setID(response.getInt("id"));
                     doc.setName(docName);
                     doc.setContactInfo(docPhone, docFax, docEmail);
                     doc.setAddress(docAddress, docCity, docState, docZip);
                     doc.setType(docType);
                     doc.setPatient(user.patient.getID());
-                    if(json.getString(2).equals("Update")){
+                    if(response.getString("Successful").equals("Updated")){
                         user.patient.doctor.update(doc);
                         dbHandler.updateDoctor(doc);
                     }else{
@@ -142,10 +141,5 @@ public class DoctorEditActivity extends Activity {
 
             return null;
         }
-
-        protected void onPostExecute(String file_url) {
-
-        }
-
     }
 }

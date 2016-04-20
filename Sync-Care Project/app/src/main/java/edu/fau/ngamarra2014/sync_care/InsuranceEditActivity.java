@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.fau.ngamarra2014.sync_care.Data.Insurance;
 import edu.fau.ngamarra2014.sync_care.Data.Prescription;
@@ -55,14 +56,14 @@ public class InsuranceEditActivity extends Activity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/updateDoc.php";
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/updateDoc.php";
                 new UpdateIns().execute();
             }
         });
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/connect/addDoc.php";
+                url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/addDoc.php";
                 new UpdateIns().execute();
             }
         });
@@ -102,14 +103,12 @@ public class InsuranceEditActivity extends Activity {
             query.add("rxgrp", insRxGrp);
 
             jsonParser.setParams(query);
-            JSONArray json = jsonParser.makeHttpRequest(url, "POST");
+            JSONObject response = jsonParser.makeHttpRequest(url, "POST");
 
             try {
-                int success = json.getInt(0);
-
-                if (success == 1) {
+                if (response.has("Successful")) {
                     Insurance insurance = new Insurance();
-                    insurance.setID(json.getInt(1));
+                    insurance.setID(response.getInt("id"));
                     insurance.setProvider(insProvider);
                     insurance.setMID(insMID);
                     insurance.setGroupNumber(insGroupnum);
@@ -117,7 +116,7 @@ public class InsuranceEditActivity extends Activity {
                     insurance.setRxPcn(insRxPCN);
                     insurance.setRxGroup(insRxGrp);
                     insurance.setPatient(user.patient.getID());
-                    if(json.getString(2).equals("Update")){
+                    if(response.getString("Successful").equals("Updated")){
                         user.patient.insurance.update(insurance);
                         dbHandler.updateInsurance(insurance);
                     }else{
@@ -133,11 +132,6 @@ public class InsuranceEditActivity extends Activity {
 
             return null;
         }
-
-        protected void onPostExecute(String file_url) {
-
-        }
-
     }
 }
 
