@@ -5,6 +5,7 @@ Topic: Caring for Others
 4/19/16 - We have moved to a more specific home care (Physical Therapy). By the end of the week we hope to have the app moved over to reflect Physical Therapy
 
 Some changes made:
+
     Moved database over to Sqlite for faster access and allow the user to view information without 
     having to be connected to the internet
         Still need to able to connect to the internet in order to see updated logs, edit information, and adding information
