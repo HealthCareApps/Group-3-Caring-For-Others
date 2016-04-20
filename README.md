@@ -2,12 +2,24 @@
 Team Members: Nick G., Nicholas A., David G., Genesi, and Gus. 
 Topic: Caring for Others
 
+4/19/16 - We have moved to a more specific home care (Physical Therapy). By the end of the week we hope to have the app moved over to reflect Physical Therapy
+
+Some changes made:
+    Moved database over to Sqlite for faster access and allow the user to view information without 
+    having to be connected to the internet
+        Still need to able to connect to the internet in order to see updated logs, edit information, and adding information
+        
+    App will be available across multiple devices. Meaning user doesn't have to lose or re-enter any information
+    if they sign in on another device other then the original device that they've registed in.
+    
+    AR will not be implemented anymore
+    
 
 Changes:
 
 The app will consist of two profiles. There is no patients profile anymore
 
-	Primary CareTaker - The main person taking care of the patient that will
+    Primary CareTaker - The main person taking care of the patient that will
 	supply the information about the patient.
 	
 	Nurse/Family member - Person taking care of the patient, needs access to
