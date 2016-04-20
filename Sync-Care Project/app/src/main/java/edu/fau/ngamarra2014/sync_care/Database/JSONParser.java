@@ -90,6 +90,7 @@ public class JSONParser {
             response = new JSONObject(json);
         } catch (JSONException e) {
             Log.i("Error", e.toString());
+            Log.i("String", json);
         }
         return response;
 

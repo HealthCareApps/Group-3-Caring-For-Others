@@ -122,9 +122,21 @@ public class LoginActivity extends AppCompatActivity {
                     user.setEmail(response.getJSONObject("User").getString("email"));
                     user.setUsername(response.getJSONObject("User").getString("username"));
                     user.setPassword(response.getJSONObject("User").getString("password"));
-                    dbHandler.addUser(user);
+                    /*dbHandler.addUser(user);
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    finish();
+                    finish();*/
+                    query = new QueryString("id", response.getJSONObject("User").getString("id"));
+                    jsonParser.setParams(query);
+                    response = jsonParser.makeHttpRequest("http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/getPatients.php", "GET");
+                    JSONArray patients = response.getJSONArray("Patients");
+                    for(int i = 0; i < patients.length(); i++){
+                        JSONObject patient = patients.getJSONObject(i);
+                        Log.i("Patient", patient.toString());
+                        query = new QueryString("id", patient.getString("id"));
+                        jsonParser.setParams(query);
+                        response = jsonParser.makeHttpRequest("http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/patientInfo.php", "GET");
+                        Log.i("Info", response.toString());
+                    }
                 } else {
                     Snackbar.make(view, "Invalid credentials", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
