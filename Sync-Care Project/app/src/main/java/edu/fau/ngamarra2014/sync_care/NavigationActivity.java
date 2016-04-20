@@ -8,12 +8,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
-import org.json.JSONException;
 
 import edu.fau.ngamarra2014.sync_care.Data.User;
 
@@ -72,7 +69,7 @@ public class NavigationActivity extends AppCompatActivity
             Intent i = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_account) {
-            Intent i = new Intent(getApplicationContext(), DeletePatientActivity.class);
+            Intent i = new Intent(getApplicationContext(), AccountActivity.class);
             startActivity(i);
 
         } else if (id == R.id.nav_patients) {
