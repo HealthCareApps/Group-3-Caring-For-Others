@@ -102,6 +102,7 @@
             android:name=".AccountActivity"
             android:label="@string/title_activity_delete_patient"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Information"></activity>
     </application>
 
 </manifest>

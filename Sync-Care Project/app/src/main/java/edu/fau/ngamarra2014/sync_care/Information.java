@@ -1,4 +1,4 @@
-package edu.fau.ngamarra2014.sync_care.OldCode;
+package edu.fau.ngamarra2014.sync_care;
 
 import android.content.Context;
 import android.support.design.widget.TabLayout;
@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 
 import edu.fau.ngamarra2014.sync_care.R;
 
-public class Healthcare extends AppCompatActivity {
+public class Information extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -29,8 +29,8 @@ public class Healthcare extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.healthcare_activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -70,25 +70,30 @@ public class Healthcare extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.healthcare_fragment, container, false);
-            NestedScrollView doc = (NestedScrollView) rootView.findViewById(R.id.doctab);
-            NestedScrollView ins = (NestedScrollView) rootView.findViewById(R.id.instab);
-            NestedScrollView pha = (NestedScrollView) rootView.findViewById(R.id.phatab);
+            NestedScrollView info = (NestedScrollView) rootView.findViewById(R.id.infotab);
+            NestedScrollView motor = (NestedScrollView) rootView.findViewById(R.id.motortab);
+            NestedScrollView exercise = (NestedScrollView) rootView.findViewById(R.id.exercisetab);
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
-                ins.setVisibility(View.INVISIBLE);
-                pha.setVisibility(View.INVISIBLE);
-                doc.setVisibility(View.VISIBLE);
+                motor.setVisibility(View.INVISIBLE);
+                exercise.setVisibility(View.INVISIBLE);
+                info.setVisibility(View.VISIBLE);
                /* TextView textView = (TextView) rootView.findViewById(R.id.section_label);
                 textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));*/
             }
             else if(getArguments().getInt(ARG_SECTION_NUMBER) == 2) {
-                ins.setVisibility(View.VISIBLE);
-                pha.setVisibility(View.INVISIBLE);
-                doc.setVisibility(View.INVISIBLE);
+                motor.setVisibility(View.VISIBLE);
+                exercise.setVisibility(View.INVISIBLE);
+                info.setVisibility(View.INVISIBLE);
             }
             else if(getArguments().getInt(ARG_SECTION_NUMBER) == 3) {
-                ins.setVisibility(View.INVISIBLE);
-                pha.setVisibility(View.VISIBLE);
-                doc.setVisibility(View.INVISIBLE);
+                motor.setVisibility(View.INVISIBLE);
+                exercise.setVisibility(View.VISIBLE);
+                info.setVisibility(View.INVISIBLE);
+            }
+            else if(getArguments().getInt(ARG_SECTION_NUMBER) == 4) {
+                motor.setVisibility(View.INVISIBLE);
+                exercise.setVisibility(View.VISIBLE);
+                info.setVisibility(View.INVISIBLE);
             }
             return rootView;
         }
@@ -121,11 +126,13 @@ public class Healthcare extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Doctors";
+                    return "Balance Checklist";
                 case 1:
-                    return "Insurances";
+                    return "Motor Symptoms";
                 case 2:
-                    return "Pharmacies";
+                    return "Exercise List";
+                case 3:
+                    return "Target Heart Rate";
             }
             return null;
         }

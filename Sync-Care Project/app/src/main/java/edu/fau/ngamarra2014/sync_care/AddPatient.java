@@ -111,7 +111,7 @@ public class AddPatient extends AppCompatActivity {
 
             // Building Parameters
             QueryString query = new QueryString("database", "patients");
-            query.add("caretaker", Integer.toString(user.getID()));
+            query.add("Patient", Integer.toString(user.getID()));
             query.add("first", fname);
             query.add("last", lname);
             query.add("birth", birth);

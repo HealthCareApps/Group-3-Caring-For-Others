@@ -1,21 +1,13 @@
 package edu.fau.ngamarra2014.sync_care;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import org.json.JSONArray;
-import org.json.JSONException;
+import android.widget.ImageButton;
 
 import edu.fau.ngamarra2014.sync_care.Data.User;
-import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
-import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
-import edu.fau.ngamarra2014.sync_care.Database.QueryString;
 
 public class HomeActivity extends NavigationActivity{
 
@@ -28,6 +20,14 @@ public class HomeActivity extends NavigationActivity{
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.home_activity, null, false);
         drawer.addView(contentView, 0);
+
+        ImageButton information = (ImageButton) findViewById(R.id.info);
+        information.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Information.class));
+            }
+        });
         //Log.i("Doctors", " " + user.getPatient(0).getNumberOfDoctors());
         //new GrabPatients().execute();
     }
@@ -35,6 +35,7 @@ public class HomeActivity extends NavigationActivity{
         super.onRestart();
         //Log.i("Doctors", " " + user.getPatient(0).getNumberOfDoctors());
     }
+
 
     /*class GrabPatients extends AsyncTask<String, String, String> {
 

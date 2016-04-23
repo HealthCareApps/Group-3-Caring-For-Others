@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="50dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Slowness of movement, also called bradykinesia.  This symptom makes it harder to initiate and perform physical actions such as getting out of bed, buttoning a shirt or even speech." />
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox1"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Involuntary shaking, or tremor at rest.  Tremor usually occurs in the hands, but it can also appear in other parts of the body, including the lower lip, jaw or leg.  This symptom usually improves when a person starts performing tasks or using the limb in some way" />
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox2"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Stiffness of the arms, legs or trunk.  Muscles feel unusually tight, stiff or achy.  This symptom can occur on one side or both sides of the body."/>
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox3"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Trouble with balance and falls, also called postural instability.  A person with postural instability will have problems with walking, balance and turning around.  Falls may occur without explanation.  Postural instability isn't usually present with diagnosis, but it's one of the most common and troublesome symptoms that happen later on."/>
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox4"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Dyskinesias are involuntary, erratic writhing movements of the face, arms, legs and trunk.  Dyskinesias usually begin after a few years of treatment with levodopa."/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>
