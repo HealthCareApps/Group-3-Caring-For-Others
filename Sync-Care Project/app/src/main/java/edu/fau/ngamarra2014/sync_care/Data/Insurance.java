@@ -1,9 +1,24 @@
 package edu.fau.ngamarra2014.sync_care.Data;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Insurance {
     private int id, patient;
     private String mid, groupnum, rxbin, rxpcn;
     private String provider, rxgrp;
+
+    public Insurance(){}
+    public Insurance(JSONObject insurance) throws JSONException {
+        this.id = insurance.getInt("id");
+        this.patient = insurance.getInt("patient_id");
+        this.mid = insurance.getString("mid");
+        this.groupnum = insurance.getString("groupnum");
+        this.rxbin = insurance.getString("rxbin");
+        this.rxpcn = insurance.getString("rxpcn");
+        this.provider = insurance.getString("provider");
+        this.rxgrp = insurance.getString("rxgrp");
+    }
 
     public void setID(int id){
         this.id = id;

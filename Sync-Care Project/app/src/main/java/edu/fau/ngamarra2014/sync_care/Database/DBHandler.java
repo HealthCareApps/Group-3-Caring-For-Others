@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import edu.fau.ngamarra2014.sync_care.Authentication.MCrypt;
 import edu.fau.ngamarra2014.sync_care.Data.Doctor;
 import edu.fau.ngamarra2014.sync_care.Data.Insurance;
 import edu.fau.ngamarra2014.sync_care.Data.Patient;
@@ -31,8 +32,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static final String COLUMN_ID = "_id";
 
-    public DBHandler(Context context, String name,
-                       SQLiteDatabase.CursorFactory factory, int version) {
+    public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
 
@@ -104,8 +104,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion,
-                          int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PATIENTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DOCTORS);
@@ -115,12 +114,19 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addUser(User user) {
+    public void addUser(User user){
 
         ContentValues values = new ContentValues();
+        MCrypt mcrypt = new MCrypt();
+
+        try {
+            values.put("password", MCrypt.bytesToHex(mcrypt.encrypt(user.getPassword())));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         values.put("_id", user.getID());
         values.put("username", user.getUsername());
-        values.put("password", user.getPassword());
+
         values.put("first", user.getFirst());
         values.put("last", user.getLast());
         values.put("email", user.getEmail());
@@ -132,15 +138,22 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean findUser(String username, String password) {
+    public boolean AuthenticateUser(String username, String password){
         String query = "Select * FROM " + TABLE_USERS + " WHERE " + "username" + " =  \"" + username + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
+        MCrypt mcrypt = new MCrypt();
 
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
-            if(cursor.getString(2).equals(password)){
+            String decrypted = null;
+            try {
+                decrypted = new String( mcrypt.decrypt(cursor.getString(2)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(decrypted.equals(password)){
                 user.setID(cursor.getInt(0));
                 user.setUsername(cursor.getString(1));
                 user.setFirst(cursor.getString(3));
@@ -238,7 +251,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.update(TABLE_DOCTORS, values, filter, null);
         db.close();
     }
-
     public ArrayList<Doctor> loadDoctors(int patient) {
         String query = "Select * FROM " + TABLE_DOCTORS + " WHERE " + "patient_id" + " =  \"" + patient + "\"";
 
@@ -296,7 +308,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.update(TABLE_PRESCRIPTIONS, values, filter, null);
         db.close();
     }
-
     public ArrayList<Prescription> loadPrescriptions(int patient) {
         String query = "Select * FROM " + TABLE_PRESCRIPTIONS + " WHERE " + "patient_id" + " =  \"" + patient + "\"";
 
@@ -356,7 +367,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.update(TABLE_PHARMACIES, values, filter, null);
         db.close();
     }
-
     public ArrayList<Pharmacy> loadPharmacies(int patient) {
         String query = "Select * FROM " + TABLE_PHARMACIES + " WHERE " + "patient_id" + " =  \"" + patient + "\"";
 
@@ -414,7 +424,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.update(TABLE_INSURANCES, values, filter, null);
         db.close();
     }
-
     public ArrayList<Insurance> loadInsurances(int patient) {
         String query = "Select * FROM " + TABLE_INSURANCES + " WHERE " + "patient_id" + " =  \"" + patient + "\"";
 

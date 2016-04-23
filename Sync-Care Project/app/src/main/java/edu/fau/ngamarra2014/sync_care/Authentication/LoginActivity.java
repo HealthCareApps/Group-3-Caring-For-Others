@@ -15,6 +15,11 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import edu.fau.ngamarra2014.sync_care.Data.Doctor;
+import edu.fau.ngamarra2014.sync_care.Data.Insurance;
+import edu.fau.ngamarra2014.sync_care.Data.Patient;
+import edu.fau.ngamarra2014.sync_care.Data.Pharmacy;
+import edu.fau.ngamarra2014.sync_care.Data.Prescription;
 import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
@@ -56,7 +61,9 @@ public class LoginActivity extends AppCompatActivity {
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean response = dbHandler.findUser(inputUsername.getText().toString(),inputPassword.getText().toString());
+                boolean response;
+                response = dbHandler.AuthenticateUser(inputUsername.getText().toString(), inputPassword.getText().toString());
+
                 if(response){
                     dbHandler.loadPatients(user.getID());
                     for(int i =0; i < user.getNumberOfPatients(); i++){
@@ -68,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                     startActivity(i);
                 }else{
-                    new Signin(v).execute();
+                    new Signin().execute();
                 }
             }
         });
@@ -83,10 +90,6 @@ public class LoginActivity extends AppCompatActivity {
         private View view;
         String username;
         String password;
-
-        public Signin(View v){
-            this.view = v;
-        }
 
         @Override
         protected void onPreExecute() {
@@ -116,30 +119,51 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
                 if(response.has("User")){
-                    user.setID(response.getJSONObject("User").getInt("id"));
-                    user.setFirst(response.getJSONObject("User").getString("first"));
-                    user.setLast(response.getJSONObject("User").getString("last"));
-                    user.setEmail(response.getJSONObject("User").getString("email"));
-                    user.setUsername(response.getJSONObject("User").getString("username"));
-                    user.setPassword(response.getJSONObject("User").getString("password"));
-                    /*dbHandler.addUser(user);
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    finish();*/
-                    query = new QueryString("id", response.getJSONObject("User").getString("id"));
-                    jsonParser.setParams(query);
+                    user.setUser(response.getJSONObject("User"));
+
+                    //dbHandler.addUser(user);
+
+                    jsonParser.setParams(new QueryString("id", Integer.toString(user.getID())));
                     response = jsonParser.makeHttpRequest("http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/getPatients.php", "GET");
                     JSONArray patients = response.getJSONArray("Patients");
+
                     for(int i = 0; i < patients.length(); i++){
                         JSONObject patient = patients.getJSONObject(i);
-                        Log.i("Patient", patient.toString());
-                        query = new QueryString("id", patient.getString("id"));
-                        jsonParser.setParams(query);
+                        Patient p = user.addPatient(patient);
+
+                        jsonParser.setParams(new QueryString("id", patient.getString("id")));
                         response = jsonParser.makeHttpRequest("http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/patientInfo.php", "GET");
+
+                        JSONArray doctors = response.getJSONArray("doctors");
+                        JSONArray insurances = response.getJSONArray("insurances");
+                        JSONArray pharmacies = response.getJSONArray("pharmacies");
+                        JSONArray prescriptions = response.getJSONArray("prescriptions");
+                        for(int x = 0; x < doctors.length(); x++){
+                            JSONObject doctor = doctors.getJSONObject(x);
+                            Doctor doc = p.addDoctor(doctor);
+                            dbHandler.addDoctor(doc);
+                        }
+                        for(int y = 0; y < insurances.length(); y++){
+                            JSONObject insurance = insurances.getJSONObject(y);
+                            Insurance insur = p.addInsurance(insurance);
+                            dbHandler.addInsurance(insur);
+                        }
+                        for(int z = 0; z < pharmacies.length(); z++){
+                            JSONObject pharmacy = pharmacies.getJSONObject(z);
+                            Pharmacy pharm = p.addPharmacy(pharmacy);
+                            dbHandler.addPharmacy(pharm);
+                        }
+                        for(int t = 0; t < prescriptions.length(); t++){
+                            JSONObject prescription = prescriptions.getJSONObject(t);
+                            Prescription rx = p.addPrescription(prescription);
+                            dbHandler.addPrescription(rx);
+                        }
                         Log.i("Info", response.toString());
                     }
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    finish();
                 } else {
-                    Snackbar.make(view, "Invalid credentials", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@drawable/logo2circle"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -28,20 +28,8 @@
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".Unused.SettingsActivity"
-            android:label="Settings"/>
-        <activity
-            android:name=".LinkedRequestsActivity"
-            android:label="Linked Requests"/>
-        <activity
-            android:name=".Unused.VuMarkActivity"
-            android:label="VuMark"/>
-        <activity
-            android:name=".Unused.AlertsActivity"
-            android:label="Alerts"/>
-        <activity
-        android:name=".DeleteMedicalActivity"
-        android:label="Delete Medical" />
+            android:name=".DeleteMedicalActivity"
+            android:label="Delete Medical" />
         <activity
             android:name=".DeletePatientActivity"
             android:label="Delete Patient" />

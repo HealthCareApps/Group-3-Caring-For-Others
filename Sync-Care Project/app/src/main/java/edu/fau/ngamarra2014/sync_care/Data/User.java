@@ -2,6 +2,9 @@ package edu.fau.ngamarra2014.sync_care.Data;
 
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class User {
@@ -15,6 +18,14 @@ public class User {
 
     private User(){}
 
+    public void setUser(JSONObject user) throws JSONException {
+        this.id = user.getInt("id");
+        this.first = user.getString("first");
+        this.last = user.getString("last");
+        this.email = user.getString("email");
+        this.username = user.getString("username");
+        this.password = user.getString("password");
+    }
     public void setID(int id){
         this.id = id;
     }
@@ -63,6 +74,11 @@ public class User {
 
     public void addPatient(Patient p){
         this.Patients.add(p);
+    }
+    public Patient addPatient(JSONObject patient) throws JSONException {
+        Patient p = new Patient(patient);
+        this.Patients.add(p);
+        return p;
     }
     public Patient getPatient(int index){
         return this.Patients.get(index);

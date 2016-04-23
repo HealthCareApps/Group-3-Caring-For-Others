@@ -77,7 +77,7 @@ public class Registration extends Activity {
     class CreateNewUser extends AsyncTask<String, String, String> {
 
         JSONParser jsonParser = new JSONParser();
-        private String register_caretaker_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/register.php";
+        private String register_caretaker_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Authentication/register.php";
 
         private JSONObject response;
 
