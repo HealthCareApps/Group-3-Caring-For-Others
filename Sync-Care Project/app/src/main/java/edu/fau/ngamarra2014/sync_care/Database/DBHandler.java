@@ -147,12 +147,14 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
-            String decrypted = null;
+            String decrypted;
+
             try {
-                decrypted = new String( mcrypt.decrypt(cursor.getString(2)));
+                decrypted = new String(mcrypt.decrypt(cursor.getString(2))).trim();
             } catch (Exception e) {
-                e.printStackTrace();
+                decrypted = "";
             }
+
             if(decrypted.equals(password)){
                 user.setID(cursor.getInt(0));
                 user.setUsername(cursor.getString(1));

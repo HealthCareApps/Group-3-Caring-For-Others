@@ -59,7 +59,6 @@ public class MCrypt {
 
         try {
             cipher.init(Cipher.DECRYPT_MODE, keyspec, ivspec);
-
             decrypted = cipher.doFinal(hexToBytes(code));
         } catch (Exception e)
         {

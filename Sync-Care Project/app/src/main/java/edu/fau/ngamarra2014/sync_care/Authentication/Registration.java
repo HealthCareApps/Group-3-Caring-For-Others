@@ -2,6 +2,7 @@ package edu.fau.ngamarra2014.sync_care.Authentication;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,17 +22,17 @@ import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.HomeActivity;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+import edu.fau.ngamarra2014.sync_care.PatientListActivity;
 import edu.fau.ngamarra2014.sync_care.R;
 
 public class Registration extends Activity {
     User user = User.getInstance();
     DBHandler dbHandler = new DBHandler(this, null, null, 2);
 
-    EditText inputFirst;
-    EditText inputLast;
-    EditText inputEmail;
-    EditText inputUsername;
-    EditText inputPassword;
+    EditText inputFirst, inputLast, inputEmail, inputUsername, inputPassword;
+    Button register;
+    RadioGroup account;
+    RadioButton type;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,18 +44,20 @@ public class Registration extends Activity {
         inputUsername = (EditText) findViewById(R.id.regusername);
         inputPassword = (EditText) findViewById(R.id.regpass);
 
-        Button register = (Button) findViewById(R.id.register);
+        register = (Button) findViewById(R.id.register);
+        account = (RadioGroup) findViewById(R.id.account);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (FormValidation((ViewGroup) findViewById(R.id.registration))){
+                    type = (RadioButton) findViewById(account.getCheckedRadioButtonId());
                     user.setUsername(inputUsername.getText().toString());
                     user.setPassword(inputPassword.getText().toString());
                     user.setFirst(inputFirst.getText().toString());
                     user.setLast(inputLast.getText().toString());
                     user.setEmail(inputEmail.getText().toString());
-                    user.setAccountType("primary");
+                    user.setAccountType(type.getText().toString());
                     new CreateNewUser().execute();
                 }
             }
@@ -89,6 +94,7 @@ public class Registration extends Activity {
             query.add("email", user.getEmail());
             query.add("username", user.getUsername());
             query.add("password", user.getPassword());
+            query.add("account", user.getAccountType());
 
             jsonParser.setParams(query);
             response = jsonParser.makeHttpRequest(register_caretaker_url, "POST");
@@ -101,7 +107,10 @@ public class Registration extends Activity {
                 if (response.has("Successful")) {
                     user.setID(response.getInt("id"));
                     dbHandler.addUser(user);
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    if(user.getAccountType().equals("Caretaker"))
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    else
+                        startActivity(new Intent(getApplicationContext(), PatientListActivity.class));
                     finish();
                 }else if(response.has("Error")){
                     inputUsername.setError("Username already exists");

@@ -32,15 +32,17 @@ public class RxListActivity extends NavigationActivity{
         adapter = new RxRecyclerAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), RxEditActivity.class));
-                finish();
-            }
-        });
-
+        if(user.getAccountType().equals("Caretaker")){
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), RxEditActivity.class));
+                    finish();
+                }
+            });
+        }
     }
     public void onFinishCallback()
     {

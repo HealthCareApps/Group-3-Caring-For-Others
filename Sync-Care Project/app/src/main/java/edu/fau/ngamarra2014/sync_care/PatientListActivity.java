@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import edu.fau.ngamarra2014.sync_care.Data.User;
 
 public class PatientListActivity extends NavigationActivity {
     RecyclerView recyclerView;
@@ -30,14 +33,18 @@ public class PatientListActivity extends NavigationActivity {
         adapter = new PatientRecyclerAdapter();
         recyclerView.setAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), AddPatient.class));
-                finish();
-            }
-        });
-
+        User user = User.getInstance();
+        Log.i("Account", "onCreate: " + user.getAccountType());
+        if(user.getAccountType().equals("Caretaker")){
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), AddPatient.class));
+                    finish();
+                }
+            });
+        }
     }
 }

@@ -27,8 +27,7 @@
                 android:layout_above="@+id/password"
                 android:layout_alignLeft="@+id/password"
                 android:layout_alignStart="@+id/password"
-                android:layout_centerHorizontal="true"
-                android:text="test" />
+                android:layout_centerHorizontal="true" />
 
             <EditText
                 android:layout_width="300dp"
@@ -50,8 +49,7 @@
                 android:text="LOG IN"
                 android:id="@+id/login"
                 android:gravity="center|center_horizontal"
-                android:layout_marginBottom="43dp"
-                android:layout_above="@+id/textView"
+                android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
 
             <TextView
@@ -91,5 +89,14 @@
                 android:gravity="center"
                 android:layout_below="@+id/signup"
                 android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember Me"
+        android:id="@+id/remember"
+        android:layout_above="@+id/login"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff" />
 
 </RelativeLayout>

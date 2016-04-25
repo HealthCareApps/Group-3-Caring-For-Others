@@ -32,15 +32,17 @@ public class InsuranceListActivity extends NavigationActivity {
         adapter = new InsuranceRecyclerAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), InsuranceEditActivity.class));
-                finish();
-            }
-        });
-
+        if(user.getAccountType().equals("Caretaker")){
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), InsuranceEditActivity.class));
+                    finish();
+                }
+            });
+        }
     }
     public void onFinishCallback()
     {
