@@ -2,27 +2,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".OldCode.Healthcare$PlaceholderFragment">
+    tools:context=".Information$PlaceholderFragment">
 
     <include
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        layout="@layout/healthcare_insurance_content"
-        android:id="@+id/instab" />
+        layout="@layout/information_motor_symptoms"
+        android:id="@+id/motortab" />
 
     <include
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        layout="@layout/healthcare_pharmacy_content"
-        android:id="@+id/phatab"
-        android:layout_centerHorizontal="true" />
-
-    <include
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        layout="@layout/healthcare_doctor_content"
+        layout="@layout/information_balance_checklist"
         android:layout_centerHorizontal="true"
-        android:id="@+id/doctab"
+        android:id="@+id/infotab"
+        android:layout_alignParentTop="true" />
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        layout="@layout/information_exercise_list"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/exercisetab"
         android:layout_alignParentTop="true" />
 
 </RelativeLayout>

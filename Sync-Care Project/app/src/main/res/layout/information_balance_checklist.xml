@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:gravity="center_vertical"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/checkbox"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:text="Stand with your back against the wall, feet flat on the floor with the heels approximately 3 to 4 inches or less from the wall"/>
+    <CheckBox android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:scaleX="1.50"
+        android:scaleY="1.50"/>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:gravity="center_vertical"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/checkbox1"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:text="Hold your head erect with the chin parallel to the floor, vision focused on a target at eye level." />
+        <CheckBox android:id="@+id/checkbox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.50"
+            android:scaleY="1.50"/>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:gravity="center_vertical"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/checkbox2"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:text="Relax the arms and shoulders"/>
+        <CheckBox android:id="@+id/checkbox2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.50"
+            android:scaleY="1.50"/>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:gravity="center_vertical"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/checkbox3"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:text="The buttocks, shoulder blades and, if possible, the back of the head should be touching the wall.  Focus on keeping chin parallel with the floor and the eyes focused on the target"/>
+        <CheckBox android:id="@+id/checkbox3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.50"
+            android:scaleY="1.50"/>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:gravity="center_vertical"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/checkbox4"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:text="Make sure the weight is evenly distributed throughout the whole foot, front ot back and side to side, with all the toes on the floor helping with balance.  Abdominals are pulled in, and the chest lifted.  Hold the position for 15 to 30 seconds with eyes open and 15 to 30 seconds with eyes closed"/>
+        <CheckBox android:id="@+id/checkbox4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.50"
+            android:scaleY="1.50"/>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:gravity="center_vertical"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/checkbox5"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:text="Chair squats and/or stationary lunges"/>
+        <CheckBox android:id="@+id/checkbox5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.50"
+            android:scaleY="1.50"/>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:gravity="center_vertical"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/checkbox6"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:text="Abdominal and back exercises, incorporating Pilates mat work."/>
+        <CheckBox android:id="@+id/checkbox6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.50"
+            android:scaleY="1.50"/>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:gravity="center_vertical"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/checkbox7"
+            android:textSize="20dp"
+            android:paddingLeft="5dp"
+            android:text="Stretch for the calf and hamstring muscles, along with ankle flexing, toe pointing and ankle rotation."/>
+        <CheckBox android:id="@+id/checkbox7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.50"
+            android:scaleY="1.50"/>
+    </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

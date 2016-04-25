@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="50dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Flexibility (stretching) exercises minimize effects of stiffness and rigidity, and are particularly important for the trunk and spinal muscles." />
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox1"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Aerobic (conditioning) exercises help preserve endurance/activity tolerance." />
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox2"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Posture exercises help keep the body in good alignment."/>
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox3"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Balance exercises help to keep skills sharp and reduce fall risk."/>
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox4"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Strengthening exercises counteract effects of disuse... use it or lose it!"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkbox4"
+                android:textSize="20dp"
+                android:paddingLeft="5dp"
+                android:text="• Exercise guidelines: Stretches and posture exercises daily.  Strength and balance exercises several times per week.  Aerobic exercise (walking, biking, swimming, etc) at least 3 days a week minimum for 20 minutes."/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

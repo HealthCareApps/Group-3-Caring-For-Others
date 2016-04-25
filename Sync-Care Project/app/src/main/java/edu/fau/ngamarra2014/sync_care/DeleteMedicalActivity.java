@@ -9,7 +9,7 @@ public class DeleteMedicalActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_delete_medical);
+        setContentView(R.layout.information_balance_checklist);
     }
 
 }
