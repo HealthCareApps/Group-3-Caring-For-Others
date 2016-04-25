@@ -1,5 +1,8 @@
 package edu.fau.ngamarra2014.sync_care.Data;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class Patient {
@@ -17,6 +20,16 @@ public class Patient {
     public Pharmacy pharmacy;
 
     public Patient(){}
+    public Patient(JSONObject patient) throws JSONException {
+        this.id = patient.getInt("id");
+        this.first = patient.getString("first");
+        this.last = patient.getString("last");
+        this.gender = patient.getString("gender");
+        this.dob = patient.getString("birthdate");
+        this.caretaker = patient.getInt("caretaker_id");
+        this.primaryPhoneNum = patient.getString("phone");
+        this.emergencyPhoneNum = patient.getString("emergency");
+    }
     public Patient(int id, String first, String last, String gender, String dob, int caretaker){
         this.id = id;
         this.first = first;
@@ -85,6 +98,11 @@ public class Patient {
     public void addDoctor(Doctor doctor){
         this.doctors.add(doctor);
     }
+    public Doctor addDoctor(JSONObject doc) throws JSONException {
+        Doctor doctor = new Doctor(doc);
+        this.doctors.add(doctor);
+        return doctor;
+    }
     public void setDoctors(ArrayList<Doctor> doctors){
         this.doctors = doctors;
     }
@@ -101,6 +119,11 @@ public class Patient {
 
     public void addPrescription(Prescription rx){
         this.prescriptions.add(rx);
+    }
+    public Prescription addPrescription(JSONObject rx) throws JSONException {
+        Prescription script = new Prescription(rx);
+        this.prescriptions.add(script);
+        return script;
     }
     public void setPrescriptions(ArrayList<Prescription> prescriptions){
         this.prescriptions = prescriptions;
@@ -119,6 +142,11 @@ public class Patient {
     public void addInsurance(Insurance insurance){
         this.insurances.add(insurance);
     }
+    public Insurance addInsurance(JSONObject insurance) throws JSONException{
+        Insurance insure = new Insurance(insurance);
+        this.insurances.add(insure);
+        return insure;
+    }
     public void setInsurances(ArrayList<Insurance> insurances){
         this.insurances = insurances;
     }
@@ -135,6 +163,11 @@ public class Patient {
 
     public void addPharmacy(Pharmacy pharmacy){
         this.pharmacies.add(pharmacy);
+    }
+    public Pharmacy addPharmacy(JSONObject pharmacy) throws JSONException {
+        Pharmacy pharm = new Pharmacy(pharmacy);
+        this.pharmacies.add(pharm);
+        return pharm;
     }
     public void setPharmacies(ArrayList<Pharmacy> pharmacies){
         this.pharmacies = pharmacies;

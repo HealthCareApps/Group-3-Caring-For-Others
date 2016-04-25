@@ -129,6 +129,11 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
             delete =
                     (ImageButton) itemView.findViewById(R.id.item_delete);
 
+            if(user.getAccountType().equals("Medical Specialist")){
+                edit.setVisibility(View.INVISIBLE);
+                delete.setVisibility(View.INVISIBLE);
+            }
+
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

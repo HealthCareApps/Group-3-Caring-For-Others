@@ -66,13 +66,11 @@ public class AddPatient extends AppCompatActivity {
             if (view instanceof EditText) {
                 if(view.getId() == first.getId() || view.getId() == last.getId()
                         || view.getId() == dateofbirth.getId()){
-
                     if (((EditText)view).getText().toString().length() == 0){
                         ((EditText) view).setError("Required!");
                         valid++;
                     }
                 }
-
             }
             if(view instanceof ViewGroup && (((ViewGroup)view).getChildCount() > 0))
                 FormValidation((ViewGroup)view);

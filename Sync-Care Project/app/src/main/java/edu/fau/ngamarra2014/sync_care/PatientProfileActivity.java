@@ -10,11 +10,13 @@ import android.widget.ImageButton;
 
 import org.json.JSONException;
 
+import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.OldCode.Globals;
 
 public class PatientProfileActivity extends AppCompatActivity {
 
     Globals globals = Globals.getInstance();
+    User user = User.getInstance();
 
     EditText firstname, lastname, DOB, primarynum, emergancynum, address, city, zipcode;
     ImageButton edit, back;
@@ -42,15 +44,11 @@ public class PatientProfileActivity extends AppCompatActivity {
 
         toggleTextFields(false);
 
-        try{
-            firstname.setText(globals.getCurrentPatient().getString("first"));
-            lastname.setText(globals.getCurrentPatient().getString("last"));
-            DOB.setText(globals.getCurrentPatient().getString("birthdate"));
-            primarynum.setText(globals.getCurrentPatient().getString("phone"));
-            emergancynum.setText(globals.getCurrentPatient().getString("emergency"));
-        }catch (JSONException e){
-
-        }
+        firstname.setText(user.patient.getFirst());
+        lastname.setText(user.patient.getLast());
+        DOB.setText(user.patient.getDOB());
+        primarynum.setText(user.patient.getPrimaryPhoneNumber());
+        emergancynum.setText(user.patient.getEmergencyPhoneNumber());
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override

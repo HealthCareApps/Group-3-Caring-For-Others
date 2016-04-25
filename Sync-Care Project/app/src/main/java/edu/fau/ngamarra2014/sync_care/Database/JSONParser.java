@@ -38,7 +38,6 @@ public class JSONParser {
     public JSONObject makeHttpRequest(String url, String method) {
         // Making HTTP request
         try {
-
             // check for request method
             if(method == "POST"){
                 byte[] postData = params.getBytes( StandardCharsets.UTF_8 );
@@ -61,6 +60,7 @@ public class JSONParser {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            Log.i("Internet", "makeHttpRequest: no internet");
             e.printStackTrace();
         }
 
@@ -74,12 +74,8 @@ public class JSONParser {
             while ((line = reader.readLine()) != null){
                 result.append(line);
             }
-            /*while ((ch = is.read()) != -1) {
-                sb.append((char) ch);
-            }*/
 
             json = result.toString();
-//            json = sb.toString();
             is.close();
 
         } catch (Exception e) {
@@ -90,7 +86,6 @@ public class JSONParser {
             response = new JSONObject(json);
         } catch (JSONException e) {
             Log.i("Error", e.toString());
-            Log.i("String", json);
         }
         return response;
 

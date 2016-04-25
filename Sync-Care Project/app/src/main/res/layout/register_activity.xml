@@ -3,7 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/registration"
-    android:background="@drawable/bluewood">
+    android:background="@drawable/bluewood"
+    android:gravity="center_vertical">
 
     <EditText
         android:layout_width="315dp"
@@ -66,19 +67,21 @@
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/account">
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Primary Caregiver"
+            android:text="Caretaker"
             android:id="@+id/primarycaretaker"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:checked="true" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Assistant Caregiver"
+            android:text="Medical Specialist"
             android:id="@+id/Linked"
             android:textColor="#ffffff" />
     </RadioGroup>

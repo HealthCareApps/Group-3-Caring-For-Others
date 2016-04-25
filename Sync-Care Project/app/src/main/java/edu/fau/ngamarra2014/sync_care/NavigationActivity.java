@@ -1,6 +1,7 @@
 package edu.fau.ngamarra2014.sync_care;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import edu.fau.ngamarra2014.sync_care.Authentication.LoginActivity;
 import edu.fau.ngamarra2014.sync_care.Data.User;
 
 public class NavigationActivity extends AppCompatActivity
@@ -66,19 +68,18 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(i);
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         } else if (id == R.id.nav_account) {
-            Intent i = new Intent(getApplicationContext(), AccountActivity.class);
-            startActivity(i);
-
+            startActivity(new Intent(getApplicationContext(), AccountActivity.class));
         } else if (id == R.id.nav_patients) {
-            Intent i = new Intent(getApplicationContext(), PatientListActivity.class);
-            startActivity(i);
+            startActivity(new Intent(getApplicationContext(), PatientListActivity.class));
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_logout) {
-
+            SharedPreferences.Editor editor = getSharedPreferences("PREF_FILE", 0).edit();
+            editor.clear();
+            editor.commit();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

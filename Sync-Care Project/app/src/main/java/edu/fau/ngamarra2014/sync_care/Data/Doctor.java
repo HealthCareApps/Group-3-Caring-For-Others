@@ -1,12 +1,29 @@
 package edu.fau.ngamarra2014.sync_care.Data;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Doctor {
     private int id, patient;
     private String name, type;
     private String phone, email, fax;
     private String address, city, state, zip;
 
+    public Doctor(){}
+    public Doctor(JSONObject doc) throws JSONException {
+        this.id = doc.getInt("id");
+        this.patient = doc.getInt("patient_id");
+        this.name = doc.getString("name");
+        this.type = doc.getString("type");
+        this.phone = doc.getString("phone");
+        this.email = doc.getString("email");
+        this.fax = doc.getString("fax");
+        this.address = doc.getString("address");
+        this.city = doc.getString("city");
+        this.state = doc.getString("state");
+        this.zip = doc.getString("zip");
+    }
     public void setID(int id){
         this.id = id;
     }
