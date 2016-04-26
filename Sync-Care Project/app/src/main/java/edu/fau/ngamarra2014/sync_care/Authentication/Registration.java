@@ -28,6 +28,7 @@ import edu.fau.ngamarra2014.sync_care.R;
 public class Registration extends Activity {
     User user = User.getInstance();
     DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    MCrypt mcrypt = new MCrypt();
 
     EditText inputFirst, inputLast, inputEmail, inputUsername, inputPassword;
     Button register;
@@ -53,7 +54,11 @@ public class Registration extends Activity {
                 if (FormValidation((ViewGroup) findViewById(R.id.registration))){
                     type = (RadioButton) findViewById(account.getCheckedRadioButtonId());
                     user.setUsername(inputUsername.getText().toString());
-                    user.setPassword(inputPassword.getText().toString());
+                    try {
+                        user.setPassword(MCrypt.bytesToHex(mcrypt.encrypt(inputPassword.getText().toString())));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     user.setFirst(inputFirst.getText().toString());
                     user.setLast(inputLast.getText().toString());
                     user.setEmail(inputEmail.getText().toString());

@@ -25,6 +25,7 @@ public class User {
         this.email = user.getString("email");
         this.username = user.getString("username");
         this.password = user.getString("password");
+        this.accountType = user.getString("account");
     }
     public void setID(int id){
         this.id = id;

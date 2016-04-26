@@ -54,7 +54,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 + "phone TEXT,"
                 + "emergency TEXT,"
                 + "gender TEXT,"
-                + "primary_diagnosis TEXT,"
                 + "caretaker_id INTEGER" + ")";
         String CREATE_USERS_DOCTORS = "CREATE TABLE " + TABLE_DOCTORS + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY,"
@@ -117,16 +116,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public void addUser(User user){
 
         ContentValues values = new ContentValues();
-        MCrypt mcrypt = new MCrypt();
 
-        try {
-            values.put("password", MCrypt.bytesToHex(mcrypt.encrypt(user.getPassword())));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        values.put("password", user.getPassword());
         values.put("_id", user.getID());
         values.put("username", user.getUsername());
-
         values.put("first", user.getFirst());
         values.put("last", user.getLast());
         values.put("email", user.getEmail());
@@ -138,7 +131,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean AuthenticateUser(String username, String password){
+    public int AuthenticateUser(String username, String password){
         String query = "Select * FROM " + TABLE_USERS + " WHERE " + "username" + " =  \"" + username + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -154,7 +147,6 @@ public class DBHandler extends SQLiteOpenHelper {
             } catch (Exception e) {
                 decrypted = "";
             }
-
             if(decrypted.equals(password)){
                 user.setID(cursor.getInt(0));
                 user.setUsername(cursor.getString(1));
@@ -164,12 +156,14 @@ public class DBHandler extends SQLiteOpenHelper {
                 user.setAccountType(cursor.getString(6));
                 db.close();
                 cursor.close();
-                return true;
+                return 1;
+            }else{
+                cursor.close();
+                return 2;
             }
-            cursor.close();
         }
         db.close();
-        return false;
+        return 0;
     }
 
     public void addPatient(Patient patient){
@@ -181,7 +175,6 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put("phone", patient.getPrimaryPhoneNumber());
         values.put("emergency", patient.getEmergencyPhoneNumber());
         values.put("gender", patient.getGender());
-        values.put("primary_diagnosis", patient.getDiagnosis());
         values.put("caretaker_id", patient.getCaretaker());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -206,7 +199,6 @@ public class DBHandler extends SQLiteOpenHelper {
             patient.setPrimaryPhoneNumber(cursor.getString(4));
             patient.setEmergencyPhoneNumber(cursor.getString(5));
             patient.setGender(cursor.getString(6));
-            patient.setDiagnosis(cursor.getString(7));
             patient.setCaretaker(cursor.getInt(8));
 
             user.addPatient(patient);

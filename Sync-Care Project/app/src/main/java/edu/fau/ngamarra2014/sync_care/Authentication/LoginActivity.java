@@ -9,10 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -91,7 +93,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     public void login(){
-        if(dbHandler.AuthenticateUser(username, password)){
+        int response = dbHandler.AuthenticateUser(username, password);
+
+        if(response == 1){
             dbHandler.loadPatients(user.getID());
 
             for(int i =0; i < user.getNumberOfPatients(); i++){
@@ -103,10 +107,17 @@ public class LoginActivity extends AppCompatActivity {
 
             if(user.getAccountType().equals("Caretaker"))
                 startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-            else if(user.getAccountType().equals("Medical Specialist"))
+            else if(user.getAccountType().equals("Specialist"))
                 startActivity(new Intent(getApplicationContext(), PatientListActivity.class));
 
-        }else{
+        }else if(response == 2){
+            if(getCurrentFocus()!=null) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+            Toast toast = Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_SHORT);
+            toast.show();
+        }else if(response == 0){
             new Signin().execute();
         }
     }
@@ -140,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 if(response.has("User")){
                     user.setUser(response.getJSONObject("User"));
-
+                    Log.i("password", user.getPassword());
                     dbHandler.addUser(user);
 
                     jsonParser.setParams(new QueryString("id", Integer.toString(user.getID())));
@@ -182,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     finish();
                 } else {
-
+                    Log.i("Login", "Invalid login credentials");
                 }
             } catch (Exception e) {
                 e.printStackTrace();

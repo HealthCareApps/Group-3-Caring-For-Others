@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Patient {
     private int id, caretaker;
     private String first, last, dob, gender;
-    private String primaryPhoneNum, emergencyPhoneNum, diagnosis;
+    private String primaryPhoneNum, emergencyPhoneNum;
     private ArrayList<Doctor> doctors = new ArrayList<>();
     private ArrayList<Prescription> prescriptions = new ArrayList<>();
     private ArrayList<Insurance> insurances = new ArrayList<>();
@@ -61,9 +61,7 @@ public class Patient {
     public void setEmergencyPhoneNumber(String number){
         this.emergencyPhoneNum = number;
     }
-    public void setDiagnosis(String diagnosis){
-        this.diagnosis = diagnosis;
-    }
+
     public int getID(){
         return this.id;
     }
@@ -88,9 +86,7 @@ public class Patient {
     public String getEmergencyPhoneNumber(){
         return this.emergencyPhoneNum;
     }
-    public String getDiagnosis(){
-        return this.diagnosis;
-    }
+
     public int getCaretaker(){
         return this.caretaker;
     }

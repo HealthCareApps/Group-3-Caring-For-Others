@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +21,7 @@ import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
 
-public class AddPatient extends AppCompatActivity {
+public class AddPatientActivity extends AppCompatActivity {
 
     User user = User.getInstance();
     DBHandler dbHandler = new DBHandler(this, null, null, 2);
@@ -89,7 +88,7 @@ public class AddPatient extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(AddPatient.this);
+            pDialog = new ProgressDialog(AddPatientActivity.this);
             pDialog.setMessage("Adding Patient...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
@@ -126,7 +125,6 @@ public class AddPatient extends AppCompatActivity {
                     Patient patient = new Patient(response.getInt("id"), fname, lname, gender, birth, user.getID());
                     patient.setPrimaryPhoneNumber(phoneNumber);
                     patient.setEmergencyPhoneNumber(emergencyNumber);
-                    patient.setDiagnosis(diagnosis);
                     user.addPatient(patient);
                     dbHandler.addPatient(patient);
 

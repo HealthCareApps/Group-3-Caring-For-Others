@@ -37,7 +37,7 @@
             android:name=".ManageProfileActivity"
             android:label="Manage Profile" />
         <activity
-            android:name=".AddPatient"
+            android:name=".AddPatientActivity"
             android:label="Add Patient" />
         <activity
             android:name=".PatientActivity"
@@ -89,8 +89,9 @@
         <activity
             android:name=".AccountActivity"
             android:label="@string/title_activity_delete_patient"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Information"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Information"/>
+        <activity android:name=".LinkedRequestsActivity"/>
     </application>
 
 </manifest>
