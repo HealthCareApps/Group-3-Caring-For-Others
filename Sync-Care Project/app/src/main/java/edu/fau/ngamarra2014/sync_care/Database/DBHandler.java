@@ -19,7 +19,7 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "sync_care.db";
     public static final String TABLE_USERS = "users";
     public static final String TABLE_PATIENTS = "patients";

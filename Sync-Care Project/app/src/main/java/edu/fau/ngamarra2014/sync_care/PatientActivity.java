@@ -42,7 +42,6 @@ public class PatientActivity extends AppCompatActivity {
         dob = (TextView) findViewById(R.id.dob);
 
         name.setText(user.patient.getName());
-        diagnosis.setText("Primary Diagnosis: " + user.patient.getDiagnosis());
         dob.setText("Date of Birth: " + user.patient.getDOB());
 
         doctor = (ImageButton) findViewById(R.id.doctor);
