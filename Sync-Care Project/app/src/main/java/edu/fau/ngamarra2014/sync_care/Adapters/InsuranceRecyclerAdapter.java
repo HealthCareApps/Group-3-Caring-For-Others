@@ -1,6 +1,5 @@
-package edu.fau.ngamarra2014.sync_care;
+package edu.fau.ngamarra2014.sync_care.Adapters;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -21,6 +18,9 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+import edu.fau.ngamarra2014.sync_care.InsuranceEditActivity;
+import edu.fau.ngamarra2014.sync_care.InsuranceListActivity;
+import edu.fau.ngamarra2014.sync_care.R;
 
 public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecyclerAdapter.ViewHolder> {
 

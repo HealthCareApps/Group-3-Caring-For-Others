@@ -1,4 +1,4 @@
-package edu.fau.ngamarra2014.sync_care;
+package edu.fau.ngamarra2014.sync_care.Adapters;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -19,43 +18,50 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
-import edu.fau.ngamarra2014.sync_care.OldCode.Globals;
+import edu.fau.ngamarra2014.sync_care.DoctorEditActivity;
+import edu.fau.ngamarra2014.sync_care.DoctorListActivity;
+import edu.fau.ngamarra2014.sync_care.R;
 
-public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecyclerAdapter.ViewHolder> {
+public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAdapter.ViewHolder> {
 
-    Globals globals = Globals.getInstance();
     User user = User.getInstance();
 
     private ArrayList<String> name = new ArrayList<String>();
+    private ArrayList<String> type = new ArrayList<String>();
     private ArrayList<String> phone = new ArrayList<String>();
+    private ArrayList<String> email = new ArrayList<String>();
     private ArrayList<String> address = new ArrayList<String>();
     private ArrayList<String> city = new ArrayList<String>();
     private ArrayList<String> state = new ArrayList<String>();
     private ArrayList<String> zip = new ArrayList<String>();
+    private ArrayList<String> fax = new ArrayList<String>();
 
-    private int[] images = { R.drawable.pharmacy_icon};
-    PharmacyListActivity Phar;
+    private int[] images = { R.drawable.doctor_icon};
+    DoctorListActivity Doc;
 
     private int id;
 
-    public PharmacyRecyclerAdapter(PharmacyListActivity phar){
+    public DoctorRecyclerAdapter(DoctorListActivity doc){
 
-        Phar = phar;
+        Doc = doc;
 
-        for(int i = 0; i < user.patient.getNumberOfPharmacies(); i++){
-            name.add(user.patient.getPharmacy(i).getName());
-            phone.add(user.patient.getPharmacy(i).getPhone());
-            address.add(user.patient.getPharmacy(i).getAddress()[0]);
-            city.add(user.patient.getPharmacy(i).getAddress()[1]);
-            state.add(user.patient.getPharmacy(i).getAddress()[2]);
-            zip.add(user.patient.getPharmacy(i).getAddress()[3]);
+        for(int i = 0; i < user.patient.getNumberOfDoctors(); i++){
+            name.add(user.patient.getDoctor(i).getName());
+            type.add(user.patient.getDoctor(i).getType());
+            phone.add(user.patient.getDoctor(i).getContactInfo()[0]);
+            email.add(user.patient.getDoctor(i).getContactInfo()[2]);
+            address.add(user.patient.getDoctor(i).getAddress()[0]);
+            city.add(user.patient.getDoctor(i).getAddress()[1]);
+            state.add(user.patient.getDoctor(i).getAddress()[2]);
+            zip.add(user.patient.getDoctor(i).getAddress()[3]);
+            fax.add(user.patient.getDoctor(i).getContactInfo()[1]);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.card_pharmacy_layout, viewGroup, false);
+                .inflate(R.layout.card_doctor_layout, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -63,11 +69,14 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         viewHolder.itemName.setText(name.get(i));
+        viewHolder.itemType.setText(type.get(i));
         viewHolder.itemPhone.setText(phone.get(i));
+        viewHolder.itemEmail.setText(email.get(i));
         viewHolder.itemAddress.setText(address.get(i));
         viewHolder.itemCity.setText(city.get(i));
         viewHolder.itemState.setText(state.get(i));
         viewHolder.itemZip.setText(zip.get(i));
+        viewHolder.itemFax.setText(fax.get(i));
         viewHolder.itemImage.setImageResource(images[0]);
     }
     @Override
@@ -80,12 +89,15 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
 
         public ImageView itemImage;
         public TextView itemName;
+        public TextView itemType;
         public TextView item;
         public TextView itemPhone;
+        public TextView itemEmail;
         public TextView itemAddress;
         public TextView itemCity;
         public TextView itemState;
         public TextView itemZip;
+        public TextView itemFax;
         public ImageButton edit, delete;
 
         public ViewHolder(View itemView) {
@@ -96,8 +108,12 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
                     (ImageView) itemView.findViewById(R.id.item_image);
             itemName =
                     (TextView) itemView.findViewById(R.id.item_name);
+            itemType =
+                    (TextView) itemView.findViewById(R.id.item_type);
             itemPhone =
                     (TextView) itemView.findViewById(R.id.item_phone);
+            itemEmail =
+                    (TextView) itemView.findViewById(R.id.item_email);
             itemAddress =
                     (TextView) itemView.findViewById(R.id.item_address);
             itemCity =
@@ -106,6 +122,8 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
                     (TextView) itemView.findViewById(R.id.item_state);
             itemZip =
                     (TextView) itemView.findViewById(R.id.item_zip);
+            itemFax =
+                    (TextView) itemView.findViewById(R.id.item_fax);
             edit =
                     (ImageButton) itemView.findViewById(R.id.item_edit);
             delete =
@@ -119,43 +137,43 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    user.patient.setCurrentPharmacy(getAdapterPosition());
-                    v.getContext().startActivity(new Intent(v.getContext(), PharmacyEditActivity.class));
+                    user.patient.setCurrentDoctor(getAdapterPosition());
+                    v.getContext().startActivity(new Intent(v.getContext(), DoctorEditActivity.class));
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    id = user.patient.getPharmacy(getAdapterPosition()).getID();
-                    new DeletePhar(getAdapterPosition()).execute();
+                    id = user.patient.getDoctor(getAdapterPosition()).getID();
+                    new DeleteDoc(getAdapterPosition()).execute();
                 }
             });
         }
     }
-    class DeletePhar extends AsyncTask<String, String, String> {
+    class DeleteDoc extends AsyncTask<String, String, String> {
 
         JSONParser jsonParser = new JSONParser();
         private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/deleteDoc.php";
-        DBHandler dbHandler = new DBHandler(Phar, null, null, 2);
+        DBHandler dbHandler = new DBHandler(Doc, null, null, 2);
         int index;
 
-        public DeletePhar(int index){
+        public DeleteDoc(int index){
             this.index = index;
         }
         protected String doInBackground(String... args) {
 
             // Building Parameters
             QueryString query = new QueryString("id", Integer.toString(id));
-            query.add("database", "Pharmacies");
+            query.add("database", "Doctors");
 
             jsonParser.setParams(query);
             JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
 
             try {
                 if (response.has("Successful")) {
-                    dbHandler.deleteDoc("pharmacies", id);
-                    user.patient.removePharmacy(index);
-                    Phar.onFinishCallback();
+                    dbHandler.deleteDoc("doctors", id);
+                    user.patient.removeDoctor(index);
+                    Doc.onFinishCallback();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -164,4 +182,6 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
             return null;
         }
     }
+
+
 }

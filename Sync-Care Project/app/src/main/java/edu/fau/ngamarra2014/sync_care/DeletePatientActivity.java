@@ -2,12 +2,11 @@ package edu.fau.ngamarra2014.sync_care;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import edu.fau.ngamarra2014.sync_care.Adapters.DeletePatientsAdapter;
 import edu.fau.ngamarra2014.sync_care.Data.User;
 
 
@@ -29,7 +28,7 @@ public class DeletePatientActivity extends Activity {
         }
 
 
-        MyCustomAdapter adapter = new MyCustomAdapter(titles, this);
+        DeletePatientsAdapter adapter = new DeletePatientsAdapter(titles, this);
         list = (ListView) findViewById(R.id.listviewpatient);
         list.setAdapter(adapter);
 

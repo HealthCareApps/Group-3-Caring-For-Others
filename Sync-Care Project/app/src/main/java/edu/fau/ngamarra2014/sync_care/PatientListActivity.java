@@ -1,7 +1,6 @@
 package edu.fau.ngamarra2014.sync_care;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,22 +10,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import edu.fau.ngamarra2014.sync_care.Authentication.LoginActivity;
-import edu.fau.ngamarra2014.sync_care.Data.Doctor;
-import edu.fau.ngamarra2014.sync_care.Data.Insurance;
-import edu.fau.ngamarra2014.sync_care.Data.Patient;
-import edu.fau.ngamarra2014.sync_care.Data.Pharmacy;
-import edu.fau.ngamarra2014.sync_care.Data.Prescription;
+import edu.fau.ngamarra2014.sync_care.Adapters.PatientRecyclerAdapter;
 import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
