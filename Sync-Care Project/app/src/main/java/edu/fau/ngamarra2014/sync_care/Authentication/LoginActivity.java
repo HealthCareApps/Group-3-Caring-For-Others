@@ -52,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
 
         credentials = getSharedPreferences("PREF_FILE", 0);
 
+        //getApplicationContext().deleteDatabase("sync_care.db");
+
         findViewById(R.id.background).getBackground().setAlpha(222);
 
         //Text Fields
@@ -151,7 +153,6 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 if(response.has("User")){
                     user.setUser(response.getJSONObject("User"));
-                    Log.i("password", user.getPassword());
                     dbHandler.addUser(user);
 
                     jsonParser.setParams(new QueryString("id", Integer.toString(user.getID())));
@@ -159,10 +160,10 @@ public class LoginActivity extends AppCompatActivity {
                     JSONArray patients = response.getJSONArray("Patients");
 
                     for(int i = 0; i < patients.length(); i++){
-                        JSONObject patient = patients.getJSONObject(i);
-                        Patient p = user.addPatient(patient);
+                        Patient patient = user.addPatient(patients.getJSONObject(i));
+                        dbHandler.addPatient(patient);
 
-                        jsonParser.setParams(new QueryString("id", patient.getString("id")));
+                        jsonParser.setParams(new QueryString("id", Integer.toString(patient.getID())));
                         response = jsonParser.makeHttpRequest("http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/patientInfo.php", "GET");
 
                         JSONArray doctors = response.getJSONArray("doctors");
@@ -171,26 +172,29 @@ public class LoginActivity extends AppCompatActivity {
                         JSONArray prescriptions = response.getJSONArray("prescriptions");
                         for(int x = 0; x < doctors.length(); x++){
                             JSONObject doctor = doctors.getJSONObject(x);
-                            Doctor doc = p.addDoctor(doctor);
+                            Doctor doc = patient.addDoctor(doctor);
                             dbHandler.addDoctor(doc);
                         }
                         for(int y = 0; y < insurances.length(); y++){
                             JSONObject insurance = insurances.getJSONObject(y);
-                            Insurance insur = p.addInsurance(insurance);
+                            Insurance insur = patient.addInsurance(insurance);
                             dbHandler.addInsurance(insur);
                         }
                         for(int z = 0; z < pharmacies.length(); z++){
                             JSONObject pharmacy = pharmacies.getJSONObject(z);
-                            Pharmacy pharm = p.addPharmacy(pharmacy);
+                            Pharmacy pharm = patient.addPharmacy(pharmacy);
                             dbHandler.addPharmacy(pharm);
                         }
                         for(int t = 0; t < prescriptions.length(); t++){
                             JSONObject prescription = prescriptions.getJSONObject(t);
-                            Prescription rx = p.addPrescription(prescription);
+                            Prescription rx = patient.addPrescription(prescription);
                             dbHandler.addPrescription(rx);
                         }
                     }
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    if(user.getAccountType().equals("Caretaker"))
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    else if(user.getAccountType().equals("Specialist"))
+                        startActivity(new Intent(getApplicationContext(), PatientListActivity.class));
                     finish();
                 } else {
                     Log.i("Login", "Invalid login credentials");

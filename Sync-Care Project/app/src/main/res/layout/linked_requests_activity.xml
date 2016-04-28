@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#ffffff">
 
     <TextView
         android:layout_width="wrap_content"
@@ -8,12 +9,11 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Patients name"
         android:id="@+id/patientname"
-        android:layout_marginLeft="62dp"
-        android:layout_marginStart="62dp"
-        android:layout_marginTop="43dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textColor="#000000"
+        android:textSize="25dp"
+        android:layout_above="@+id/textView5"
+        android:layout_alignLeft="@+id/specialistname"
+        android:layout_alignStart="@+id/specialistname" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,9 +21,14 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Specialist Name"
         android:id="@+id/specialistname"
-        android:layout_below="@+id/cancel"
-        android:layout_alignLeft="@+id/patientname"
-        android:layout_alignStart="@+id/patientname" />
+        android:textColor="#3f86fd"
+        android:textIsSelectable="true"
+        android:textSize="25dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
+        android:layout_below="@+id/patientname"
+        android:layout_toRightOf="@+id/textView5"
+        android:layout_toEndOf="@+id/textView5" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -31,9 +36,9 @@
         android:id="@+id/cancel"
         android:src="@drawable/ic_cancel_24dp"
         android:background="#ffffff"
-        android:layout_marginRight="27dp"
-        android:layout_marginEnd="27dp"
-        android:layout_alignTop="@+id/patientname"
+        android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_above="@+id/specialistname"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -41,12 +46,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/accept"
-        android:layout_marginRight="38dp"
-        android:layout_marginEnd="38dp"
+        android:layout_marginRight="44dp"
+        android:layout_marginEnd="44dp"
         android:src="@drawable/ic_check_24dp"
         android:background="#ffffff"
-        android:layout_alignTop="@+id/cancel"
+        android:layout_above="@+id/specialistname"
         android:layout_toLeftOf="@+id/cancel"
         android:layout_toStartOf="@+id/cancel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Patient:"
+        android:id="@+id/textView4"
+        android:textSize="25dp"
+        android:textColor="#000000"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Specialist: "
+        android:id="@+id/textView5"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"
+        android:textColor="#000000" />
 
 </RelativeLayout>

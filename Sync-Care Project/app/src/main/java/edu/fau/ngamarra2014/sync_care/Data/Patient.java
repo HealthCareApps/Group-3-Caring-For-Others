@@ -26,7 +26,10 @@ public class Patient {
         this.last = patient.getString("last");
         this.gender = patient.getString("gender");
         this.dob = patient.getString("birthdate");
-        this.caretaker = patient.getInt("caretaker_id");
+        if(User.getInstance().getAccountType().equals("Caretaker"))
+            this.caretaker = patient.getInt("caretaker_id");
+        else
+            this.caretaker = patient.getInt("specialist_id");
         this.primaryPhoneNum = patient.getString("phone");
         this.emergencyPhoneNum = patient.getString("emergency");
     }

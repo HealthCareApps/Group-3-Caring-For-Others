@@ -113,7 +113,7 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
             delete =
                     (ImageButton) itemView.findViewById(R.id.item_delete);
 
-            if(user.getAccountType().equals("Medical Specialist")){
+            if(user.getAccountType().equals("Specialist")){
                 edit.setVisibility(View.INVISIBLE);
                 delete.setVisibility(View.INVISIBLE);
             }

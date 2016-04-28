@@ -12,14 +12,16 @@ import java.util.ArrayList;
 
 import edu.fau.ngamarra2014.sync_care.Adapters.LinkedRequestAdapter;
 import edu.fau.ngamarra2014.sync_care.Data.Patient;
+import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
 
 
 public class LinkedRequestsActivity extends Activity {
 
-    ArrayList<Patient> LinkedRequests = new ArrayList<>();
-    ArrayList<String> list = new ArrayList<>();
+    ArrayList<JSONObject> specialist = new ArrayList<>();
+    ArrayList<JSONObject> patients = new ArrayList<>();
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +36,13 @@ public class LinkedRequestsActivity extends Activity {
         private String url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/linkedrequests.php";
 
         protected String doInBackground(String... args) {
-            QueryString query = new QueryString("id", "");
-
-            jsonParser.setParams(query);
+            jsonParser.setParams(new QueryString("id", Integer.toString(user.getID())));
             JSONObject response = jsonParser.makeHttpRequest(url, "GET");
 
             try {
                 for(int i = 0; i < response.getJSONArray("Patients").length(); i++){
-                    LinkedRequests.add(new Patient(response.getJSONArray("Patients").getJSONObject(i)));
-                    list.add(response.getJSONArray("Patients").getJSONObject(i).getString("first"));
+                    patients.add(response.getJSONArray("Patients").getJSONObject(i));
+                    specialist.add(response.getJSONArray("Specialists").getJSONObject(i));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -51,7 +51,7 @@ public class LinkedRequestsActivity extends Activity {
             return null;
         }
         protected void onPostExecute(String file_url) {
-            LinkedRequestAdapter adapter = new LinkedRequestAdapter(list,list,getApplicationContext());
+            LinkedRequestAdapter adapter = new LinkedRequestAdapter(patients, specialist, getApplicationContext());
             ListView view = (ListView) findViewById(R.id.listviewpatient);
             view.setAdapter(adapter);
         }

@@ -57,6 +57,7 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.card_insurance_layout, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(v);
+
         return viewHolder;
     }
 
@@ -111,7 +112,7 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
             delete =
                     (ImageButton) itemView.findViewById(R.id.item_delete);
 
-            if(user.getAccountType().equals("Medical Specialist")){
+            if(user.getAccountType().equals("Specialist")){
                 edit.setVisibility(View.INVISIBLE);
                 delete.setVisibility(View.INVISIBLE);
             }
