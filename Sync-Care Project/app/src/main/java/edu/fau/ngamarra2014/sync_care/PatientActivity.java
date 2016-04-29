@@ -15,7 +15,7 @@ public class PatientActivity extends AppCompatActivity {
     User user = User.getInstance();
 
     TextView diagnosis, dob, name;
-    ImageButton profile, doctor, meds, insurance, pharmacy, excercises;
+    ImageButton profile, doctor, meds, insurance, pharmacy, excercises, caretakers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,10 @@ public class PatientActivity extends AppCompatActivity {
         insurance = (ImageButton) findViewById(R.id.insurance);
         pharmacy = (ImageButton) findViewById(R.id.pharmacy);
         excercises = (ImageButton) findViewById(R.id.excercises);
+        caretakers = (ImageButton) findViewById(R.id.caretakers);
+
+        if(user.getAccountType().equals("Specialist"))
+            caretakers.setVisibility(View.INVISIBLE);
 
 
         doctor.setOnClickListener(new View.OnClickListener() {
