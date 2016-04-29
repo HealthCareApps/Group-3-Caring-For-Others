@@ -144,6 +144,11 @@ public class PatientListActivity extends NavigationActivity {
             }
         }
     }
+    public void onFinishCallback()
+    {
+        finish();
+        startActivity(getIntent());
+    }
 
     class checkfornewpatients extends AsyncTask<String, String, String> {
 
@@ -196,6 +201,7 @@ public class PatientListActivity extends NavigationActivity {
                             dbHandler.addPrescription(rx);
                         }
                     }
+                    onFinishCallback();
                 }
 
             } catch (JSONException e) {

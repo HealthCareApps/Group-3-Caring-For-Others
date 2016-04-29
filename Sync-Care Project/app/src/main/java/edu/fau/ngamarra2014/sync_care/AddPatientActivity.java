@@ -82,7 +82,7 @@ public class AddPatientActivity extends AppCompatActivity {
         JSONParser jsonParser = new JSONParser();
         private String add_patient_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/addDoc.php";
 
-        String fname, lname, birth, phoneNumber, emergencyNumber, gender, diagnosis;
+        String fname, lname, birth, phoneNumber, emergencyNumber, gender;
         RadioButton rd = (RadioButton) findViewById(radio.getCheckedRadioButtonId());
 
         @Override
@@ -100,7 +100,6 @@ public class AddPatientActivity extends AppCompatActivity {
             birth = dateofbirth.getText().toString();
             phoneNumber = number.getText().toString();
             emergencyNumber = emergency.getText().toString();
-            diagnosis = dia.getText().toString();
             gender = rd.getText().toString();
         }
 
@@ -115,7 +114,6 @@ public class AddPatientActivity extends AppCompatActivity {
             query.add("phone", phoneNumber);
             query.add("emergency", emergencyNumber);
             query.add("gender", gender);
-            query.add("diagnosis", diagnosis);
 
             jsonParser.setParams(query);
             JSONObject response = jsonParser.makeHttpRequest(add_patient_url, "POST");

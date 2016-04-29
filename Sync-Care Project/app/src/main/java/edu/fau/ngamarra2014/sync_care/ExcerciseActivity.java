@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.Locale;
 
+import edu.fau.ngamarra2014.sync_care.Data.Excercise;
 import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
@@ -70,20 +71,17 @@ public class ExcerciseActivity extends Activity {
 
             try {
                 if (response.has("Successful")) {
-                    /*Doctor doc = new Doctor();
-                    doc.setID(response.getInt("id"));
-                    doc.setName(docName);
-                    doc.setContactInfo(docPhone, docFax, docEmail);
-                    doc.setAddress(docAddress, docCity, docState, docZip);
-                    doc.setType(docType);
-                    doc.setPatient(user.patient.getID());*/
-                    /*if(response.getString("Successful").equals("Updated")){
-                        user.patient.doctor.update(doc);
-                        dbHandler.updateDoctor(doc);
-                    }else{
-                        user.patient.addDoctor(doc);
-                        dbHandler.addDoctor(doc);
-                    }*/
+                    Excercise excercise = new Excercise();
+                    excercise.setID(response.getInt("id"));
+                    excercise.setName(args[0]);
+                    excercise.setStart(args[1]);
+                    excercise.setDuration(args[2]);
+                    excercise.setCalories(args[3]);
+                    excercise.setComments(args[4]);
+                    excercise.setDate(args[5]);
+                    excercise.setPatient(user.patient.getID());
+                    excercise.setSpecialist(user.getID());
+                    dbHandler.addExcercise(excercise);
 
                     finish();
                 }

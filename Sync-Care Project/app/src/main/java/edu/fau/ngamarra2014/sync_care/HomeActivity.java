@@ -43,6 +43,7 @@ public class HomeActivity extends NavigationActivity{
 
         protected String doInBackground(String... args) {
 
+            Log.i("ID", "doInBackground: " + user.getID());
             jsonParser.setParams(new QueryString("id", Integer.toString(user.getID())));
             response = jsonParser.makeHttpRequest(url, "GET");
 
@@ -72,5 +73,10 @@ public class HomeActivity extends NavigationActivity{
                 alertDialog.show();
             }
         }
+    }
+    protected void onRestart(){
+        super.onRestart();
+
+        new checkSync().execute();
     }
 }

@@ -1,23 +1,14 @@
 package edu.fau.ngamarra2014.sync_care.Adapters;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import edu.fau.ngamarra2014.sync_care.Data.User;
-import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
-import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
-import edu.fau.ngamarra2014.sync_care.Database.QueryString;
 import edu.fau.ngamarra2014.sync_care.ExcerciseListActivity;
 import edu.fau.ngamarra2014.sync_care.R;
 
@@ -33,12 +24,8 @@ public class ExcerciseRecyclerAdapter extends RecyclerView.Adapter<ExcerciseRecy
     private ArrayList<String> date = new ArrayList<String>();
 
     private int[] images = { R.drawable.exercise};
-    ExcerciseListActivity excercise;
-
-    private int id;
 
     public ExcerciseRecyclerAdapter(ExcerciseListActivity excercise){
-        this.excercise = excercise;
 
         for(int i = 0; i < user.patient.getNumberOfDoctors(); i++){
             name.add(user.patient.getDoctor(i).getName());
@@ -103,38 +90,4 @@ public class ExcerciseRecyclerAdapter extends RecyclerView.Adapter<ExcerciseRecy
                     (TextView) itemView.findViewById(R.id.weekday);
         }
     }
-    /*class DeleteDoc extends AsyncTask<String, String, String> {
-
-        JSONParser jsonParser = new JSONParser();
-        private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/deleteDoc.php";
-        DBHandler dbHandler = new DBHandler(Doc, null, null, 2);
-        int index;
-
-        public DeleteDoc(int index){
-            this.index = index;
-        }
-        protected String doInBackground(String... args) {
-
-            // Building Parameters
-            QueryString query = new QueryString("id", Integer.toString(id));
-            query.add("database", "Doctors");
-
-            jsonParser.setParams(query);
-            JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
-
-            try {
-                if (response.has("Successful")) {
-                    dbHandler.deleteDoc("doctors", id);
-                    user.patient.removeDoctor(index);
-                    Doc.onFinishCallback();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-    }*/
-
-
 }

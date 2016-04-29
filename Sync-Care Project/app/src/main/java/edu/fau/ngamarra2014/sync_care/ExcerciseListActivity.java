@@ -8,8 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import edu.fau.ngamarra2014.sync_care.Adapters.DoctorRecyclerAdapter;
 import edu.fau.ngamarra2014.sync_care.Adapters.ExcerciseRecyclerAdapter;
 import edu.fau.ngamarra2014.sync_care.Data.User;
 

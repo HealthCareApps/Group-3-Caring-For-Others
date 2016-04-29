@@ -19,6 +19,7 @@ public class Excercise {
         this.comments = excercise.getString("comments");
         this.date = excercise.getString("date");
     }
+    public Excercise(){}
 
     public void setID(int id){
         this.id = id;

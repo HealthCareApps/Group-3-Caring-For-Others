@@ -81,7 +81,7 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medical Specialist"
+            android:text="Specialist"
             android:id="@+id/Linked"
             android:textColor="#ffffff" />
     </RadioGroup>

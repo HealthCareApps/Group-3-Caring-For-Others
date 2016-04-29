@@ -52,8 +52,6 @@ public class LoginActivity extends AppCompatActivity {
 
         credentials = getSharedPreferences("PREF_FILE", 0);
 
-        //getApplicationContext().deleteDatabase("sync_care.db");
-
         findViewById(R.id.background).getBackground().setAlpha(222);
 
         //Text Fields
