@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import edu.fau.ngamarra2014.sync_care.Authentication.MCrypt;
 import edu.fau.ngamarra2014.sync_care.Data.Doctor;
+import edu.fau.ngamarra2014.sync_care.Data.Excercise;
 import edu.fau.ngamarra2014.sync_care.Data.Insurance;
 import edu.fau.ngamarra2014.sync_care.Data.Patient;
 import edu.fau.ngamarra2014.sync_care.Data.Pharmacy;
@@ -28,6 +29,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String TABLE_INSURANCES = "insurances";
     public static final String TABLE_PHARMACIES = "pharmacies";
     public static final String TABLE_PRESCRIPTIONS = "prescriptions";
+    public static final String TABLE_EXCERCISES = "excercises";
 
     User user = User.getInstance();
 
@@ -104,6 +106,15 @@ public class DBHandler extends SQLiteOpenHelper {
                 + "doctor TEXT,"
                 + "instructions TEXT,"
                 + "patient_id INTEGER" + ")";
+        String CREATE_USERS_EXCERCISES = "CREATE TABLE " + TABLE_EXCERCISES + "("
+                + COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + "name TEXT,"
+                + "start TEXT,"
+                + "duration TEXT,"
+                + "calories TEXT,"
+                + "comments TEXT,"
+                + "patient_id INTEGER,"
+                + "specialist_id INTEGER" + ")";
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_USERS_PATIENTS);
         db.execSQL(CREATE_USERS_DOCTORS);
@@ -111,6 +122,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_USERS_PHARMACIES);
         db.execSQL(CREATE_USERS_PRESCRIPTIONS);
         db.execSQL(CREATE_SPECIALIST_PATIENTS);
+        db.execSQL(CREATE_USERS_EXCERCISES);
 
     }
 
@@ -123,6 +135,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHARMACIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRESCRIPTIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SPECIALIST_PATIENTS );
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXCERCISES);
         onCreate(db);
     }
 
@@ -243,7 +256,7 @@ public class DBHandler extends SQLiteOpenHelper {
             patient.setPrimaryPhoneNumber(cursor.getString(4));
             patient.setEmergencyPhoneNumber(cursor.getString(5));
             patient.setGender(cursor.getString(6));
-            patient.setCaretaker(cursor.getInt(8));
+            patient.setCaretaker(cursor.getInt(7));
 
             user.addPatient(patient);
         }
@@ -514,6 +527,24 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return insurances;
+    }
+
+    public void addExcercise(Excercise excercise){
+        ContentValues values = new ContentValues();
+        values.put("_id", excercise.getId());
+        values.put("name", excercise.getName());
+        values.put("start", excercise.getStart());
+        values.put("duration", excercise.getDuration());
+        values.put("calories", excercise.getCalories());
+        values.put("comments", excercise.getComments());
+        values.put("date", excercise.getDate());
+        values.put("patient_id", excercise.getPatient());
+        values.put("specialist_id", excercise.getSpecialist());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.insert(TABLE_EXCERCISES, null, values);
+        db.close();
     }
 
     public void deleteDoc(String table, int id) {

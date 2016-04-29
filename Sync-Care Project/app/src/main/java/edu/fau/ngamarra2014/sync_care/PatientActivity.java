@@ -15,8 +15,7 @@ public class PatientActivity extends AppCompatActivity {
     User user = User.getInstance();
 
     TextView diagnosis, dob, name;
-    ImageButton profile, doctor, meds, insurance, pharmacy;
-    int index;
+    ImageButton profile, doctor, meds, insurance, pharmacy, excercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +28,6 @@ public class PatientActivity extends AppCompatActivity {
         //new GrabPatientsInfo().execute();
 
         name = (TextView) findViewById(R.id.pname);
-        diagnosis = (TextView) findViewById(R.id.pdiganosis);
         dob = (TextView) findViewById(R.id.dob);
 
         name.setText(user.patient.getName());
@@ -40,6 +38,8 @@ public class PatientActivity extends AppCompatActivity {
         profile = (ImageButton) findViewById(R.id.profile);
         insurance = (ImageButton) findViewById(R.id.insurance);
         pharmacy = (ImageButton) findViewById(R.id.pharmacy);
+        excercises = (ImageButton) findViewById(R.id.excercises);
+
 
         doctor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +73,12 @@ public class PatientActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), PharmacyListActivity.class));
+            }
+        });
+        excercises.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ExcerciseActivity.class));
             }
         });
     }

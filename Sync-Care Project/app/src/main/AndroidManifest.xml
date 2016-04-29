@@ -88,10 +88,13 @@
         </activity>
         <activity
             android:name=".AccountActivity"
-            android:label="@string/title_activity_delete_patient"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Information"/>
-        <activity android:name=".LinkedRequestsActivity"/>
+        <activity android:name=".Information"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".LinkedRequestsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ExcerciseActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

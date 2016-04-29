@@ -58,7 +58,6 @@ public class PatientListActivity extends NavigationActivity {
                 user.getPatient(i).setInsurances(dbHandler.loadInsurances(user.getPatient(i).getID()));
             }
             String lastEntry = dbHandler.lastPatientAdded(user.getID());
-            Log.i("WTF", "onCreate: " + lastEntry);
             new checkfornewpatients().execute(lastEntry);
         }
 
