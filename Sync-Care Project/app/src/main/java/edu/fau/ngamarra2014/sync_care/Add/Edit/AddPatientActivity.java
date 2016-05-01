@@ -1,4 +1,4 @@
-package edu.fau.ngamarra2014.sync_care;
+package edu.fau.ngamarra2014.sync_care.Add.Edit;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,13 +21,15 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+import edu.fau.ngamarra2014.sync_care.PatientListActivity;
+import edu.fau.ngamarra2014.sync_care.R;
 
 public class AddPatientActivity extends AppCompatActivity {
 
     User user = User.getInstance();
-    DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    DBHandler dbHandler = new DBHandler(this, user.getUsername(), null, 2);
 
-    EditText first, last, dateofbirth, number, emergency, dia;
+    EditText first, last, dateofbirth, number, emergency;
     RadioGroup radio;
     Button add;
     static int valid = 0;
@@ -41,7 +44,6 @@ public class AddPatientActivity extends AppCompatActivity {
         dateofbirth = (EditText) findViewById(R.id.birthdate);
         number = (EditText) findViewById(R.id.phonenum);
         emergency = (EditText) findViewById(R.id.emernum);
-        dia = (EditText) findViewById(R.id.diagnosis);
         radio = (RadioGroup) findViewById(R.id.radioGroup);
 
         add = (Button) findViewById(R.id.addPatient);
@@ -80,9 +82,10 @@ public class AddPatientActivity extends AppCompatActivity {
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
+        JSONObject response;
         private String add_patient_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/addDoc.php";
 
-        String fname, lname, birth, phoneNumber, emergencyNumber, gender, diagnosis;
+        String fname, lname, birth, phoneNumber, emergencyNumber, gender;
         RadioButton rd = (RadioButton) findViewById(radio.getCheckedRadioButtonId());
 
         @Override
@@ -100,7 +103,6 @@ public class AddPatientActivity extends AppCompatActivity {
             birth = dateofbirth.getText().toString();
             phoneNumber = number.getText().toString();
             emergencyNumber = emergency.getText().toString();
-            diagnosis = dia.getText().toString();
             gender = rd.getText().toString();
         }
 
@@ -115,12 +117,11 @@ public class AddPatientActivity extends AppCompatActivity {
             query.add("phone", phoneNumber);
             query.add("emergency", emergencyNumber);
             query.add("gender", gender);
-            query.add("diagnosis", diagnosis);
 
             jsonParser.setParams(query);
-            JSONObject response = jsonParser.makeHttpRequest(add_patient_url, "POST");
 
             try {
+                response = jsonParser.makeHttpRequest(add_patient_url, "POST");
                 if (response.has("Successful")) {
                     Patient patient = new Patient(response.getInt("id"), fname, lname, gender, birth, user.getID());
                     patient.setPrimaryPhoneNumber(phoneNumber);
@@ -140,6 +141,10 @@ public class AddPatientActivity extends AppCompatActivity {
 
         protected void onPostExecute(String file_url) {
             pDialog.dismiss();
+            if(response.has("Internet")){
+                Toast toast = Toast.makeText(AddPatientActivity.this, "No Internet Connection", Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
 
     }

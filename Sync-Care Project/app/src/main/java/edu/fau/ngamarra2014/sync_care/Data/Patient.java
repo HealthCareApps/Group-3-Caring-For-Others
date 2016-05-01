@@ -13,6 +13,7 @@ public class Patient {
     private ArrayList<Prescription> prescriptions = new ArrayList<>();
     private ArrayList<Insurance> insurances = new ArrayList<>();
     private ArrayList<Pharmacy> pharmacies = new ArrayList<>();
+    private ArrayList<Exercise> exercises = new ArrayList<>();
 
     public Doctor doctor;
     public Prescription prescription;
@@ -177,5 +178,23 @@ public class Patient {
     }
     public void setCurrentPharmacy(int index){
         this.pharmacy = this.pharmacies.get(index);
+    }
+
+    public void addExercise(Exercise exercise){
+        this.exercises.add(exercise);
+    }
+    public Exercise addExercise(JSONObject exercise) throws JSONException {
+        Exercise ex = new Exercise(exercise);
+        this.exercises.add(ex);
+        return ex;
+    }
+    public void setExercises(ArrayList<Exercise> exercises){
+        this.exercises = exercises;
+    }
+    public Exercise getExercise(int index){
+        return this.exercises.get(index);
+    }
+    public int getNumberOfExercises(){
+        return this.exercises.size();
     }
 }

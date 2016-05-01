@@ -1,4 +1,4 @@
-package edu.fau.ngamarra2014.sync_care;
+package edu.fau.ngamarra2014.sync_care.Adapters;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -19,11 +18,12 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
-import edu.fau.ngamarra2014.sync_care.OldCode.Globals;
+import edu.fau.ngamarra2014.sync_care.Add.Edit.PharmacyEditActivity;
+import edu.fau.ngamarra2014.sync_care.PharmacyListActivity;
+import edu.fau.ngamarra2014.sync_care.R;
 
 public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecyclerAdapter.ViewHolder> {
 
-    Globals globals = Globals.getInstance();
     User user = User.getInstance();
 
     private ArrayList<String> name = new ArrayList<String>();
@@ -111,7 +111,7 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
             delete =
                     (ImageButton) itemView.findViewById(R.id.item_delete);
 
-            if(user.getAccountType().equals("Medical Specialist")){
+            if(user.getAccountType().equals("Specialist")){
                 edit.setVisibility(View.INVISIBLE);
                 delete.setVisibility(View.INVISIBLE);
             }
@@ -136,7 +136,7 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
 
         JSONParser jsonParser = new JSONParser();
         private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/deleteDoc.php";
-        DBHandler dbHandler = new DBHandler(Phar, null, null, 2);
+        DBHandler dbHandler = new DBHandler(Phar, user.getUsername(), null, 2);
         int index;
 
         public DeletePhar(int index){
@@ -149,9 +149,9 @@ public class PharmacyRecyclerAdapter extends RecyclerView.Adapter<PharmacyRecycl
             query.add("database", "Pharmacies");
 
             jsonParser.setParams(query);
-            JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
 
             try {
+                JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
                 if (response.has("Successful")) {
                     dbHandler.deleteDoc("pharmacies", id);
                     user.patient.removePharmacy(index);

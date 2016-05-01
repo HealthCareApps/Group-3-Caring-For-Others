@@ -1,4 +1,4 @@
-package edu.fau.ngamarra2014.sync_care;
+package edu.fau.ngamarra2014.sync_care.Adapters;
 
 
 import android.content.Context;
@@ -13,13 +13,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
+import edu.fau.ngamarra2014.sync_care.R;
+
+public class DeletePatientsAdapter extends BaseAdapter implements ListAdapter {
     private ArrayList<String> list = new ArrayList<String>();
     private Context context;
 
-
-
-    public MyCustomAdapter(ArrayList<String> list, Context context) {
+    public DeletePatientsAdapter(ArrayList<String> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -57,8 +57,7 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //do something
-                list.remove(position); //or some other task
+                list.remove(position);
                 notifyDataSetChanged();
             }
         });

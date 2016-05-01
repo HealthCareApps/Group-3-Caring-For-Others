@@ -1,15 +1,21 @@
 package edu.fau.ngamarra2014.sync_care;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 
 
-public class DeleteMedicalActivity extends Activity {
+public class DeleteMedicalActivity extends NavigationActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.information_balance_checklist);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_delete_medical, null, false);
+        drawer.addView(contentView, 0);
     }
 
 }

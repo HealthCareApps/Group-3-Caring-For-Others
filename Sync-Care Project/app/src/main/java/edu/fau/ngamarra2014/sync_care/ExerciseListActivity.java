@@ -8,14 +8,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import edu.fau.ngamarra2014.sync_care.Adapters.ExerciseRecyclerAdapter;
+import edu.fau.ngamarra2014.sync_care.Add.Edit.ExcerciseActivity;
+import edu.fau.ngamarra2014.sync_care.Data.User;
 
-import edu.fau.ngamarra2014.sync_care.Adapters.RxRecyclerAdapter;
-import edu.fau.ngamarra2014.sync_care.Add.Edit.RxEditActivity;
+public class ExerciseListActivity extends NavigationActivity {
 
-public class RxListActivity extends NavigationActivity{
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
+
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,36 +29,27 @@ public class RxListActivity extends NavigationActivity{
         View contentView = inflater.inflate(R.layout.card_activity, null, false);
         drawer.addView(contentView, 0);
 
-        getSupportActionBar().setTitle("Prescriptions");
+        getSupportActionBar().setTitle("Exercises");
 
         recyclerView =
                 (RecyclerView) findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RxRecyclerAdapter(this);
+        adapter = new ExerciseRecyclerAdapter();
         recyclerView.setAdapter(adapter);
 
-        if(user.getAccountType().equals("Caretaker")){
+
+        if(user.getAccountType().equals("Specialist")){
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setVisibility(View.VISIBLE);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getApplicationContext(), RxEditActivity.class));
+                    startActivity(new Intent(getApplicationContext(), ExcerciseActivity.class));
                     finish();
                 }
             });
         }
-    }
-    public void onFinishCallback()
-    {
-        finish();
-        startActivity(getIntent());
-    }
-    protected void onRestart(){
-        super.onRestart();
-        user.patient.prescription = null;
-        finish();
-        startActivity(getIntent());
+
     }
 }

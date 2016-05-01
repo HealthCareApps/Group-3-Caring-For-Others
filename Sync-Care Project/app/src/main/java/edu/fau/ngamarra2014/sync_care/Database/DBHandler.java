@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import edu.fau.ngamarra2014.sync_care.Authentication.MCrypt;
 import edu.fau.ngamarra2014.sync_care.Data.Doctor;
+import edu.fau.ngamarra2014.sync_care.Data.Exercise;
 import edu.fau.ngamarra2014.sync_care.Data.Insurance;
 import edu.fau.ngamarra2014.sync_care.Data.Patient;
 import edu.fau.ngamarra2014.sync_care.Data.Pharmacy;
@@ -19,21 +20,24 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
-    private static final String DATABASE_NAME = "sync_care.db";
+    private static final int DATABASE_VERSION = 9;
+    private String DATABASE_NAME = "sync_care.db";
     public static final String TABLE_USERS = "users";
     public static final String TABLE_PATIENTS = "patients";
+    public static final String TABLE_SPECIALIST_PATIENTS = "specialist_patients";
     public static final String TABLE_DOCTORS = "doctors";
     public static final String TABLE_INSURANCES = "insurances";
     public static final String TABLE_PHARMACIES = "pharmacies";
     public static final String TABLE_PRESCRIPTIONS = "prescriptions";
+    public static final String TABLE_EXERCISES = "exercises";
 
     User user = User.getInstance();
 
     public static final String COLUMN_ID = "_id";
 
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+        super(context, name, factory, DATABASE_VERSION);
+        DATABASE_NAME = name;
     }
 
     @Override
@@ -55,6 +59,16 @@ public class DBHandler extends SQLiteOpenHelper {
                 + "emergency TEXT,"
                 + "gender TEXT,"
                 + "caretaker_id INTEGER" + ")";
+        String CREATE_SPECIALIST_PATIENTS = "CREATE TABLE " + TABLE_SPECIALIST_PATIENTS + "("
+                + COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + "patient INTEGER,"
+                + "first TEXT,"
+                + "last TEXT,"
+                + "birthdate TEXT,"
+                + "phone TEXT,"
+                + "emergency TEXT,"
+                + "gender TEXT,"
+                + "specialist_id INTEGER" + ")";
         String CREATE_USERS_DOCTORS = "CREATE TABLE " + TABLE_DOCTORS + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY,"
                 + "name TEXT,"
@@ -93,13 +107,27 @@ public class DBHandler extends SQLiteOpenHelper {
                 + "doctor TEXT,"
                 + "instructions TEXT,"
                 + "patient_id INTEGER" + ")";
-        db.execSQL(CREATE_USERS_TABLE);
-        db.execSQL(CREATE_USERS_PATIENTS);
-        db.execSQL(CREATE_USERS_DOCTORS);
-        db.execSQL(CREATE_USERS_INSURANCES);
-        db.execSQL(CREATE_USERS_PHARMACIES);
-        db.execSQL(CREATE_USERS_PRESCRIPTIONS);
-
+        String CREATE_USERS_EXERCISES = "CREATE TABLE " + TABLE_EXERCISES + "("
+                + COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + "name TEXT,"
+                + "start TEXT,"
+                + "duration TEXT,"
+                + "calories TEXT,"
+                + "comments TEXT,"
+                + "date TEXT,"
+                + "patient_id INTEGER,"
+                + "specialist_id INTEGER" + ")";
+        if(DATABASE_NAME.equals("USERS")){
+            db.execSQL(CREATE_USERS_TABLE);
+        }else{
+            db.execSQL(CREATE_USERS_PATIENTS);
+            db.execSQL(CREATE_USERS_DOCTORS);
+            db.execSQL(CREATE_USERS_INSURANCES);
+            db.execSQL(CREATE_USERS_PHARMACIES);
+            db.execSQL(CREATE_USERS_PRESCRIPTIONS);
+            db.execSQL(CREATE_SPECIALIST_PATIENTS);
+            db.execSQL(CREATE_USERS_EXERCISES);
+        }
     }
 
     @Override
@@ -110,6 +138,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSURANCES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHARMACIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRESCRIPTIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SPECIALIST_PATIENTS );
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXERCISES);
         onCreate(db);
     }
 
@@ -166,6 +196,37 @@ public class DBHandler extends SQLiteOpenHelper {
         return 0;
     }
 
+    public String lastPatientAdded(int id){
+        String query = "SELECT * FROM " + TABLE_SPECIALIST_PATIENTS + " WHERE specialist_id = \"" + id + "\" ORDER BY _id DESC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            cursor.moveToFirst();
+            return cursor.getString(0);
+        }
+        return "0";
+    }
+
+    public void addSpecialistPatient(int id, Patient patient){
+        ContentValues values = new ContentValues();
+        values.put("_id", id);
+        values.put("patient", patient.getID());
+        values.put("first", patient.getFirst());
+        values.put("last", patient.getLast());
+        values.put("birthdate", patient.getDOB());
+        values.put("phone", patient.getPrimaryPhoneNumber());
+        values.put("emergency", patient.getEmergencyPhoneNumber());
+        values.put("gender", patient.getGender());
+        values.put("specialist_id", patient.getCaretaker());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.insert(TABLE_SPECIALIST_PATIENTS, null, values);
+        db.close();
+    }
+
     public void addPatient(Patient patient){
         ContentValues values = new ContentValues();
         values.put("_id", patient.getID());
@@ -199,6 +260,31 @@ public class DBHandler extends SQLiteOpenHelper {
             patient.setPrimaryPhoneNumber(cursor.getString(4));
             patient.setEmergencyPhoneNumber(cursor.getString(5));
             patient.setGender(cursor.getString(6));
+            patient.setCaretaker(cursor.getInt(7));
+
+            user.addPatient(patient);
+        }
+        cursor.close();
+        db.close();
+    }
+
+    public void loadSpecialistPatients(int id) {
+        String query = "Select * FROM " + TABLE_SPECIALIST_PATIENTS + " WHERE " + "specialist_id" + " =  \"" + id + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        Patient patient;
+
+        while(cursor.moveToNext()) {
+            patient = new Patient();
+            Log.i("ADDING", "loadSpecialistPatients: ");
+            patient.setID(cursor.getInt(1));
+            patient.setName(cursor.getString(2), cursor.getString(3));
+            patient.setDOB(cursor.getString(4));
+            patient.setPrimaryPhoneNumber(cursor.getString(5));
+            patient.setEmergencyPhoneNumber(cursor.getString(6));
+            patient.setGender(cursor.getString(7));
             patient.setCaretaker(cursor.getInt(8));
 
             user.addPatient(patient);
@@ -264,7 +350,6 @@ public class DBHandler extends SQLiteOpenHelper {
             doc.setPatient(cursor.getInt(10));
 
             doctors.add(doc);
-            //user.patient.addDoctor(doc);
         }
 
         cursor.close();
@@ -444,6 +529,62 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return insurances;
+    }
+
+    public void addExercise(Exercise exercise){
+        ContentValues values = new ContentValues();
+        values.put("_id", exercise.getId());
+        values.put("name", exercise.getName());
+        values.put("start", exercise.getStart());
+        values.put("duration", exercise.getDuration());
+        values.put("calories", exercise.getCalories());
+        values.put("comments", exercise.getComments());
+        values.put("date", exercise.getDate());
+        values.put("patient_id", exercise.getPatient());
+        values.put("specialist_id", exercise.getSpecialist());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.insert(TABLE_EXERCISES, null, values);
+        db.close();
+    }
+    public ArrayList<Exercise> loadExercises(int patient) {
+        String query = "Select * FROM " + TABLE_EXERCISES + " WHERE " + "patient_id" + " =  \"" + patient + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        ArrayList<Exercise> exercises = new ArrayList<>();
+        Exercise exercise;
+
+        while (cursor.moveToNext()) {
+            exercise = new Exercise();
+            exercise.setID(cursor.getInt(0));
+            exercise.setName(cursor.getString(1));
+            exercise.setStart(cursor.getString(2));
+            exercise.setDuration(cursor.getString(3));
+            exercise.setCalories(cursor.getString(4));
+            exercise.setComments(cursor.getString(5));
+            exercise.setPatient(cursor.getInt(6));
+            exercise.setSpecialist(cursor.getInt(7));
+
+            exercises.add(exercise);
+        }
+        cursor.close();
+        db.close();
+        return exercises;
+    }
+    public String lastExerciseAdded(int id){
+        String query = "SELECT * FROM " + TABLE_EXERCISES + " WHERE patient_id = \"" + id + "\" ORDER BY _id DESC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            cursor.moveToFirst();
+            return cursor.getString(0);
+        }
+        return "0";
     }
 
     public void deleteDoc(String table, int id) {

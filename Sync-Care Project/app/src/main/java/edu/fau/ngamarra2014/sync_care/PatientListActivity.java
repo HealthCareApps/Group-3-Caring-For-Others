@@ -1,10 +1,11 @@
 package edu.fau.ngamarra2014.sync_care;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,15 +20,18 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.fau.ngamarra2014.sync_care.Authentication.LoginActivity;
+import edu.fau.ngamarra2014.sync_care.Adapters.PatientRecyclerAdapter;
+import edu.fau.ngamarra2014.sync_care.Add.Edit.AddPatientActivity;
 import edu.fau.ngamarra2014.sync_care.Data.Doctor;
 import edu.fau.ngamarra2014.sync_care.Data.Insurance;
 import edu.fau.ngamarra2014.sync_care.Data.Patient;
 import edu.fau.ngamarra2014.sync_care.Data.Pharmacy;
 import edu.fau.ngamarra2014.sync_care.Data.Prescription;
 import edu.fau.ngamarra2014.sync_care.Data.User;
+import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
 
@@ -37,6 +41,7 @@ public class PatientListActivity extends NavigationActivity {
     RecyclerView.Adapter adapter;
 
     User user = User.getInstance();
+    DBHandler dbHandler = new DBHandler(this, user.getUsername(), null, 2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,22 @@ public class PatientListActivity extends NavigationActivity {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.card_activity, null, false);
         drawer.addView(contentView, 0);
+
+        getSupportActionBar().setTitle("Patients");
+
+        if(user.getAccountType().equals("Specialist")){
+            FloatingActionButton refresh = (FloatingActionButton) findViewById(R.id.refresh);
+            refresh.setVisibility(View.VISIBLE);
+
+            refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String lastEntry = dbHandler.lastPatientAdded(user.getID());
+                    new checkfornewpatients(getApplicationContext()).execute(lastEntry);
+                }
+            });
+
+        }
 
         recyclerView =
                 (RecyclerView) findViewById(R.id.recycler_view);
@@ -78,7 +99,7 @@ public class PatientListActivity extends NavigationActivity {
                                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                                 inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                             }
-                            new sync(input.getText().toString()).execute();
+                            new sync().execute(input.getText().toString());
                         }
                     });
                     alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -94,24 +115,31 @@ public class PatientListActivity extends NavigationActivity {
             }
         });
     }
+
     class sync extends AsyncTask<String, String, String> {
 
         private String url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/sync.php";
         JSONParser jsonParser = new JSONParser();
         JSONObject response;
-        String id;
 
-        public sync(String id){
-            this.id = id;
-        }
         protected String doInBackground(String... args) {
 
             // Building Parameters for php
-            QueryString query = new QueryString("patient", id);
+            QueryString query = new QueryString("patient", args[0]);
             query.add("id", Integer.toString(user.getID()));
 
             jsonParser.setParams(query);
-            response = jsonParser.makeHttpRequest(url, "GET");
+
+            try{
+                response = jsonParser.makeHttpRequest(url, "GET");
+                if(response.has("Patients")){
+                    for(int i = 0; i < response.getJSONArray("Patients").length(); i++){
+                        dbHandler.addPatient(new Patient(response.getJSONArray("Patients").getJSONObject(i)));
+                    }
+                }
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
 
             return null;
         }
@@ -119,6 +147,86 @@ public class PatientListActivity extends NavigationActivity {
             super.onPostExecute(file_url);
             if(response.has("Successful")){
                 Toast toast = Toast.makeText(PatientListActivity.this, "Awaiting Confirmation", Toast.LENGTH_SHORT);
+                toast.show();
+            }else if(response.has("Internet")){
+                Toast toast = Toast.makeText(PatientListActivity.this, "No Internet Connection", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+    }
+
+    class checkfornewpatients extends AsyncTask<String, String, String> {
+
+        private String url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/checklinkedrequests.php";
+        JSONParser jsonParser = new JSONParser();
+        JSONObject response;
+        Context context;
+
+        public checkfornewpatients(Context context){
+            this.context = context;
+        }
+        protected String doInBackground(String... args) {
+
+            QueryString query = new QueryString("id", Integer.toString(user.getID()));
+            query.add("last", args[0]);
+
+            jsonParser.setParams(query);
+
+            try {
+                response = jsonParser.makeHttpRequest(url, "GET");
+
+                if(response.has("Patients")){
+                    JSONArray patients = response.getJSONArray("Patients");
+                    for(int i = 0; i < patients.length(); i++){
+                        Patient patient = new Patient(patients.getJSONObject(i));
+                        user.addPatient(patient);
+                        dbHandler.addSpecialistPatient(patients.getJSONObject(i).getInt("special_id"), patient);
+
+                        jsonParser.setParams(new QueryString("id", Integer.toString(patient.getID())));
+                        response = jsonParser.makeHttpRequest("http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/patientInfo.php", "GET");
+
+                        JSONArray doctors = response.getJSONArray("doctors");
+                        JSONArray insurances = response.getJSONArray("insurances");
+                        JSONArray pharmacies = response.getJSONArray("pharmacies");
+                        JSONArray prescriptions = response.getJSONArray("prescriptions");
+
+                        for(int x = 0; x < doctors.length(); x++){
+                            JSONObject doctor = doctors.getJSONObject(x);
+                            Doctor doc = patient.addDoctor(doctor);
+                            dbHandler.addDoctor(doc);
+                        }
+                        for(int y = 0; y < insurances.length(); y++){
+                            JSONObject insurance = insurances.getJSONObject(y);
+                            Insurance insur = patient.addInsurance(insurance);
+                            dbHandler.addInsurance(insur);
+                        }
+                        for(int z = 0; z < pharmacies.length(); z++){
+                            JSONObject pharmacy = pharmacies.getJSONObject(z);
+                            Pharmacy pharm = patient.addPharmacy(pharmacy);
+                            dbHandler.addPharmacy(pharm);
+                        }
+                        for(int t = 0; t < prescriptions.length(); t++){
+                            JSONObject prescription = prescriptions.getJSONObject(t);
+                            Prescription rx = patient.addPrescription(prescription);
+                            dbHandler.addPrescription(rx);
+                        }
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        protected void onPostExecute(String url){
+            super.onPostExecute(url);
+            if(response.has("Patients")){
+                context.startActivity(new Intent(context, PatientListActivity.class));
+            }else if(response.has("Error")) {
+                Toast toast = Toast.makeText(PatientListActivity.this, "No new confirmed patients", Toast.LENGTH_SHORT);
+                toast.show();
+            }else if(response.has("Internet")){
+                Toast toast = Toast.makeText(PatientListActivity.this, "No Internet Connection", Toast.LENGTH_LONG);
                 toast.show();
             }
         }

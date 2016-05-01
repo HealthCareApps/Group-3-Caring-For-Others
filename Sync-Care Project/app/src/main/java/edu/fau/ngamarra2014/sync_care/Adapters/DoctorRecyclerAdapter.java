@@ -1,6 +1,5 @@
-package edu.fau.ngamarra2014.sync_care;
+package edu.fau.ngamarra2014.sync_care.Adapters;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -21,6 +18,9 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+import edu.fau.ngamarra2014.sync_care.Add.Edit.DoctorEditActivity;
+import edu.fau.ngamarra2014.sync_care.DoctorListActivity;
+import edu.fau.ngamarra2014.sync_care.R;
 
 public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAdapter.ViewHolder> {
 
@@ -129,7 +129,7 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
             delete =
                     (ImageButton) itemView.findViewById(R.id.item_delete);
 
-            if(user.getAccountType().equals("Medical Specialist")){
+            if(user.getAccountType().equals("Specialist")){
                 edit.setVisibility(View.INVISIBLE);
                 delete.setVisibility(View.INVISIBLE);
             }
@@ -154,7 +154,7 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
 
         JSONParser jsonParser = new JSONParser();
         private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/deleteDoc.php";
-        DBHandler dbHandler = new DBHandler(Doc, null, null, 2);
+        DBHandler dbHandler = new DBHandler(Doc, user.getUsername(), null, 2);
         int index;
 
         public DeleteDoc(int index){
@@ -167,9 +167,9 @@ public class DoctorRecyclerAdapter extends RecyclerView.Adapter<DoctorRecyclerAd
             query.add("database", "Doctors");
 
             jsonParser.setParams(query);
-            JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
 
             try {
+                JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
                 if (response.has("Successful")) {
                     dbHandler.deleteDoc("doctors", id);
                     user.patient.removeDoctor(index);

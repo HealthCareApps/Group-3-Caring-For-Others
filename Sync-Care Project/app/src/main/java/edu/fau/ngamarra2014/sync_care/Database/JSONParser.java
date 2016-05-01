@@ -10,11 +10,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.JsonReader;
 import android.util.Log;
 
 public class JSONParser {
@@ -25,23 +24,20 @@ public class JSONParser {
 
     private String params = "";
 
-    // constructor
-    public JSONParser() {
-
-    }
+    public JSONParser() {}
 
     public void setParams(QueryString query){
         params = query.toString();
     }
-    // function get json from url
-    // by making HTTP POST or GET mehtod
-    public JSONObject makeHttpRequest(String url, String method) {
-        // Making HTTP request
+
+    public JSONObject makeHttpRequest(String url, String method) throws JSONException {
+
         try {
-            // check for request method
+
             if(method == "POST"){
                 byte[] postData = params.getBytes( StandardCharsets.UTF_8 );
                 HttpURLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
+
                 urlConnection.setDoOutput(true);
                 DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
                 wr.write(postData);
@@ -60,8 +56,7 @@ public class JSONParser {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            Log.i("Internet", "makeHttpRequest: no internet");
-            e.printStackTrace();
+           return new JSONObject("{\"Internet\": \"Unable to connect to Internet\"}");
         }
 
         try {
@@ -79,13 +74,13 @@ public class JSONParser {
             is.close();
 
         } catch (Exception e) {
-            Log.e("Buffer Error", "Error converting result " + e.toString());
+            return new JSONObject("{\"Error\": \"String Failed\"}");
         }
 
         try {
             response = new JSONObject(json);
         } catch (JSONException e) {
-            Log.i("Error", e.toString());
+            return new JSONObject("{\"Error\": \"Failed to convert JSON Object\"}");
         }
         return response;
 

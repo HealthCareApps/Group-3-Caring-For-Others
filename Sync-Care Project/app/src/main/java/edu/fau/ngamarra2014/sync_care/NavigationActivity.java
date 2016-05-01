@@ -9,20 +9,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import edu.fau.ngamarra2014.sync_care.Authentication.LoginActivity;
+import edu.fau.ngamarra2014.sync_care.Data.Insurance;
 import edu.fau.ngamarra2014.sync_care.Data.User;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    //Globals globals = Globals.getInstance();
     User user = User.getInstance();
     DrawerLayout drawer;
-    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +40,18 @@ public class NavigationActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        if(user.getAccountType().equals("Specialist")){
+            Menu menu = navigationView.getMenu();
+            menu.findItem(R.id.nav_patients).setVisible(false);
+        }
+
         View headerLayout = navigationView.getHeaderView(0);
 
-        title = (TextView) headerLayout.findViewById(R.id.username);
+        TextView title = (TextView) headerLayout.findViewById(R.id.username);
         title.setText(user.getName());
-       /* try {
-            title.setText(globals.getuser().getString("name"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
+        TextView type = (TextView) headerLayout.findViewById(R.id.type);
+        type.setText(user.getAccountType());
+
     }
 
     @Override
@@ -68,7 +71,10 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            if(user.getAccountType().equals("Caretaker"))
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            else
+                startActivity(new Intent(getApplicationContext(), PatientListActivity.class));
         } else if (id == R.id.nav_account) {
             startActivity(new Intent(getApplicationContext(), AccountActivity.class));
         } else if (id == R.id.nav_patients) {
@@ -79,7 +85,14 @@ public class NavigationActivity extends AppCompatActivity
             SharedPreferences.Editor editor = getSharedPreferences("PREF_FILE", 0).edit();
             editor.clear();
             editor.commit();
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.putExtra("finish", true);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                    Intent.FLAG_ACTIVITY_NEW_TASK); // To clean up all activities
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
