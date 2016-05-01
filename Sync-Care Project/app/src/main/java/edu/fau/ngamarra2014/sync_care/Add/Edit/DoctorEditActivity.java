@@ -1,4 +1,4 @@
-package edu.fau.ngamarra2014.sync_care;
+package edu.fau.ngamarra2014.sync_care.Add.Edit;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,11 +19,12 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+import edu.fau.ngamarra2014.sync_care.R;
 
 public class DoctorEditActivity extends Activity {
 
     User user = User.getInstance();
-    DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    DBHandler dbHandler = new DBHandler(this, user.getUsername(), null, 2);
     private String url;
 
     EditText name, type, phone, email, address, city, state, zip, fax;
@@ -78,7 +80,7 @@ public class DoctorEditActivity extends Activity {
     class UpdateDoc extends AsyncTask<String, String, String> {
 
         JSONParser jsonParser = new JSONParser();
-
+        JSONObject response;
         String docName, docType, docPhone, docEmail, docAddress, docCity, docState, docZip, docFax;
 
         @Override
@@ -114,10 +116,10 @@ public class DoctorEditActivity extends Activity {
             if(id != 0) query.add("id", Integer.toString(id));
 
             jsonParser.setParams(query);
-            JSONObject response = jsonParser.makeHttpRequest(url, "POST");
 
             try {
-               if (response.has("Successful")) {
+                response = jsonParser.makeHttpRequest(url, "POST");
+                if (response.has("Successful")) {
                     Doctor doc = new Doctor();
                     doc.setID(response.getInt("id"));
                     doc.setName(docName);
@@ -140,6 +142,13 @@ public class DoctorEditActivity extends Activity {
             }
 
             return null;
+        }
+        protected void onPostExecute(String url){
+            super.onPostExecute(url);
+            if(response.has("Internet")){
+                Toast toast = Toast.makeText(DoctorEditActivity.this, "No Internet Connection", Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
     }
 }

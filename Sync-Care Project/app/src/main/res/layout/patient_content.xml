@@ -31,9 +31,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Small Text"
+                android:id="@+id/id"
+                android:layout_centerInParent="true"
+                android:layout_above="@+id/dob" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Date of Birth: "
                 android:id="@+id/dob"
-                android:paddingTop="5dp"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
 
@@ -65,19 +73,6 @@
             android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true"
             android:layout_gravity="right" />
-
-        <ImageButton
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:id="@+id/routines"
-            android:src="@drawable/daily_routines_button"
-            android:cropToPadding="false"
-            android:scaleType="centerCrop"
-            android:padding="5dp"
-            android:background="#ffffff"
-            android:clickable="true"
-            android:layout_below="@+id/imageView"
-            android:layout_centerHorizontal="true" />
 
         <ImageButton
             android:layout_width="300dp"
@@ -121,10 +116,23 @@
         <ImageButton
             android:layout_width="300dp"
             android:layout_height="200dp"
-            android:id="@+id/excercises"
+            android:id="@+id/exercises"
             android:src="@drawable/excercise_button"
             android:scaleType="centerCrop"
             android:background="#ffffff" />
+
+        <ImageButton
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:id="@+id/routines"
+            android:src="@drawable/daily_routines_button"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"
+            android:padding="5dp"
+            android:background="#ffffff"
+            android:clickable="true"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true" />
 
         <ImageButton
             android:layout_width="300dp"

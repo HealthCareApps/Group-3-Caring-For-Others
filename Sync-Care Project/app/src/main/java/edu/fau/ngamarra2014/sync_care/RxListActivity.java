@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import edu.fau.ngamarra2014.sync_care.Adapters.RxRecyclerAdapter;
+import edu.fau.ngamarra2014.sync_care.Add.Edit.RxEditActivity;
 
 public class RxListActivity extends NavigationActivity{
     RecyclerView recyclerView;
@@ -24,6 +25,8 @@ public class RxListActivity extends NavigationActivity{
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.card_activity, null, false);
         drawer.addView(contentView, 0);
+
+        getSupportActionBar().setTitle("Prescriptions");
 
         recyclerView =
                 (RecyclerView) findViewById(R.id.recycler_view);

@@ -100,8 +100,6 @@ public class LinkedRequestAdapter extends BaseAdapter implements ListAdapter {
             deleteBtn.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    //do something
-                    //list.remove(position); //or some other task
                     notifyDataSetChanged();
                 }
             });
@@ -121,17 +119,21 @@ public class LinkedRequestAdapter extends BaseAdapter implements ListAdapter {
 
         @Override
         protected String doInBackground(String... params) {
-            QueryString query = new QueryString("id", params[0]);
-            query.add("database", "Sync");
-            jsonParser.setParams(query);
-            response = jsonParser.makeHttpRequest(delete_url, "POST");
 
-            query = new QueryString("id", params[2]);
-            query.add("database", "specialist");
-            query.add("patient", params[1]);
-            jsonParser.setParams(query);
-            response = jsonParser.makeHttpRequest(update_url, "POST");
+            try {
+                QueryString query = new QueryString("id", params[0]);
+                query.add("database", "Sync");
+                jsonParser.setParams(query);
+                response = jsonParser.makeHttpRequest(delete_url, "POST");
 
+                query = new QueryString("id", params[2]);
+                query.add("database", "specialist");
+                query.add("patient", params[1]);
+                jsonParser.setParams(query);
+                response = jsonParser.makeHttpRequest(update_url, "POST");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return null;
         }
     }

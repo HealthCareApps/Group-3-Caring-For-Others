@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.fau.ngamarra2014.sync_care.Adapters.PatientRecyclerAdapter;
+import edu.fau.ngamarra2014.sync_care.Add.Edit.AddPatientActivity;
 import edu.fau.ngamarra2014.sync_care.Data.Doctor;
 import edu.fau.ngamarra2014.sync_care.Data.Insurance;
 import edu.fau.ngamarra2014.sync_care.Data.Patient;
@@ -36,9 +39,9 @@ public class PatientListActivity extends NavigationActivity {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
-    DBHandler dbHandler = new DBHandler(this, null, null, 2);
 
     User user = User.getInstance();
+    DBHandler dbHandler = new DBHandler(this, user.getUsername(), null, 2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +52,20 @@ public class PatientListActivity extends NavigationActivity {
         View contentView = inflater.inflate(R.layout.card_activity, null, false);
         drawer.addView(contentView, 0);
 
+        getSupportActionBar().setTitle("Patients");
+
         if(user.getAccountType().equals("Specialist")){
-            dbHandler.loadSpecialistPatients(user.getID());
-            for(int i =0; i < user.getNumberOfPatients(); i++){
-                user.getPatient(i).setDoctors(dbHandler.loadDoctors(user.getPatient(i).getID()));
-                user.getPatient(i).setPrescriptions(dbHandler.loadPrescriptions(user.getPatient(i).getID()));
-                user.getPatient(i).setPharmacies(dbHandler.loadPharmacies(user.getPatient(i).getID()));
-                user.getPatient(i).setInsurances(dbHandler.loadInsurances(user.getPatient(i).getID()));
-            }
-            String lastEntry = dbHandler.lastPatientAdded(user.getID());
-            new checkfornewpatients().execute(lastEntry);
+            FloatingActionButton refresh = (FloatingActionButton) findViewById(R.id.refresh);
+            refresh.setVisibility(View.VISIBLE);
+
+            refresh.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String lastEntry = dbHandler.lastPatientAdded(user.getID());
+                    new checkfornewpatients(getApplicationContext()).execute(lastEntry);
+                }
+            });
+
         }
 
         recyclerView =
@@ -122,9 +129,9 @@ public class PatientListActivity extends NavigationActivity {
             query.add("id", Integer.toString(user.getID()));
 
             jsonParser.setParams(query);
-            response = jsonParser.makeHttpRequest(url, "GET");
 
             try{
+                response = jsonParser.makeHttpRequest(url, "GET");
                 if(response.has("Patients")){
                     for(int i = 0; i < response.getJSONArray("Patients").length(); i++){
                         dbHandler.addPatient(new Patient(response.getJSONArray("Patients").getJSONObject(i)));
@@ -141,13 +148,11 @@ public class PatientListActivity extends NavigationActivity {
             if(response.has("Successful")){
                 Toast toast = Toast.makeText(PatientListActivity.this, "Awaiting Confirmation", Toast.LENGTH_SHORT);
                 toast.show();
+            }else if(response.has("Internet")){
+                Toast toast = Toast.makeText(PatientListActivity.this, "No Internet Connection", Toast.LENGTH_LONG);
+                toast.show();
             }
         }
-    }
-    public void onFinishCallback()
-    {
-        finish();
-        startActivity(getIntent());
     }
 
     class checkfornewpatients extends AsyncTask<String, String, String> {
@@ -155,16 +160,21 @@ public class PatientListActivity extends NavigationActivity {
         private String url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/checklinkedrequests.php";
         JSONParser jsonParser = new JSONParser();
         JSONObject response;
+        Context context;
 
+        public checkfornewpatients(Context context){
+            this.context = context;
+        }
         protected String doInBackground(String... args) {
 
             QueryString query = new QueryString("id", Integer.toString(user.getID()));
             query.add("last", args[0]);
 
             jsonParser.setParams(query);
-            response = jsonParser.makeHttpRequest(url, "GET");
 
             try {
+                response = jsonParser.makeHttpRequest(url, "GET");
+
                 if(response.has("Patients")){
                     JSONArray patients = response.getJSONArray("Patients");
                     for(int i = 0; i < patients.length(); i++){
@@ -201,22 +211,24 @@ public class PatientListActivity extends NavigationActivity {
                             dbHandler.addPrescription(rx);
                         }
                     }
-                    onFinishCallback();
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
             return null;
         }
-        protected void onPostExecute(String file_url){
-            super.onPostExecute(file_url);
-            /*if(response.has("Successful")){
-                Toast toast = Toast.makeText(PatientListActivity.this, "Awaiting Confirmation", Toast.LENGTH_SHORT);
+        protected void onPostExecute(String url){
+            super.onPostExecute(url);
+            if(response.has("Patients")){
+                context.startActivity(new Intent(context, PatientListActivity.class));
+            }else if(response.has("Error")) {
+                Toast toast = Toast.makeText(PatientListActivity.this, "No new confirmed patients", Toast.LENGTH_SHORT);
                 toast.show();
-            }*/
+            }else if(response.has("Internet")){
+                Toast toast = Toast.makeText(PatientListActivity.this, "No Internet Connection", Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
     }
 }

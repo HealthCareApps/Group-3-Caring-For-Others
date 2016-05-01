@@ -3,23 +3,23 @@ package edu.fau.ngamarra2014.sync_care.Data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Excercise {
+public class Exercise {
 
     int id, patient, specialist;
     String name, start, duration, calories, comments, date;
 
-    public Excercise(JSONObject excercise) throws JSONException {
-        this.id = excercise.getInt("id");
-        this.patient = excercise.getInt("patient");
-        this.specialist = excercise.getInt("specialist");
-        this.name = excercise.getString("name");
-        this.start = excercise.getString("start");
-        this.duration = excercise.getString("duration");
-        this.calories = excercise.getString("calories");
-        this.comments = excercise.getString("comments");
-        this.date = excercise.getString("date");
+    public Exercise(JSONObject exercise) throws JSONException {
+        this.id = exercise.getInt("id");
+        this.patient = exercise.getInt("patient");
+        this.specialist = exercise.getInt("specialist");
+        this.name = exercise.getString("name");
+        this.start = exercise.getString("start");
+        this.duration = exercise.getString("duration");
+        this.calories = exercise.getString("calories");
+        this.comments = exercise.getString("comments");
+        this.date = exercise.getString("date");
     }
-    public Excercise(){}
+    public Exercise(){}
 
     public void setID(int id){
         this.id = id;

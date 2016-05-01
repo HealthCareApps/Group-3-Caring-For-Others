@@ -1,6 +1,5 @@
 package edu.fau.ngamarra2014.sync_care.Adapters;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +20,7 @@ import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
 import edu.fau.ngamarra2014.sync_care.R;
-import edu.fau.ngamarra2014.sync_care.RxEditActivity;
+import edu.fau.ngamarra2014.sync_care.Add.Edit.RxEditActivity;
 import edu.fau.ngamarra2014.sync_care.RxListActivity;
 
 public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.ViewHolder>{
@@ -130,10 +129,9 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
     }
     class DeleteRx extends AsyncTask<String, String, String> {
 
-        private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
         private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/deleteDoc.php";
-        DBHandler dbHandler = new DBHandler(RX, null, null, 2);
+        DBHandler dbHandler = new DBHandler(RX, user.getUsername(), null, 2);
         int index;
 
         public DeleteRx(int index){
@@ -146,9 +144,9 @@ public class RxRecyclerAdapter extends RecyclerView.Adapter<RxRecyclerAdapter.Vi
             query.add("database", "Prescriptions");
 
             jsonParser.setParams(query);
-            JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
 
             try {
+                JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
                 if (response.has("Successful")) {
                     dbHandler.deleteDoc("prescriptions", id);
                     user.patient.removePrescription(index);

@@ -1,21 +1,16 @@
 package edu.fau.ngamarra2014.sync_care;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
-import org.json.JSONException;
-
 import edu.fau.ngamarra2014.sync_care.Data.User;
-import edu.fau.ngamarra2014.sync_care.OldCode.Globals;
 
-public class PatientProfileActivity extends AppCompatActivity {
+public class PatientProfileActivity extends NavigationActivity {
 
-    Globals globals = Globals.getInstance();
     User user = User.getInstance();
 
     EditText firstname, lastname, DOB, primarynum, emergancynum, address, city, zipcode;
@@ -25,10 +20,13 @@ public class PatientProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.patient_profile_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.patient_profile_activity, null, false);
+        drawer.addView(contentView, 0);
+
+        getSupportActionBar().hide();
 
         firstname = (EditText) findViewById(R.id.firstname);
         lastname = (EditText) findViewById(R.id.lastname);
@@ -68,17 +66,12 @@ public class PatientProfileActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    globals.getCurrentPatient().put("first", firstname.getText().toString());
-                    globals.getCurrentPatient().put("last", lastname.getText().toString());
-                    globals.getCurrentPatient().put("birthdate", DOB.getText().toString());
-                    globals.getCurrentPatient().put("phone", primarynum.getText().toString());
-                    globals.getCurrentPatient().put("emergency", emergancynum.getText().toString());
+                user.patient.setName(firstname.getText().toString(), lastname.getText().toString());
+                user.patient.setDOB(DOB.getText().toString());
+                user.patient.setPrimaryPhoneNumber(primarynum.getText().toString());
+                user.patient.setEmergencyPhoneNumber(emergancynum.getText().toString());
 
-                    save.setVisibility(View.INVISIBLE);
-                }catch (JSONException e){
-
-                }
+                save.setVisibility(View.INVISIBLE);
             }
         });
     }

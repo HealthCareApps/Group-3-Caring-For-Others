@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import edu.fau.ngamarra2014.sync_care.Adapters.PharmacyRecyclerAdapter;
+import edu.fau.ngamarra2014.sync_care.Add.Edit.PharmacyEditActivity;
 
 public class PharmacyListActivity extends NavigationActivity {
 
@@ -25,6 +26,8 @@ public class PharmacyListActivity extends NavigationActivity {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.card_activity, null, false);
         drawer.addView(contentView, 0);
+
+        getSupportActionBar().setTitle("Pharmacies");
 
         recyclerView =
                 (RecyclerView) findViewById(R.id.recycler_view);

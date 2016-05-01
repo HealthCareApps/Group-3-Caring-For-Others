@@ -8,10 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import edu.fau.ngamarra2014.sync_care.Adapters.ExcerciseRecyclerAdapter;
+import edu.fau.ngamarra2014.sync_care.Adapters.ExerciseRecyclerAdapter;
+import edu.fau.ngamarra2014.sync_care.Add.Edit.ExcerciseActivity;
 import edu.fau.ngamarra2014.sync_care.Data.User;
 
-public class ExcerciseListActivity extends NavigationActivity {
+public class ExerciseListActivity extends NavigationActivity {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -28,34 +29,27 @@ public class ExcerciseListActivity extends NavigationActivity {
         View contentView = inflater.inflate(R.layout.card_activity, null, false);
         drawer.addView(contentView, 0);
 
+        getSupportActionBar().setTitle("Exercises");
+
         recyclerView =
                 (RecyclerView) findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ExcerciseRecyclerAdapter(this);
+        adapter = new ExerciseRecyclerAdapter();
         recyclerView.setAdapter(adapter);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setVisibility(View.VISIBLE);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ExcerciseActivity.class));
-                finish();
-            }
-        });
+        if(user.getAccountType().equals("Specialist")){
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), ExcerciseActivity.class));
+                    finish();
+                }
+            });
+        }
 
-    }
-    public void onFinishCallback()
-    {
-        finish();
-        startActivity(getIntent());
-    }
-    protected void onRestart(){
-        super.onRestart();
-        //user.patient.doctor = null;
-        finish();
-        startActivity(getIntent());
     }
 }

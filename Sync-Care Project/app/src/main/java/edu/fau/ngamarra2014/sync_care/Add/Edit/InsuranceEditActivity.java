@@ -1,4 +1,4 @@
-package edu.fau.ngamarra2014.sync_care;
+package edu.fau.ngamarra2014.sync_care.Add.Edit;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,11 +19,12 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+import edu.fau.ngamarra2014.sync_care.R;
 
 public class InsuranceEditActivity extends Activity {
 
     User user = User.getInstance();
-    DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    DBHandler dbHandler = new DBHandler(this, user.getUsername(), null, 2);
     private String url;
 
     EditText provider, mid, groupnum, rxbin, rxpcn, rxgrp;
@@ -73,6 +75,7 @@ public class InsuranceEditActivity extends Activity {
 
         private ProgressDialog pDialog;
         JSONParser jsonParser = new JSONParser();
+        JSONObject response;
 
         String insProvider, insMID, insGroupnum, insRxBin, insRxPCN, insRxGrp;
 
@@ -103,9 +106,10 @@ public class InsuranceEditActivity extends Activity {
             query.add("rxgrp", insRxGrp);
 
             jsonParser.setParams(query);
-            JSONObject response = jsonParser.makeHttpRequest(url, "POST");
+
 
             try {
+                response = jsonParser.makeHttpRequest(url, "POST");
                 if (response.has("Successful")) {
                     Insurance insurance = new Insurance();
                     insurance.setID(response.getInt("id"));
@@ -131,6 +135,13 @@ public class InsuranceEditActivity extends Activity {
             }
 
             return null;
+        }
+        protected void onPostExecute(String url){
+            super.onPostExecute(url);
+            if(response.has("Internet")){
+                Toast toast = Toast.makeText(InsuranceEditActivity.this, "No Internet Connection", Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
     }
 }

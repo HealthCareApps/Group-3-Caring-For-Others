@@ -97,4 +97,7 @@ public class User {
         }
         return instance;
     }
+    public static void logout(){
+        instance = new User();
+    }
 }

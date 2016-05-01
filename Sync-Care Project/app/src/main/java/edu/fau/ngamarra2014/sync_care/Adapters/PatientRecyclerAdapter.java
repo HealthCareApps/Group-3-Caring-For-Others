@@ -20,6 +20,7 @@ public class PatientRecyclerAdapter extends RecyclerView.Adapter<PatientRecycler
 
     private ArrayList<String> titles = new ArrayList<String>();
     private ArrayList<String> details = new ArrayList<String>();
+    private ArrayList<String> ids = new ArrayList<String>();
     private int[] images = { R.drawable.mario_icon};
 
     public PatientRecyclerAdapter(){
@@ -27,6 +28,7 @@ public class PatientRecyclerAdapter extends RecyclerView.Adapter<PatientRecycler
         for(int i = 0; i < user.getNumberOfPatients(); i++){
             titles.add(user.getPatient(i).getName());
             details.add("DOB: " + user.getPatient(i).getDOB());
+            ids.add("ID: " + user.getPatient(i).getID());
         }
     }
 
@@ -41,6 +43,7 @@ public class PatientRecyclerAdapter extends RecyclerView.Adapter<PatientRecycler
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         viewHolder.itemTitle.setText(titles.get(i));
         viewHolder.itemDetail.setText(details.get(i));
+        viewHolder.itemID.setText(ids.get(i));
         viewHolder.itemImage.setImageResource(images[0]);
     }
     @Override
@@ -53,6 +56,7 @@ public class PatientRecyclerAdapter extends RecyclerView.Adapter<PatientRecycler
         public ImageView itemImage;
         public TextView itemTitle;
         public TextView itemDetail;
+        public TextView itemID;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -62,6 +66,8 @@ public class PatientRecyclerAdapter extends RecyclerView.Adapter<PatientRecycler
                     (TextView) itemView.findViewById(R.id.item_title);
             itemDetail =
                     (TextView) itemView.findViewById(R.id.item_detail);
+            itemID =
+                    (TextView) itemView.findViewById(R.id.item_id);
 
             itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -69,6 +75,7 @@ public class PatientRecyclerAdapter extends RecyclerView.Adapter<PatientRecycler
                 public void onClick(View v) {
                     user.setCurrentPatient(getAdapterPosition());
                     v.getContext().startActivity(new Intent(v.getContext(), PatientActivity.class));
+
                 }
             });
         }

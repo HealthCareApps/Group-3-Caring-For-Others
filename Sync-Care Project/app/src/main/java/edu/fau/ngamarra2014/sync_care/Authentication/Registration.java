@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +30,7 @@ import edu.fau.ngamarra2014.sync_care.R;
 
 public class Registration extends Activity {
     User user = User.getInstance();
-    DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    DBHandler login = new DBHandler(this, "USERS", null, 2);
     MCrypt mcrypt = new MCrypt();
 
     EditText inputFirst, inputLast, inputEmail, inputUsername, inputPassword;
@@ -47,6 +50,15 @@ public class Registration extends Activity {
 
         register = (Button) findViewById(R.id.register);
         account = (RadioGroup) findViewById(R.id.account);
+
+        TextView login = (TextView) findViewById(R.id.login);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            }
+        });
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +114,11 @@ public class Registration extends Activity {
             query.add("account", user.getAccountType());
 
             jsonParser.setParams(query);
-            response = jsonParser.makeHttpRequest(register_caretaker_url, "POST");
+            try {
+                response = jsonParser.makeHttpRequest(register_caretaker_url, "POST");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             return null;
         }
@@ -111,14 +127,14 @@ public class Registration extends Activity {
             try {
                 if (response.has("Successful")) {
                     user.setID(response.getInt("id"));
-                    dbHandler.addUser(user);
-                    if(user.getAccountType().equals("Caretaker"))
-                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    else
-                        startActivity(new Intent(getApplicationContext(), PatientListActivity.class));
+                    login.addUser(user);
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     finish();
                 }else if(response.has("Error")){
                     inputUsername.setError("Username already exists");
+                }else if(response.has("Internet")){
+                    Toast toast = Toast.makeText(Registration.this, "No Internet Connection", Toast.LENGTH_LONG);
+                    toast.show();
                 }
             }catch (JSONException e){
                 e.printStackTrace();

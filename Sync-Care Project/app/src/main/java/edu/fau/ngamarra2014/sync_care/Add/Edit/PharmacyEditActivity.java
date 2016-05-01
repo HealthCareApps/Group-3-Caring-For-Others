@@ -1,4 +1,4 @@
-package edu.fau.ngamarra2014.sync_care;
+package edu.fau.ngamarra2014.sync_care.Add.Edit;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,11 +18,12 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+import edu.fau.ngamarra2014.sync_care.R;
 
 public class PharmacyEditActivity extends Activity {
 
     User user = User.getInstance();
-    DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    DBHandler dbHandler = new DBHandler(this, user.getUsername(), null, 2);
     private String url;
 
     EditText name, phone, address, city, state, zip;
@@ -71,7 +73,7 @@ public class PharmacyEditActivity extends Activity {
     class UpdatePhar extends AsyncTask<String, String, String> {
 
         JSONParser jsonParser = new JSONParser();
-
+        JSONObject response;
         String pharName, pharPhone, pharAddress, pharCity, pharState, pharZip;
 
         @Override
@@ -102,10 +104,11 @@ public class PharmacyEditActivity extends Activity {
 
 
             jsonParser.setParams(query);
-            JSONObject response = jsonParser.makeHttpRequest(url, "POST");
+
 
             try {
-               if (response.has("Successful")) {
+                response = jsonParser.makeHttpRequest(url, "POST");
+                if (response.has("Successful")) {
                     Pharmacy pharmacy = new Pharmacy();
                     pharmacy.setID(response.getInt("id"));
                     pharmacy.setName(pharName);
@@ -127,6 +130,13 @@ public class PharmacyEditActivity extends Activity {
             }
 
             return null;
+        }
+        protected void onPostExecute(String url){
+            super.onPostExecute(url);
+            if(response.has("Internet")){
+                Toast toast = Toast.makeText(PharmacyEditActivity.this, "No Internet Connection", Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
     }
 }

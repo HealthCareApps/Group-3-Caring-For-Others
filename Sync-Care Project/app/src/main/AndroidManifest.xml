@@ -10,91 +10,91 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".Authentication.LoginActivity"
-            android:noHistory="true">
 
+        <activity android:name=".Authentication.LoginActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Authentication.Registration"
-            android:label="Registration"/>
-        <activity
-            android:name=".HomeActivity"
-            android:label="Home Page"
+
+        <activity android:name=".Authentication.Registration"
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".HomeActivity"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".DeleteMedicalActivity"
-            android:label="Delete Medical" />
-        <activity
-            android:name=".DeletePatientActivity"
-            android:label="Delete Patient" />
-        <activity
-            android:name=".ManageProfileActivity"
-            android:label="Manage Profile" />
-        <activity
-            android:name=".AddPatientActivity"
-            android:label="Add Patient" />
-        <activity
-            android:name=".PatientActivity"
+
+        <activity android:name=".DeleteMedicalActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".DeletePatientActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".ManageProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".Add.Edit.AddPatientActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".PatientActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".PatientListActivity"
-            android:label="List of Patients"
-            android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".RxListActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".PatientProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".NavigationActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".RxEditActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".DoctorListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".PharmacyListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".InsuranceListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".DoctorEditActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".PharmacyEditActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".InsuranceEditActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".AccountActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".PatientListActivity"
+            android:noHistory="true"
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".RxListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".PatientProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".NavigationActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".Add.Edit.RxEditActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".DoctorListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".PharmacyListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".InsuranceListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".Add.Edit.DoctorEditActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".Add.Edit.PharmacyEditActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".Add.Edit.InsuranceEditActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".AccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity android:name=".Information"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity android:name=".LinkedRequestsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ExcerciseActivity"
+
+        <activity android:name=".Add.Edit.ExcerciseActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".ExerciseListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import edu.fau.ngamarra2014.sync_care.Authentication.MCrypt;
 import edu.fau.ngamarra2014.sync_care.Data.Doctor;
-import edu.fau.ngamarra2014.sync_care.Data.Excercise;
+import edu.fau.ngamarra2014.sync_care.Data.Exercise;
 import edu.fau.ngamarra2014.sync_care.Data.Insurance;
 import edu.fau.ngamarra2014.sync_care.Data.Patient;
 import edu.fau.ngamarra2014.sync_care.Data.Pharmacy;
@@ -20,8 +20,8 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 6;
-    private static final String DATABASE_NAME = "sync_care.db";
+    private static final int DATABASE_VERSION = 9;
+    private String DATABASE_NAME = "sync_care.db";
     public static final String TABLE_USERS = "users";
     public static final String TABLE_PATIENTS = "patients";
     public static final String TABLE_SPECIALIST_PATIENTS = "specialist_patients";
@@ -29,14 +29,15 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String TABLE_INSURANCES = "insurances";
     public static final String TABLE_PHARMACIES = "pharmacies";
     public static final String TABLE_PRESCRIPTIONS = "prescriptions";
-    public static final String TABLE_EXCERCISES = "excercises";
+    public static final String TABLE_EXERCISES = "exercises";
 
     User user = User.getInstance();
 
     public static final String COLUMN_ID = "_id";
 
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+        super(context, name, factory, DATABASE_VERSION);
+        DATABASE_NAME = name;
     }
 
     @Override
@@ -106,24 +107,27 @@ public class DBHandler extends SQLiteOpenHelper {
                 + "doctor TEXT,"
                 + "instructions TEXT,"
                 + "patient_id INTEGER" + ")";
-        String CREATE_USERS_EXCERCISES = "CREATE TABLE " + TABLE_EXCERCISES + "("
+        String CREATE_USERS_EXERCISES = "CREATE TABLE " + TABLE_EXERCISES + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY,"
                 + "name TEXT,"
                 + "start TEXT,"
                 + "duration TEXT,"
                 + "calories TEXT,"
                 + "comments TEXT,"
+                + "date TEXT,"
                 + "patient_id INTEGER,"
                 + "specialist_id INTEGER" + ")";
-        db.execSQL(CREATE_USERS_TABLE);
-        db.execSQL(CREATE_USERS_PATIENTS);
-        db.execSQL(CREATE_USERS_DOCTORS);
-        db.execSQL(CREATE_USERS_INSURANCES);
-        db.execSQL(CREATE_USERS_PHARMACIES);
-        db.execSQL(CREATE_USERS_PRESCRIPTIONS);
-        db.execSQL(CREATE_SPECIALIST_PATIENTS);
-        db.execSQL(CREATE_USERS_EXCERCISES);
-
+        if(DATABASE_NAME.equals("USERS")){
+            db.execSQL(CREATE_USERS_TABLE);
+        }else{
+            db.execSQL(CREATE_USERS_PATIENTS);
+            db.execSQL(CREATE_USERS_DOCTORS);
+            db.execSQL(CREATE_USERS_INSURANCES);
+            db.execSQL(CREATE_USERS_PHARMACIES);
+            db.execSQL(CREATE_USERS_PRESCRIPTIONS);
+            db.execSQL(CREATE_SPECIALIST_PATIENTS);
+            db.execSQL(CREATE_USERS_EXERCISES);
+        }
     }
 
     @Override
@@ -135,7 +139,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHARMACIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRESCRIPTIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SPECIALIST_PATIENTS );
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXCERCISES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXERCISES);
         onCreate(db);
     }
 
@@ -305,8 +309,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Long result = db.insertOrThrow(TABLE_DOCTORS, null, values);
-        Log.i("Result", "addDoctor: " + result);
+        db.insert(TABLE_DOCTORS, null, values);
         db.close();
     }
     public void updateDoctor(Doctor doc){
@@ -347,7 +350,6 @@ public class DBHandler extends SQLiteOpenHelper {
             doc.setPatient(cursor.getInt(10));
 
             doctors.add(doc);
-            //user.patient.addDoctor(doc);
         }
 
         cursor.close();
@@ -529,22 +531,60 @@ public class DBHandler extends SQLiteOpenHelper {
         return insurances;
     }
 
-    public void addExcercise(Excercise excercise){
+    public void addExercise(Exercise exercise){
         ContentValues values = new ContentValues();
-        values.put("_id", excercise.getId());
-        values.put("name", excercise.getName());
-        values.put("start", excercise.getStart());
-        values.put("duration", excercise.getDuration());
-        values.put("calories", excercise.getCalories());
-        values.put("comments", excercise.getComments());
-        values.put("date", excercise.getDate());
-        values.put("patient_id", excercise.getPatient());
-        values.put("specialist_id", excercise.getSpecialist());
+        values.put("_id", exercise.getId());
+        values.put("name", exercise.getName());
+        values.put("start", exercise.getStart());
+        values.put("duration", exercise.getDuration());
+        values.put("calories", exercise.getCalories());
+        values.put("comments", exercise.getComments());
+        values.put("date", exercise.getDate());
+        values.put("patient_id", exercise.getPatient());
+        values.put("specialist_id", exercise.getSpecialist());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.insert(TABLE_EXCERCISES, null, values);
+        db.insert(TABLE_EXERCISES, null, values);
         db.close();
+    }
+    public ArrayList<Exercise> loadExercises(int patient) {
+        String query = "Select * FROM " + TABLE_EXERCISES + " WHERE " + "patient_id" + " =  \"" + patient + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        ArrayList<Exercise> exercises = new ArrayList<>();
+        Exercise exercise;
+
+        while (cursor.moveToNext()) {
+            exercise = new Exercise();
+            exercise.setID(cursor.getInt(0));
+            exercise.setName(cursor.getString(1));
+            exercise.setStart(cursor.getString(2));
+            exercise.setDuration(cursor.getString(3));
+            exercise.setCalories(cursor.getString(4));
+            exercise.setComments(cursor.getString(5));
+            exercise.setPatient(cursor.getInt(6));
+            exercise.setSpecialist(cursor.getInt(7));
+
+            exercises.add(exercise);
+        }
+        cursor.close();
+        db.close();
+        return exercises;
+    }
+    public String lastExerciseAdded(int id){
+        String query = "SELECT * FROM " + TABLE_EXERCISES + " WHERE patient_id = \"" + id + "\" ORDER BY _id DESC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            cursor.moveToFirst();
+            return cursor.getString(0);
+        }
+        return "0";
     }
 
     public void deleteDoc(String table, int id) {

@@ -18,7 +18,7 @@ import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
-import edu.fau.ngamarra2014.sync_care.InsuranceEditActivity;
+import edu.fau.ngamarra2014.sync_care.Add.Edit.InsuranceEditActivity;
 import edu.fau.ngamarra2014.sync_care.InsuranceListActivity;
 import edu.fau.ngamarra2014.sync_care.R;
 
@@ -137,7 +137,7 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
 
         JSONParser jsonParser = new JSONParser();
         private String delete_url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/deleteDoc.php";
-        DBHandler dbHandler = new DBHandler(Ins, null, null, 2);
+        DBHandler dbHandler = new DBHandler(Ins, user.getUsername(), null, 2);
         int index;
 
         public DeleteIns(int index){
@@ -150,9 +150,9 @@ public class InsuranceRecyclerAdapter extends RecyclerView.Adapter<InsuranceRecy
             query.add("database", "Insurances");
 
             jsonParser.setParams(query);
-            JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
 
             try {
+                JSONObject response = jsonParser.makeHttpRequest(delete_url, "POST");
                 if (response.has("Successful")) {
                     dbHandler.deleteDoc("insurances", id);
                     user.patient.removeInsurance(index);

@@ -1,4 +1,4 @@
-package edu.fau.ngamarra2014.sync_care;
+package edu.fau.ngamarra2014.sync_care.Add.Edit;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -7,22 +7,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Locale;
 
-import edu.fau.ngamarra2014.sync_care.Data.Excercise;
+import edu.fau.ngamarra2014.sync_care.Data.Exercise;
 import edu.fau.ngamarra2014.sync_care.Data.User;
 import edu.fau.ngamarra2014.sync_care.Database.DBHandler;
 import edu.fau.ngamarra2014.sync_care.Database.JSONParser;
 import edu.fau.ngamarra2014.sync_care.Database.QueryString;
+import edu.fau.ngamarra2014.sync_care.R;
 
 public class ExcerciseActivity extends Activity {
 
     User user = User.getInstance();
-    DBHandler dbHandler = new DBHandler(this, null, null, 2);
+    DBHandler dbHandler = new DBHandler(this, user.getUsername(), null, 2);
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +53,14 @@ public class ExcerciseActivity extends Activity {
     class addDoc extends AsyncTask<String, String, String> {
 
         JSONParser jsonParser = new JSONParser();
+        JSONObject response;
         private String url = "http://lamp.cse.fau.edu/~ngamarra2014/Sync-Care2/PHP/Functions/addDoc.php";
 
         protected String doInBackground(String... args) {
 
             // Building Parameters
-            QueryString query = new QueryString("database", "excercise");
-            query.add("id", Integer.toString(user.patient.getID()));
+            QueryString query = new QueryString("database", "exercise");
+            query.add("id", Integer.toString(user.getID()));
             query.add("patient", Integer.toString(user.patient.getID()));
             query.add("name", args[0]);
             query.add("start", args[1]);
@@ -67,32 +70,37 @@ public class ExcerciseActivity extends Activity {
             query.add("date", args[5]);
 
             jsonParser.setParams(query);
-            JSONObject response = jsonParser.makeHttpRequest(url, "POST");
+
 
             try {
+                response = jsonParser.makeHttpRequest(url, "POST");
                 if (response.has("Successful")) {
-                    Excercise excercise = new Excercise();
-                    excercise.setID(response.getInt("id"));
-                    excercise.setName(args[0]);
-                    excercise.setStart(args[1]);
-                    excercise.setDuration(args[2]);
-                    excercise.setCalories(args[3]);
-                    excercise.setComments(args[4]);
-                    excercise.setDate(args[5]);
-                    excercise.setPatient(user.patient.getID());
-                    excercise.setSpecialist(user.getID());
-                    dbHandler.addExcercise(excercise);
-
+                    Exercise exercise = new Exercise();
+                    exercise.setID(response.getInt("id"));
+                    exercise.setName(args[0]);
+                    exercise.setStart(args[1]);
+                    exercise.setDuration(args[2]);
+                    exercise.setCalories(args[3]);
+                    exercise.setComments(args[4]);
+                    exercise.setDate(args[5]);
+                    exercise.setPatient(user.patient.getID());
+                    exercise.setSpecialist(user.getID());
+                    dbHandler.addExercise(exercise);
+                    user.patient.addExercise(exercise);
                     finish();
-                }
-                else{
-                    Log.i("Error", response.toString());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return null;
+        }
+        protected void onPostExecute(String url){
+            super.onPostExecute(url);
+            if(response.has("Internet")){
+                Toast toast = Toast.makeText(ExcerciseActivity.this, "No Internet Connection", Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
     }
 }

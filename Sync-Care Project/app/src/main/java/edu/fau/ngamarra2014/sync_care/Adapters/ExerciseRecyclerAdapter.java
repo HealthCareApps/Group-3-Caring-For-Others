@@ -9,10 +9,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import edu.fau.ngamarra2014.sync_care.Data.User;
-import edu.fau.ngamarra2014.sync_care.ExcerciseListActivity;
 import edu.fau.ngamarra2014.sync_care.R;
 
-public class ExcerciseRecyclerAdapter extends RecyclerView.Adapter<ExcerciseRecyclerAdapter.ViewHolder> {
+public class ExerciseRecyclerAdapter extends RecyclerView.Adapter<ExerciseRecyclerAdapter.ViewHolder> {
 
     User user = User.getInstance();
 
@@ -25,15 +24,15 @@ public class ExcerciseRecyclerAdapter extends RecyclerView.Adapter<ExcerciseRecy
 
     private int[] images = { R.drawable.exercise};
 
-    public ExcerciseRecyclerAdapter(ExcerciseListActivity excercise){
+    public ExerciseRecyclerAdapter(){
 
-        for(int i = 0; i < user.patient.getNumberOfDoctors(); i++){
-            name.add(user.patient.getDoctor(i).getName());
-            start.add(user.patient.getDoctor(i).getType());
-            duration.add(user.patient.getDoctor(i).getContactInfo()[0]);
-            calories.add(user.patient.getDoctor(i).getContactInfo()[2]);
-            comments.add(user.patient.getDoctor(i).getAddress()[0]);
-            date.add(user.patient.getDoctor(i).getAddress()[1]);
+        for(int i = 0; i < user.patient.getNumberOfExercises(); i++){
+            name.add(user.patient.getExercise(i).getName());
+            start.add(user.patient.getExercise(i).getStart());
+            duration.add(user.patient.getExercise(i).getDuration());
+            calories.add(user.patient.getExercise(i).getCalories());
+            comments.add(user.patient.getExercise(i).getComments());
+            date.add(user.patient.getExercise(i).getDate());
         }
     }
 
